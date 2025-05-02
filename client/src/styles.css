@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: corporate --default, dim --prefersdark;
+}
+
+.menu li > *:not(ul):not(.menu-title):not(details):active,
+.menu li > details > summary:active {
+  @apply bg-transparent;
+}
