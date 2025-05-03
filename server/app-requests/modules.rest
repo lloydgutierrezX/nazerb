@@ -1,0 +1,33 @@
+# App Requests
+
+### ROLE ###
+
+### Get Module Request
+GET http://localhost:3000/api/modules
+Content-Type: application/json
+
+### Create Module Request
+POST http://localhost:3000/api/modules
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "description": "test module"
+}
+
+### Get Module by ID Request
+GET http://localhost:3000/api/modules/16
+Content-Type: application/json
+
+### Update Module Request
+PUT http://localhost:3000/api/modules/16
+Content-Type: application/json
+
+{
+  "name": "testing 1233",
+  "description": "test module"
+}
+
+### Delete Module Request
+DELETE http://localhost:3000/api/modules/16
+Content-Type: application/json
