@@ -1,5 +1,7 @@
 import express from "express";
 
+import routes from "./src/routes/routes.js";
+
 const app = express();
 
 // middlewares
@@ -11,6 +13,8 @@ const app = express();
 
 app.use(express.json()); // converts data to json
 app.use(express.urlencoded({ extended: true })); // converts data to json
+
+app.use("/api", routes); // use the routes
 
 // Route access that is not registered should receive a 404 status page.
 app.get("/", (req, res) => {

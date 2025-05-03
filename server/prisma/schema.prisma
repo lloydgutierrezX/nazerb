@@ -46,6 +46,7 @@ model Module {
   id Int @id @default(autoincrement())
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   
@@ -59,6 +60,7 @@ model Role {
   id Int @id @default(autoincrement())
   name String @db.VarChar(60) @unique
   isActive Boolean @default(true) @map("is_active")
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -72,6 +74,7 @@ model Permission {
   id Int @id @default(autoincrement())
   name String @db.VarChar(60) @unique
   isActive Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

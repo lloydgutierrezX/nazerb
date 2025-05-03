@@ -30,6 +30,7 @@ CREATE TABLE "modules" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(60) NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "description" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -41,6 +42,7 @@ CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(60) NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "description" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -52,6 +54,7 @@ CREATE TABLE "permissions" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(60) NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "description" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
