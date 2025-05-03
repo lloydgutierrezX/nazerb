@@ -1,3 +1,12 @@
+import express from "express";
+import modulesRoute from "./modulesRoutes.js";
+
+const routes = express.Router();
+// Define the routes for the application
+routes.use("/modules", modulesRoute);
+
+export default routes;
+
 // @error    400 - Bad Request
 // @error    500 - Internal Server Error
 // @error    409 - Conflict
