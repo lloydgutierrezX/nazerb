@@ -1,4 +1,4 @@
-import { PrismaClient } from "#root/generated/prisma/client.js"; // Adjust the import path as necessary
+import { PrismaClient } from "#root/generated/prisma/client.js";
 
 const prisma = new PrismaClient();
 
@@ -23,7 +23,7 @@ export const createModule = async (req, res) => {
     }
 
     console.log(
-      `Creating module with name ${name} and description ${description}`
+      `Processing create module with name ${name} and description ${description}`
     );
     // Create the new module
     const newModule = await prisma.module.create({
@@ -137,6 +137,8 @@ export const updateModule = async (req, res) => {
     }
 
     // Update the module
+    console.log(`Processing update of module with ID ${id}`);
+
     const updatedModule = await prisma.module.update({
       where: { id: parseInt(id) },
       data: {
@@ -158,7 +160,7 @@ export const updateModule = async (req, res) => {
 
 // Function to SOFT delete a module
 export const deleteModule = async (req, res) => {
-  console.log(`Deleting module with ID: ${req.params.id}`);
+  console.log(`Soft deleting module with ID: ${req.params.id}`);
 
   // Check if the ID is a valid number
   const { id } = req.params;
@@ -183,7 +185,7 @@ export const deleteModule = async (req, res) => {
   }
   try {
     // Soft delete the module
-    console.log(`Soft deleting module with ID ${id}`);
+    console.log(`processing soft delete of module with ID ${id}`);
 
     const deletedModule = await prisma.module.update({
       where: { id: parseInt(id) },
