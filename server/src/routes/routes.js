@@ -1,11 +1,13 @@
 import express from "express";
-import modulesRoute from "./modulesRoutes.js";
-import rolesRoutes from "./rolesRoutes.js";
+import moduleRoute from "./moduleRoutes.js";
+import roleRoutes from "./roleRoutes.js";
+import permissionRoutes from "./permissionRoutes.js";
 
 const routes = express.Router();
 // Define the routes for the application
-routes.use("/modules", modulesRoute);
-routes.use("/roles", rolesRoutes);
+routes.use("/modules", moduleRoute);
+routes.use("/roles", roleRoutes);
+routes.use("/permissions", permissionRoutes);
 
 export default routes;
 
