@@ -7,21 +7,21 @@ import {
   deleteModule,
 } from "../controllers/modulesController.js";
 
-const modulesRoutes = express.Router();
+const moduleRoutes = express.Router();
 
 // Route to create a new module
-modulesRoutes.post("/", createModule);
+moduleRoutes.post("/", createModule);
 
 // Route to get all modules
-modulesRoutes.get("/", getModules);
+moduleRoutes.get("/", getModules);
 
 // Route to get a module by ID
-modulesRoutes.get("/:id", getModuleById);
+moduleRoutes.get("/:id", getModuleById);
 
 // Route to update a module by ID
-modulesRoutes.put("/:id", updateModule);
+moduleRoutes.put("/:id", updateModule);
 
 // Route to delete a module by ID
-modulesRoutes.delete("/:id", deleteModule);
+moduleRoutes.delete("/:id", deleteModule);
 
-export default modulesRoutes;
+export default moduleRoutes;
