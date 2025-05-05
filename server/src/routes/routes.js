@@ -1,9 +1,11 @@
 import express from "express";
 import modulesRoute from "./modulesRoutes.js";
+import rolesRoutes from "./rolesRoutes.js";
 
 const routes = express.Router();
 // Define the routes for the application
 routes.use("/modules", modulesRoute);
+routes.use("/roles", rolesRoutes);
 
 export default routes;
 

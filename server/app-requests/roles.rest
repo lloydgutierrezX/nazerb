@@ -1,0 +1,33 @@
+# App Requests
+
+### ROLE ###
+
+### Get All Roles Request
+GET http://localhost:3000/api/roles
+Content-Type: application/json
+
+### Get Module by ID Request
+GET http://localhost:3000/api/roles/5
+Content-Type: application/json
+
+### Create Module Request
+POST http://localhost:3000/api/roles
+Content-Type: application/json
+
+{
+  "name": "Employee 1",
+  "description": "Employee 1 role"
+}
+
+### Update Module Request
+PUT http://localhost:3000/api/roles/1
+Content-Type: application/json
+
+{
+  "name": "Super Admin",
+  "description": "Super Admin role that has all permissions"
+}
+
+### Delete Module Request
+DELETE http://localhost:3000/api/roles/5
+Content-Type: application/json
