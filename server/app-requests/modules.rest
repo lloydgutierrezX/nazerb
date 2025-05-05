@@ -11,8 +11,8 @@ POST http://localhost:3000/api/modules
 Content-Type: application/json
 
 {
-  "name": "Test",
-  "description": "test module"
+  "name": "user",
+  "description": "user module"
 }
 
 ### Get Module by ID Request
@@ -29,5 +29,5 @@ Content-Type: application/json
 }
 
 ### Delete Module Request
-DELETE http://localhost:3000/api/modules/16
+DELETE http://localhost:3000/api/modules/5
 Content-Type: application/json
