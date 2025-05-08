@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
-import Drawer from "./components/drawer/Drawer";
-import Icon from "./components/icon/Icon";
+import { Drawer } from "./components/drawer/Drawer";
+import { Icon } from "./components/icon/Icon";
 
-import Dashboard from "./pages/Dashboard";
-import NotFound from "./pages/NotFound";
+import { Dashboard } from "./pages/Dashboard";
+import { NotFound } from "./pages/NotFound";
 
 import { PageContext } from "./hooks/Page";
-import Login from "./pages/Login";
+import { Module } from "./pages/security/Module";
+// import Login from "./pages/Login";
 
-const AppLayout = (children: any) => {
-  return children;
-};
+// const AppLayout = (children: any) => {
+//   return children;
+// };
 
 function App() {
   const location = useLocation();
@@ -25,8 +26,8 @@ function App() {
 
   return (
     <PageContext.Provider value={currentModule}>
-      <Route path="/login" element={<Login />} />
-      <Route path="/" element={<AppLayout />}></Route>
+      {/* <Route path="/login" element={<Login />} /> */}
+      {/* <Route path="/" element={<AppLayout />}></Route> */}
 
       <div className="drawer lg:drawer-open">
         <input id="cb-drawer" type="checkbox" className="drawer-toggle" />
@@ -44,6 +45,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
+
+              <Route path="/security/modules" element={<Module />} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
