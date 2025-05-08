@@ -54,6 +54,12 @@ export const jsonMenu = [
         icon: "circleuser",
       },
       {
+        key: "modules",
+        path: "security/modules",
+        is_active: true,
+        icon: "component",
+      },
+      {
         key: "roles",
         path: "security/roles",
         is_active: true,

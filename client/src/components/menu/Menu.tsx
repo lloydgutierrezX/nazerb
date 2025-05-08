@@ -1,8 +1,8 @@
 import { memo } from "react";
-import { IMenu, jsonMenu } from "./MenuInterface";
-import MenuItem from "./MenuItem";
+import { IMenu, jsonMenu } from "./IMenu";
+import { MenuItem } from "./MenuItem";
 
-const Menu = memo(function Menu() {
+export const Menu = memo(function Menu() {
   const menu: IMenu[] = jsonMenu;
   return (
     <ul className="menu w-full bg-transparent px-0 pt-5">
@@ -10,5 +10,3 @@ const Menu = memo(function Menu() {
     </ul>
   );
 });
-
-export default Menu;

@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import Menu from "../menu/Menu";
-import Icon from "../icon/Icon";
+import { Menu } from "../menu/Menu";
+import { Icon } from "../icon/Icon";
 import { memo } from "react";
 
-const Drawer = memo(function Drawer() {
+export const Drawer = memo(function Drawer() {
   const projectTitle = import.meta.env.VITE_PROJECT_TITLE;
 
   return (
@@ -37,5 +37,3 @@ const Drawer = memo(function Drawer() {
     </div>
   );
 });
-
-export default Drawer;
