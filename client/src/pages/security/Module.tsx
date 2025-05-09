@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DaaTable, ITableConfig } from "../../components/datatable/Table";
+import { DataTable } from "../../components/datatable/DataTable";
 import { IData } from "../IData";
+import { ITableConfig } from "../../components/datatable/IDatatable";
 import moment from "moment";
 
 // data
@@ -30,7 +31,6 @@ const columns: ColumnDef<IData, string>[] = [
   {
     accessorKey: "name",
     header: "Name",
-    size: 150,
     cell: (info: { getValue: () => string }) => info.getValue(),
     enableSorting: true,
     sortUndefined: -1,
@@ -39,35 +39,59 @@ const columns: ColumnDef<IData, string>[] = [
   {
     accessorKey: "created_at",
     header: "Date Created",
-    size: 50,
     cell: (info: { getValue: () => string }) =>
       moment(info.getValue()).format("MMM DD, YYYY"),
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
+    enableGlobalFilter: false,
   },
   {
     accessorKey: "updated_at",
     header: "Last Update",
-    size: 50,
     cell: (info: { getValue: () => string }) =>
       moment(info.getValue()).format("MMM DD, YYYY"),
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
+    enableGlobalFilter: false,
   },
 ];
 
 const config: ITableConfig = {
   serverSide: false,
   permissions: {
-    search: true,
-    add: true,
-    delete: true,
-    edit: true,
+    search: {
+      isAllowed: true,
+      placeholder: "Search",
+    },
+    add: {
+      isAllowed: true,
+      placeholder: "Create",
+    },
+    delete: {
+      isAllowed: true,
+      placeholder: "Delete",
+    },
+    update: {
+      isAllowed: true,
+      placeholder: "Edit",
+    },
+  },
+  filters: {
+    date: [
+      {
+        name: "created_at",
+        placeholder: "Date Created",
+      },
+      {
+        name: "updated_at",
+        placeholder: "Last Update",
+      },
+    ],
   },
 };
 
 export const Module = () => {
-  return <DaaTable data={data} columns={columns} config={config} />;
+  return <DataTable data={data} columns={columns} config={config} />;
 };

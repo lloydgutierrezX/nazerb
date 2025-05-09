@@ -1,21 +1,21 @@
 import { Row, flexRender } from "@tanstack/react-table";
 import { Icon } from "../icon/Icon";
+import { IPermissions } from "./IDatatable";
 
-interface TableBodyProps<TData> {
+type DataTableBodyProps<TData> = {
   rowModel: () => {
     rows: Row<TData>[];
   };
-  permissions: {
-    edit: boolean;
-    delete: boolean;
-  };
-}
+  permissions: IPermissions;
+};
 
-export const TableBody = <TData,>({
+export const DataTableBody = <TData,>({
   rowModel,
   permissions,
-}: TableBodyProps<TData>) => {
+}: DataTableBodyProps<TData>) => {
   const rows = rowModel().rows;
+
+  console.log(permissions.delete.isAllowed);
 
   return (
     <tbody>
@@ -34,13 +34,13 @@ export const TableBody = <TData,>({
 
           <td>
             <div className="flex justify-center">
-              {permissions.edit && (
-                <button className="btn scale-75 btn-square hover:text-blue-500 hover:bg-blue-100">
+              {permissions.update.isAllowed && (
+                <button className="btn scale-75 btn-primary btn-square hover:text-blue-500 hover:bg-blue-100">
                   <Icon icon="penciloff" classNames="" />
                 </button>
               )}
-              {permissions.delete && (
-                <button className="btn scale-75 btn-square hover:text-red-500 hover:bg-red-100">
+              {permissions.delete.isAllowed && (
+                <button className="btn scale-75 btn-error text-white btn-square hover:text-red-500 hover:bg-red-100">
                   <Icon icon="trash" classNames="" />
                 </button>
               )}

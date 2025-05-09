@@ -1,9 +1,9 @@
-interface IMenuContent {
+type IMenuContent = {
   key: string;
   is_active: boolean;
   path?: string;
   icon?: string;
-}
+};
 
 export interface IMenu extends IMenuContent {
   children?: IMenu[];

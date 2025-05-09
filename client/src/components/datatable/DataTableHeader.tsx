@@ -2,14 +2,14 @@ import { HeaderGroup } from "@tanstack/react-table";
 import { Icon } from "../icon/Icon";
 import { IData } from "../../pages/IData";
 
-export const TableHeader = (props: {
+export const DataTableHeader = (props: {
   headerGroups: () => HeaderGroup<IData>[];
 }) => {
   return (
     <thead>
       {props.headerGroups().map((headerGroup) => {
         return (
-          <tr key={headerGroup.id}>
+          <tr key={headerGroup.id} className="bg-gray-200">
             {headerGroup.headers.map((header) => {
               return (
                 <th
@@ -17,8 +17,8 @@ export const TableHeader = (props: {
                   colSpan={header.colSpan}
                   className={
                     header.column.getCanSort()
-                      ? "cursor-pointer"
-                      : "cursor-default"
+                      ? "cursor-pointer "
+                      : "cursor-default "
                   }
                 >
                   <div
@@ -54,7 +54,7 @@ export const TableHeader = (props: {
                 </th>
               );
             })}
-            <th className="cursor-default text-center">Actions</th>
+            <th className="cursor-default text-center w-20">Actions</th>
           </tr>
         );
       })}

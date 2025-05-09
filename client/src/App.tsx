@@ -7,7 +7,7 @@ import { Icon } from "./components/icon/Icon";
 import { Dashboard } from "./pages/Dashboard";
 import { NotFound } from "./pages/NotFound";
 
-import { PageContext } from "./hooks/Page";
+import { PageContext } from "./services/context/page/PageContext";
 import { Module } from "./pages/security/Module";
 // import Login from "./pages/Login";
 
