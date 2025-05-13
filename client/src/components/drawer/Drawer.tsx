@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Menu } from "../menu/Menu";
-import { Icon } from "../icon/Icon";
+import { Menu } from "Components/menu/Menu";
+import { Icon } from "Components/icon/Icon";
 import { memo } from "react";
 
 export const Drawer = memo(function Drawer() {

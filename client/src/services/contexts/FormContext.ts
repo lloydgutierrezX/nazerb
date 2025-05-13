@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { DynamicObject } from "./DialogContext";
+import { DynamicObject } from "Utils/globalInterface";
 
 export const FormContext = createContext<DynamicObject | undefined>(undefined);
 

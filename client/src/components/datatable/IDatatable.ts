@@ -1,5 +1,5 @@
 import { Row } from "@tanstack/react-table";
-import { IHandleDialog } from "../../services/contexts/DialogContext";
+import { IHandleDialog } from "Services/contexts/DialogContext";
 
 type IPermissionsConfig = {
   isAllowed: boolean;

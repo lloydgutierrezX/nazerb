@@ -8,7 +8,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { NotFound } from "./pages/NotFound";
 
 import { PageContext } from "./services/contexts/PageContext";
-import { Module } from "./pages/security/Module";
+import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
 // import Login from "./pages/Login";
 

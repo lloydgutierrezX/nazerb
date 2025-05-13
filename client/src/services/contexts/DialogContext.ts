@@ -10,10 +10,6 @@ export type IDialogContext = {
   setDialog: React.Dispatch<React.SetStateAction<IDialogContent>>
 }
 
-export type DynamicObject = {
-  [key: string]: string | number | boolean;
-}
-
 export const DialogContext = createContext<IDialogContext | undefined>(undefined);
 
 export function useDialogContext() {

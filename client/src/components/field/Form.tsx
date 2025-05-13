@@ -4,7 +4,7 @@ import { Input } from "./input/Input";
 import { z, ZodType } from "zod";
 import { Toggle } from "./toggle/Toggle";
 import { IFormField } from "./IFormFields";
-import { DynamicObject } from "../../services/contexts/DialogContext";
+import { DynamicObject } from "Utils/globalInterface";
 
 type IFormProps = {
   schema: ZodType<Record<string, unknown>>;

@@ -1,6 +1,6 @@
 import { HeaderGroup } from "@tanstack/react-table";
-import { Icon } from "../icon/Icon";
-import { IData } from "../../pages/IData";
+import { Icon } from "Components/icon/Icon";
+import { IData } from "Pages/IData";
 
 export const DataTableHeader = (props: {
   headerGroups: () => HeaderGroup<IData>[];

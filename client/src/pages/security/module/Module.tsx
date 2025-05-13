@@ -1,12 +1,16 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "../../components/datatable/DataTable";
-import { IData } from "../IData";
-import { ITableConfig } from "../../components/datatable/IDatatable";
-import { Dialog } from "../../components/modal/dialog/Dialog";
-import { Form, IFormField } from "../../components/field/Form";
+
+import { IData } from "Pages/IData";
+
+import { DataTable } from "Components/datatable/DataTable";
+import { ITableConfig } from "Components/datatable/IDatatable";
+import { Dialog } from "Components/modal/dialog/Dialog";
+import { Form, IFormField } from "Components/field/Form";
 import { moduleSchema } from "./ModuleSchema";
+
+import { FormContext } from "Services/contexts/FormContext";
+
 import moment from "moment";
-import { FormContext } from "../../services/contexts/FormContext";
 
 // data
 const data: IData[] = [

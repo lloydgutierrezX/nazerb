@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useDialogContext } from "../../../services/contexts/DialogContext";
+import { useDialogContext } from "Services/contexts/DialogContext";
 
 export const Dialog = (props: { children: ReactNode }) => {
   const { dialog, setDialog } = useDialogContext();

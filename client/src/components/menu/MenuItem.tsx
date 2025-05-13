@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { Icon } from "../icon/Icon";
-import { IMenu } from "./IMenu";
+import { Icon } from "Components/icon/Icon";
 import { memo, useMemo } from "react";
-import { usePageContext } from "../../services/contexts/PageContext";
+import { usePageContext } from "Services/contexts/PageContext";
+import { IMenu } from "./IMenu";
 
 const activeNavLink = {
   backgroundColor: "#ffffffe6",

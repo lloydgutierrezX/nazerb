@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSearhContext } from "../../../services/contexts/SearchContext";
-import { useDebounce } from "../../../services/hooks/DebounceHooks";
+import { useSearhContext } from "Services/contexts/SearchContext";
+import { useDebounce } from "Services/hooks/DebounceHooks";
 
 export const Search = () => {
   const searchContext = useSearhContext();

@@ -10,14 +10,15 @@ import {
 } from "@tanstack/react-table";
 import { DataTableHeader } from "./DataTableHeader";
 import { DataTableBody } from "./DataTableBody";
-import { IData } from "../../pages/IData";
+import { IData } from "Pages/IData";
 import { DatatableFilter } from "./DatatableFilter";
 import { ITableConfig } from "./IDatatable";
-import { Icon } from "../icon/Icon";
+
 import {
   IHandleDialog,
   useDialogContext,
-} from "../../services/contexts/DialogContext";
+} from "Services/contexts/DialogContext";
+import { Icon } from "Components/icon/Icon";
 
 export const DataTable = <T extends IData>(props: {
   data: T[];

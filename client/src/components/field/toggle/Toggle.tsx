@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { IFormField } from "../IFormFields";
+import { IFormField } from "Components/field/IFormFields";
 
 type IToggleProps = {
   name: string;

@@ -6,6 +6,7 @@
   ],
   "compilerOptions": {
     "types": ["node"],
-    "strict": true
-  }
+    "strict": true,
+    "baseUrl": "./src",
+  },
 }

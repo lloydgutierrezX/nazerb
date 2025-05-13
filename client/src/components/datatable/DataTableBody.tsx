@@ -1,5 +1,5 @@
 import { flexRender } from "@tanstack/react-table";
-import { Icon } from "../icon/Icon";
+import { Icon } from "Components/icon/Icon";
 import { DataTableBodyProps } from "./IDatatable";
 
 export const DataTableBody = <TData,>({
