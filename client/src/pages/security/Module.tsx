@@ -2,7 +2,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "../../components/datatable/DataTable";
 import { IData } from "../IData";
 import { ITableConfig } from "../../components/datatable/IDatatable";
+import { Dialog } from "../../components/modal/dialog/Dialog";
+import { Form, IFormField } from "../../components/field/Form";
+import { moduleSchema } from "./ModuleSchema";
 import moment from "moment";
+import { FormContext } from "../../services/contexts/FormContext";
 
 // data
 const data: IData[] = [
@@ -27,7 +31,7 @@ const data: IData[] = [
 ];
 
 // Columns
-const columns: ColumnDef<IData, string>[] = [
+const columnDef: ColumnDef<IData, string>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -59,6 +63,7 @@ const columns: ColumnDef<IData, string>[] = [
 ];
 
 const config: ITableConfig = {
+  module: "module",
   serverSide: false,
   permissions: {
     search: {
@@ -67,15 +72,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Create",
+      placeholder: "Add module",
+      popover: "Add new module",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
+      popover: "Delete this module?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
+      popover: "Update this module?",
     },
   },
   filters: {
@@ -92,6 +100,49 @@ const config: ITableConfig = {
   },
 };
 
+const formFields: IFormField[] = [
+  {
+    type: "toggle",
+    placeholder: "Toggle this to turn on/off this module",
+    name: "is_active",
+    value: true,
+    className: "justify-end",
+    containerClassName: "flex flex-row gap-2",
+    defaultChecked: true,
+    label: "Is Actve?",
+    labelClassName: "w-full justify-end",
+    validations: {},
+  },
+  {
+    type: "text",
+    placeholder: "Input the module name",
+    name: "name",
+    label: "Module Name",
+    labelClassName: "w-full",
+    value: "",
+    className: "",
+    validations: {
+      required: "Module name is reuqired.",
+      minLength: 4,
+      maxLength: 60,
+    },
+  },
+];
+
 export const Module = () => {
-  return <DataTable data={data} columns={columns} config={config} />;
+  return (
+    <>
+      <Dialog>
+        <FormContext.Provider value={undefined}>
+          <Form
+            formFields={formFields}
+            schema={moduleSchema}
+            moduleName="Module"
+          />
+        </FormContext.Provider>
+      </Dialog>
+
+      <DataTable data={data} columnDef={columnDef} config={config} />
+    </>
+  );
 };

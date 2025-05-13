@@ -1,6 +1,10 @@
+import { Row } from "@tanstack/react-table";
+import { IHandleDialog } from "../../services/contexts/DialogContext";
+
 type IPermissionsConfig = {
   isAllowed: boolean;
   placeholder?: string;
+  popover?: string;
 }
 
 export type IPermissions = {
@@ -11,6 +15,7 @@ export type IPermissions = {
 }
 
 export type ITableConfig = {
+  module: string;
   serverSide: boolean;
   permissions: IPermissions;
   filters?: {
@@ -31,4 +36,12 @@ export type ITableConfig = {
       type: "select" | "multi-select";
     }[];
   }
+};
+
+export type DataTableBodyProps<TData> = {
+  rowModel: () => {
+    rows: Row<TData>[];
+  };
+  permissions: IPermissions;
+  handleDialog: (params: IHandleDialog) => void;
 };

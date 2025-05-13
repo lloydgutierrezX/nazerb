@@ -1,21 +1,12 @@
-import { Row, flexRender } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { Icon } from "../icon/Icon";
-import { IPermissions } from "./IDatatable";
-
-type DataTableBodyProps<TData> = {
-  rowModel: () => {
-    rows: Row<TData>[];
-  };
-  permissions: IPermissions;
-};
+import { DataTableBodyProps } from "./IDatatable";
 
 export const DataTableBody = <TData,>({
   rowModel,
   permissions,
 }: DataTableBodyProps<TData>) => {
   const rows = rowModel().rows;
-
-  console.log(permissions.delete.isAllowed);
 
   return (
     <tbody>

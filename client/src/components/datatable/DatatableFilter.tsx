@@ -1,7 +1,7 @@
 import { Row } from "@tanstack/react-table";
 import { IData } from "../../pages/IData";
-import { Search } from "../fields/search/Search";
-import { SearchContext } from "../../services/context/search/SearchContext";
+import { Search } from "../field/search/Search";
+import { SearchContext } from "../../services/contexts/SearchContext";
 
 export const DatatableFilter = (props: {
   filterRowModel: () => {

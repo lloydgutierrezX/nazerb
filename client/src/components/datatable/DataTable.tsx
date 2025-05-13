@@ -14,14 +14,20 @@ import { IData } from "../../pages/IData";
 import { DatatableFilter } from "./DatatableFilter";
 import { ITableConfig } from "./IDatatable";
 import { Icon } from "../icon/Icon";
+import {
+  IHandleDialog,
+  useDialogContext,
+} from "../../services/contexts/DialogContext";
 
 export const DataTable = <T extends IData>(props: {
   data: T[];
-  columns: ColumnDef<T, string>[];
+  columnDef: ColumnDef<T, string>[];
   config: ITableConfig;
 }) => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState(props.data);
+
+  const { dialog, setDialog } = useDialogContext();
 
   useEffect(() => {
     setDataSource(props.data);
@@ -30,7 +36,7 @@ export const DataTable = <T extends IData>(props: {
   // Initialize the table instance
   const table = useReactTable<T>({
     data: dataSource,
-    columns: props.columns,
+    columns: props.columnDef,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
 
@@ -45,6 +51,13 @@ export const DataTable = <T extends IData>(props: {
     },
   });
 
+  const handleDialog = (params: IHandleDialog) => {
+    setDialog({
+      ...dialog,
+      open: params.toggle,
+    });
+  };
+
   return (
     <>
       <div className="flex items-center justify-between pt-4">
@@ -56,11 +69,16 @@ export const DataTable = <T extends IData>(props: {
           searchPlaceholder={props.config.permissions.search?.placeholder}
         />
 
-        {props.config.permissions.add && (
-          <button className="btn btn-primary hover:text-blue-500 hover:bg-blue-100">
+        {props.config.permissions.add.isAllowed && (
+          <button
+            className="btn btn-primary hover:text-blue-500 hover:bg-blue-100"
+            onClick={() => {
+              handleDialog({ toggle: true, action: "add" });
+            }}
+          >
             <Icon icon="plus" classNames="w-4 h-4" />
             <span className="">
-              {props.config.permissions.add.isAllowed ?? "Create"}
+              {props.config.permissions.add.placeholder ?? "Create"}
             </span>
           </button>
         )}
@@ -76,6 +94,7 @@ export const DataTable = <T extends IData>(props: {
           <DataTableBody
             rowModel={table.getRowModel}
             permissions={props.config.permissions}
+            handleDialog={handleDialog}
           />
         </table>
       </div>
