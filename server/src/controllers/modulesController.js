@@ -51,7 +51,7 @@ export const getModules = async (req, res) => {
 
   try {
     const modules = await prisma.module.findMany({
-      where: { active: true },
+      // where: { active: true },
       orderBy: { active: "asc" },
     });
     res.status(200).json(modules);

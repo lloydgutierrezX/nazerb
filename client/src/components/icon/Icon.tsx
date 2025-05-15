@@ -16,6 +16,10 @@ import {
   Settings,
   LogOut,
   Component,
+  X,
+  Check,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -97,6 +101,18 @@ export const Icon = memo(function Icon(props: {
             return <Trash className={classNames} color={color ?? undefined} />;
           case "plus":
             return <Plus className={classNames} color={color ?? undefined} />;
+          case "x":
+            return <X className={classNames} color={color ?? undefined} />;
+          case "check":
+            return <Check className={classNames} color={color ?? undefined} />;
+          case "toggle-left":
+            return (
+              <ToggleLeft className={classNames} color={color ?? undefined} />
+            );
+          case "toggle-right":
+            return (
+              <ToggleRight className={classNames} color={color ?? undefined} />
+            );
           default:
             console.warn(`No icon for ${icon}`);
             return "";

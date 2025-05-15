@@ -19,22 +19,27 @@ export type IFormProps = {
 
 interface IBaseFormField {
   name: string;
-  placeholder?: string;
   className?: string;
+  containerClassName?: string;
+  placeholder?: string;
   label?: string;
   labelClassName?: string;
-  containerClassName?: string;
+
 };
 
-interface IInputField extends IBaseFormField {
+export interface IInputField extends IBaseFormField {
   type: "text" | "number";
-  value?: string;
+}
+
+export interface ITextAreaField extends IBaseFormField {
+  type: "textarea";
 }
 
 interface IToggleField extends IBaseFormField {
   type: "toggle"
-  value: true;
   defaultChecked?: boolean;
 }
 
-export type IFormField = IInputField | IToggleField;
+export type IFormField = IInputField | IToggleField | ITextAreaField;
+
+

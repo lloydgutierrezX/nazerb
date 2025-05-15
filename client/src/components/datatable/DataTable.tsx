@@ -47,6 +47,7 @@ export const DataTable = <T extends IData>({
   const table = useReactTable<T>({
     data: dataSource,
     columns: columnDef,
+
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
 

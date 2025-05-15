@@ -1,14 +1,12 @@
 import { UseFormRegister } from "react-hook-form";
-import React from "react";
-import { IInputField } from "../IFormFields";
+import { ITextAreaField } from "../IFormFields";
 
-interface IInputProps extends IInputField {
+interface ITextAreaProps extends ITextAreaField {
   register: UseFormRegister<Record<string, unknown>>;
 }
 
-export const Input: React.FC<IInputProps> = ({
+export const TextArea: React.FC<ITextAreaProps> = ({
   name,
-  type,
   className,
   containerClassName,
   placeholder,
@@ -19,11 +17,10 @@ export const Input: React.FC<IInputProps> = ({
   return (
     <div className={`${containerClassName}`}>
       {label && <label className={`label ${labelClassName}`}>{label}</label>}
-      <input
+      <textarea
         {...register(name)}
         name={name}
-        type={type}
-        className={className}
+        className={`textarea ${className}`}
         placeholder={placeholder}
       />
     </div>

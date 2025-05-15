@@ -8,6 +8,7 @@ import { IFormField, IFormProps } from "./IFormFields";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
+import { TextArea } from "./textarea/Textarea";
 
 export const Form: React.FC<IFormProps> = ({
   schema,
@@ -27,6 +28,7 @@ export const Form: React.FC<IFormProps> = ({
     formState: { errors },
     setError,
     setValue,
+    reset,
   } = useForm<z.infer<typeof schema> & Record<string, unknown>>({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -38,13 +40,23 @@ export const Form: React.FC<IFormProps> = ({
   > = (formData) => mutation.mutate(formData);
 
   useEffect(() => {
-    if (!data) return;
+    if (!dialog.open) {
+      reset();
+      return;
+    }
 
     formFields.forEach((f) => {
       const d = data as Record<string, unknown>;
-      setValue(f.name, d[f.name]);
+      if (data) {
+        setValue(f.name, d[f.name]);
+        return;
+      }
+
+      const isBoolean = f.type === "toggle";
+
+      setValue(f.name, isBoolean ? true : "");
     });
-  }, [data, formFields, setValue]);
+  }, [dialog.open, data, formFields, setValue]);
 
   // react-query function for Add, Edit, Delete
   const mutation = useMutation({
@@ -122,11 +134,30 @@ export const Form: React.FC<IFormProps> = ({
                   <Toggle
                     register={register}
                     name={field.name}
-                    defaultChecked={field?.defaultChecked ?? false}
                     className={field.className}
                     label={field?.label}
                     labelClassName={`label ${field.labelClassName}`}
                     formFields={formFields}
+                  />
+
+                  {showError(field.name)}
+                </div>
+              );
+
+            case "textarea":
+              return (
+                <div
+                  key={field.name}
+                  className={`my-2 ${field.containerClassName}`}
+                >
+                  <TextArea
+                    register={register}
+                    name={field.name}
+                    label={field?.label}
+                    labelClassName={`label ${field.labelClassName}`}
+                    className={`input w-full outline focus:outline focus:border-transparent ${field.className}`}
+                    containerClassName="flex flex-col gap-2"
+                    type={field.type}
                   />
 
                   {showError(field.name)}

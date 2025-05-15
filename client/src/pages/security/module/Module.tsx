@@ -17,8 +17,9 @@ import {
 } from "./ModuleActions";
 import { useQuery } from "@tanstack/react-query";
 import { useDialogContext } from "Services/contexts/DialogContext";
+import { Icon } from "Components/icon/Icon";
 
-// Columns
+// ColumnsDef: for react-table column display
 const columnDef: ColumnDef<IData, string>[] = [
   {
     accessorKey: "name",
@@ -27,6 +28,36 @@ const columnDef: ColumnDef<IData, string>[] = [
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
+  },
+  {
+    accessorKey: "active",
+    header: "Active",
+    cell: (info: { getValue: () => string }) => {
+      const active = !!info.getValue() === true;
+      return (
+        <div
+          className={`badge min-w-[50px] xs:min-w-[150px] justify-start ${
+            active ? "badge-success" : "badge-soft badge-error"
+          }`}
+        >
+          {active ? (
+            <>
+              <Icon icon="toggle-right" classNames="" />
+              <span className="md:block hidden text-nowrap">Active</span>
+            </>
+          ) : (
+            <>
+              <Icon icon="toggle-left" classNames="text-nowrap" />
+              <span className="md:block hidden text-nowrap">Not Active</span>
+            </>
+          )}
+        </div>
+      );
+    },
+    enableSorting: true,
+    sortUndefined: -1,
+    sortDescFirst: false,
+    enableGlobalFilter: false,
   },
   {
     accessorKey: "createdAt",
@@ -50,6 +81,7 @@ const columnDef: ColumnDef<IData, string>[] = [
   },
 ];
 
+// Config for the datatable view
 const config: ITableConfig = {
   module: "module",
   serverSide: false,
@@ -93,7 +125,6 @@ const formFields: IFormField[] = [
     type: "toggle",
     placeholder: "Toggle this to turn on/off this module",
     name: "active",
-    value: true,
     className: "justify-end",
     containerClassName: "flex flex-row gap-2",
     defaultChecked: true,
@@ -106,8 +137,15 @@ const formFields: IFormField[] = [
     name: "name",
     label: "Module Name",
     labelClassName: "w-full",
-    value: "",
     className: "",
+  },
+  {
+    type: "textarea",
+    placeholder: "Input the module description",
+    name: "description",
+    label: "Description",
+    labelClassName: "w-full",
+    className: "h-40",
   },
 ];
 

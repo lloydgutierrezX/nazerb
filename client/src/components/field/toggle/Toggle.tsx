@@ -3,7 +3,6 @@ import { IFormField } from "Components/field/IFormFields";
 
 type IToggleProps = {
   name: string;
-  defaultChecked: boolean;
   formFields: IFormField[];
   label?: string;
   labelClassName?: string;
@@ -14,7 +13,6 @@ type IToggleProps = {
 
 export const Toggle: React.FC<IToggleProps> = ({
   name,
-  defaultChecked,
   label,
   labelClassName,
   className,
@@ -24,12 +22,7 @@ export const Toggle: React.FC<IToggleProps> = ({
     <>
       <label className={`label ${labelClassName}`}> {label} </label>
       <div className={`${className}`}>
-        <input
-          {...register(name)}
-          type="checkbox"
-          defaultChecked={defaultChecked}
-          className="toggle"
-        />
+        <input {...register(name)} type="checkbox" className="toggle" />
       </div>
     </>
   );
