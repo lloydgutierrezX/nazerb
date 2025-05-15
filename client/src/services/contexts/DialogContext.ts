@@ -1,8 +1,15 @@
 import { createContext, useContext } from "react";
 
+export type IHandleDialog = {
+  action: string;
+  toggle: boolean;
+}
+
 type IDialogContent = {
   open: boolean;
   module?: string;
+  hasChanges?: boolean;
+  data?: Record<string, unknown>;
 }
 
 export type IDialogContext = {
@@ -20,9 +27,4 @@ export function useDialogContext() {
   }
 
   return dialogContext;
-}
-
-export type IHandleDialog = {
-  action: string;
-  toggle: boolean;
 }

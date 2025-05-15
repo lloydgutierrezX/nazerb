@@ -1,6 +1,21 @@
-export type IDynamicFormFieldValidation = {
-  [key: string]: string | number | boolean;
-}
+import { AxiosResponse } from "axios";
+import { ZodType } from "zod";
+
+export type IFormProps = {
+  schema: ZodType<Record<string, unknown>>;
+  formFields: IFormField[];
+  moduleName: string;
+  apiUrl: string;
+  data?: Record<string, unknown>;
+  onAddFn: (
+    url: string,
+    data: unknown
+  ) => Promise<AxiosResponse<unknown, unknown>>;
+  onUpdateFn: (
+    url: string,
+    data: unknown
+  ) => Promise<AxiosResponse<unknown, unknown>>;
+};
 
 interface IBaseFormField {
   name: string;
@@ -9,7 +24,6 @@ interface IBaseFormField {
   label?: string;
   labelClassName?: string;
   containerClassName?: string;
-  validations: IDynamicFormFieldValidation
 };
 
 interface IInputField extends IBaseFormField {

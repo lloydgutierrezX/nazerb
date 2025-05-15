@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  ColumnDef,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
@@ -12,38 +11,46 @@ import { DataTableHeader } from "./DataTableHeader";
 import { DataTableBody } from "./DataTableBody";
 import { IData } from "Pages/IData";
 import { DatatableFilter } from "./DatatableFilter";
-import { ITableConfig } from "./IDatatable";
+import { IDataTableProps } from "./IDatatable";
 
 import {
   IHandleDialog,
   useDialogContext,
 } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
+import { SkeletonTable } from "./SkeletonTable";
 
-export const DataTable = <T extends IData>(props: {
-  data: T[];
-  columnDef: ColumnDef<T, string>[];
-  config: ITableConfig;
-}) => {
+export const DataTable = <T extends IData>({
+  data,
+  columnDef,
+  config,
+  isFetching,
+  refetch,
+}: IDataTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
-  const [dataSource, setDataSource] = useState(props.data);
+  const [dataSource, setDataSource] = useState<T[]>(data);
 
   const { dialog, setDialog } = useDialogContext();
 
   useEffect(() => {
-    setDataSource(props.data);
-  }, [props.data]);
+    setDataSource(data);
+  }, [data]);
+
+  // We check when the modal dialog.open value changes,
+  // if it is closed and there are some data changes, we do refetch
+  useEffect(() => {
+    if (!dialog.open && dialog.hasChanges) refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dialog.open, dialog.hasChanges]);
 
   // Initialize the table instance
   const table = useReactTable<T>({
     data: dataSource,
-    columns: props.columnDef,
+    columns: columnDef,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
 
-    getFilteredRowModel: !props.config.serverSide
-      ? getFilteredRowModel()
-      : undefined,
+    getFilteredRowModel: !config.serverSide ? getFilteredRowModel() : undefined,
     globalFilterFn: "includesString",
 
     onGlobalFilterChange: setGlobalFilter,
@@ -59,18 +66,24 @@ export const DataTable = <T extends IData>(props: {
     });
   };
 
+  if (isFetching) {
+    return <SkeletonTable />;
+  }
+
   return (
     <>
       <div className="flex items-center justify-between pt-4">
         <DatatableFilter
           filterRowModel={
-            table.getFilteredRowModel as unknown as () => { rows: Row<IData>[] }
+            table.getFilteredRowModel as unknown as () => {
+              rows: Row<IData>[];
+            }
           }
           setGlobalFilter={setGlobalFilter}
-          searchPlaceholder={props.config.permissions.search?.placeholder}
+          searchPlaceholder={config.permissions.search?.placeholder}
         />
 
-        {props.config.permissions.add.isAllowed && (
+        {config.permissions.add.isAllowed && (
           <button
             className="btn btn-primary hover:text-blue-500 hover:bg-blue-100"
             onClick={() => {
@@ -79,7 +92,7 @@ export const DataTable = <T extends IData>(props: {
           >
             <Icon icon="plus" classNames="w-4 h-4" />
             <span className="">
-              {props.config.permissions.add.placeholder ?? "Create"}
+              {config.permissions.add.placeholder ?? "Create"}
             </span>
           </button>
         )}
@@ -94,7 +107,7 @@ export const DataTable = <T extends IData>(props: {
           />
           <DataTableBody
             rowModel={table.getRowModel}
-            permissions={props.config.permissions}
+            permissions={config.permissions}
             handleDialog={handleDialog}
           />
         </table>

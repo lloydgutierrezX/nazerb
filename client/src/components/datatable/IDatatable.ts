@@ -1,5 +1,14 @@
-import { Row } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { IData } from "Pages/IData";
 import { IHandleDialog } from "Services/contexts/DialogContext";
+
+export type IDataTableProps<T extends IData> = {
+  data: T[];
+  columnDef: ColumnDef<T, string>[];
+  config: ITableConfig;
+  isFetching: boolean;
+  refetch: () => void;
+}
 
 type IPermissionsConfig = {
   isAllowed: boolean;

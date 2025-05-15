@@ -1,5 +1,5 @@
 import express from "express";
-
+import cors from 'cors';
 import routes from "./src/routes/routes.js";
 
 const app = express();
@@ -10,6 +10,8 @@ const app = express();
 // - JWT Blacklisting?
 // Escaping HTML & CSS?
 // Security Linter....
+
+app.use(cors());
 
 app.use(express.json()); // converts data to json
 app.use(express.urlencoded({ extended: true })); // converts data to json

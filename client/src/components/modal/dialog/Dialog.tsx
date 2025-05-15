@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
 
-export const Dialog = (props: { children: ReactNode }) => {
+export const Dialog = ({ children }: { children: ReactNode }) => {
   const { dialog, setDialog } = useDialogContext();
 
   const closeDialog = () => {
     setDialog(() => {
       return {
         ...dialog,
+        data: undefined,
+        hasChanges: false,
         open: false,
       };
     });
@@ -20,6 +22,7 @@ export const Dialog = (props: { children: ReactNode }) => {
         id="dialog"
         className="modal-toggle"
         checked={dialog.open}
+        readOnly
       />
 
       <div className="modal" role="dialog">
@@ -34,7 +37,7 @@ export const Dialog = (props: { children: ReactNode }) => {
             </label>
           </div>
 
-          {props.children}
+          {children}
         </div>
       </div>
     </>

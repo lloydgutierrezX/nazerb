@@ -8,31 +8,15 @@ import { Dialog } from "Components/modal/dialog/Dialog";
 import { Form, IFormField } from "Components/field/Form";
 import { moduleSchema } from "./ModuleSchema";
 
-import { FormContext } from "Services/contexts/FormContext";
-
 import moment from "moment";
-
-// data
-const data: IData[] = [
-  {
-    id: 1,
-    name: "Modules",
-    created_at: "2025-12-12 07:42:35.363",
-    updated_at: "2025-12-12 10:41:35.363",
-  },
-  {
-    id: 2,
-    name: "Roles",
-    created_at: "2025-01-01 10:42:35.363",
-    updated_at: "2025-01-01 11:10:35.363",
-  },
-  {
-    id: 3,
-    name: "Permissions",
-    created_at: "2025-03-03 07:41:35.363",
-    updated_at: "2025-03-03 07:41:35.363",
-  },
-];
+import {
+  addModule,
+  getAllModules,
+  IModulePostRequest,
+  updateModule,
+} from "./ModuleActions";
+import { useQuery } from "@tanstack/react-query";
+import { useDialogContext } from "Services/contexts/DialogContext";
 
 // Columns
 const columnDef: ColumnDef<IData, string>[] = [
@@ -45,7 +29,7 @@ const columnDef: ColumnDef<IData, string>[] = [
     sortDescFirst: false,
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     header: "Date Created",
     cell: (info: { getValue: () => string }) =>
       moment(info.getValue()).format("MMM DD, YYYY"),
@@ -55,7 +39,7 @@ const columnDef: ColumnDef<IData, string>[] = [
     enableGlobalFilter: false,
   },
   {
-    accessorKey: "updated_at",
+    accessorKey: "updatedAt",
     header: "Last Update",
     cell: (info: { getValue: () => string }) =>
       moment(info.getValue()).format("MMM DD, YYYY"),
@@ -108,14 +92,13 @@ const formFields: IFormField[] = [
   {
     type: "toggle",
     placeholder: "Toggle this to turn on/off this module",
-    name: "is_active",
+    name: "active",
     value: true,
     className: "justify-end",
     containerClassName: "flex flex-row gap-2",
     defaultChecked: true,
     label: "Is Actve?",
     labelClassName: "w-full justify-end",
-    validations: {},
   },
   {
     type: "text",
@@ -125,28 +108,42 @@ const formFields: IFormField[] = [
     labelClassName: "w-full",
     value: "",
     className: "",
-    validations: {
-      required: "Module name is reuqired.",
-      minLength: 4,
-      maxLength: 60,
-    },
   },
 ];
 
 export const Module = () => {
+  const { data, isFetching, refetch } = useQuery({
+    queryFn: getAllModules,
+    queryKey: ["getModules"],
+  });
+
+  const { dialog } = useDialogContext();
+
   return (
     <>
       <Dialog>
-        <FormContext.Provider value={undefined}>
-          <Form
-            formFields={formFields}
-            schema={moduleSchema}
-            moduleName="Module"
-          />
-        </FormContext.Provider>
+        <Form
+          formFields={formFields}
+          schema={moduleSchema}
+          moduleName="Module"
+          apiUrl="/modules"
+          data={dialog.data}
+          onAddFn={(url: string, data: unknown) =>
+            addModule({ url, data } as IModulePostRequest)
+          }
+          onUpdateFn={(url: string, data: unknown) =>
+            updateModule({ url, data } as IModulePostRequest)
+          }
+        />
       </Dialog>
 
-      <DataTable data={data} columnDef={columnDef} config={config} />
+      <DataTable
+        data={data?.data ?? []}
+        columnDef={columnDef}
+        config={config}
+        isFetching={isFetching}
+        refetch={refetch}
+      />
     </>
   );
 };
