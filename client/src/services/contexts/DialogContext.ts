@@ -1,11 +1,6 @@
 import { createContext, useContext } from "react";
 
-export type IHandleDialog = {
-  action: string;
-  toggle: boolean;
-}
-
-type IDialogContent = {
+export type IDialogContent = {
   open: boolean;
   module?: string;
   hasChanges?: boolean;

@@ -14,7 +14,7 @@ import { DatatableFilter } from "./DatatableFilter";
 import { IDataTableProps } from "./IDatatable";
 
 import {
-  IHandleDialog,
+  IDialogContent,
   useDialogContext,
 } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
@@ -29,7 +29,6 @@ export const DataTable = <T extends IData>({
 }: IDataTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
-
   const { dialog, setDialog } = useDialogContext();
 
   useEffect(() => {
@@ -60,10 +59,10 @@ export const DataTable = <T extends IData>({
     },
   });
 
-  const handleDialog = (params: IHandleDialog) => {
+  const handleDialog = (params: IDialogContent) => {
     setDialog({
       ...dialog,
-      open: params.toggle,
+      open: params.open,
     });
   };
 
@@ -88,7 +87,7 @@ export const DataTable = <T extends IData>({
           <button
             className="btn btn-primary hover:text-blue-500 hover:bg-blue-100"
             onClick={() => {
-              handleDialog({ toggle: true, action: "add" });
+              handleDialog({ open: true });
             }}
           >
             <Icon icon="plus" classNames="w-4 h-4" />
@@ -109,7 +108,6 @@ export const DataTable = <T extends IData>({
           <DataTableBody
             rowModel={table.getRowModel}
             permissions={config.permissions}
-            handleDialog={handleDialog}
           />
         </table>
       </div>

@@ -1,6 +1,5 @@
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { IData } from "Pages/IData";
-import { IHandleDialog } from "Services/contexts/DialogContext";
 
 export type IDataTableProps<T extends IData> = {
   data: T[];
@@ -52,5 +51,4 @@ export type DataTableBodyProps<TData> = {
     rows: Row<TData>[];
   };
   permissions: IPermissions;
-  handleDialog: (params: IHandleDialog) => void;
 };

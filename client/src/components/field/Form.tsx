@@ -8,14 +8,13 @@ import { IFormField, IFormProps } from "./IFormFields";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
-import { TextArea } from "./textarea/Textarea";
+import { TextArea } from "./textarea/TextArea";
 
 export const Form: React.FC<IFormProps> = ({
   schema,
   formFields,
   moduleName,
   data,
-  apiUrl,
   onAddFn,
   onUpdateFn,
 }) => {
@@ -61,9 +60,7 @@ export const Form: React.FC<IFormProps> = ({
   // react-query function for Add, Edit, Delete
   const mutation = useMutation({
     mutationFn: async (formData: Record<string, unknown>) =>
-      isCreate
-        ? onAddFn(apiUrl, formData)
-        : onUpdateFn(`${apiUrl}/${data.id}`, formData),
+      isCreate ? onAddFn(formData) : onUpdateFn(data.id as string, formData),
   });
 
   useEffect(() => {

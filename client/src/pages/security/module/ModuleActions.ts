@@ -1,14 +1,22 @@
-import { addData, fetchAll, updateData } from "Services/axios/request";
+import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
+
+const url = '/modules';
 
 export const getAllModules =
-  async () => await fetchAll({ url: '/modules' });
+  async () => await fetchAll({ url });
 
-export type IModulePostRequest = {
-  url: string;
-  data: { name: string, is_active: boolean }
+export type IModuleDataChangeRequest = {
+  id?: string;
+  data?: { name: string, description: string, is_active: boolean };
 }
 export const addModule =
-  async ({ url, data }: IModulePostRequest) => await addData({ url, data });
+  async ({ data }: IModuleDataChangeRequest) => await addData({ url, data });
 
 export const updateModule =
-  async ({ url, data }: IModulePostRequest) => await updateData({ url, data });
+  async ({ id, data }: IModuleDataChangeRequest) => await updateData({ url: `${url}/${id}`, data });
+
+export const deleteModule =
+  async ({ id }: IModuleDataChangeRequest) => await deleteData({ url: `${url}/${id}` });
+
+export const retrieveModule =
+  async ({ id }: IModuleDataChangeRequest) => await retreiveData({ url: `${url}/${id}` });

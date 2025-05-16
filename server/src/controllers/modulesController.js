@@ -26,6 +26,7 @@ export const createModule = async (req, res) => {
     console.log(
       `Processing create module with name ${name} and description ${description}`
     );
+
     // Create the new module
     const newModule = await prisma.module.create({
       data: {

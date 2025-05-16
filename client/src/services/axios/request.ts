@@ -16,11 +16,11 @@ export const fetchAll = ({ url, options }: IFetchRequest) => {
   }
 }
 
-type IFetchDataRequest = {
+type IChangeDataRequest = {
   url: string;
-  data: DynamicObject
+  data?: DynamicObject
 }
-export const addData = ({ url, data }: IFetchDataRequest) => {
+export const addData = ({ url, data }: IChangeDataRequest) => {
   try {
     return request.post(`${url}`, data)
       .catch((error) => { throw error.response.data })
@@ -29,9 +29,27 @@ export const addData = ({ url, data }: IFetchDataRequest) => {
   }
 }
 
-export const updateData = ({ url, data }: IFetchDataRequest) => {
+export const updateData = ({ url, data }: IChangeDataRequest) => {
   try {
-    return request.put(`${url}`, data)
+    return request.put(url, data)
+      .catch((error) => { throw error.response.data })
+  } catch {
+    throw new Error()
+  }
+}
+
+export const deleteData = ({ url }: IChangeDataRequest) => {
+  try {
+    return request.delete(url)
+      .catch((error) => { throw error.response.data })
+  } catch {
+    throw new Error()
+  }
+}
+
+export const retreiveData = ({ url }: IChangeDataRequest) => {
+  try {
+    return request.put(url, { active: true })
       .catch((error) => { throw error.response.data })
   } catch {
     throw new Error()

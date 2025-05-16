@@ -5,14 +5,12 @@ export type IFormProps = {
   schema: ZodType<Record<string, unknown>>;
   formFields: IFormField[];
   moduleName: string;
-  apiUrl: string;
   data?: Record<string, unknown>;
   onAddFn: (
-    url: string,
     data: unknown
   ) => Promise<AxiosResponse<unknown, unknown>>;
   onUpdateFn: (
-    url: string,
+    id: string,
     data: unknown
   ) => Promise<AxiosResponse<unknown, unknown>>;
 };

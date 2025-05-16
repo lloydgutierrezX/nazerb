@@ -21,7 +21,6 @@ function App() {
   const [currentModule, setCurrentModule] = useState("");
 
   const [dialog, setDialog] = useState({ open: false });
-  const dialogValue = { dialog, setDialog };
 
   useEffect(() => {
     const split = location.pathname.split("/");
@@ -47,7 +46,7 @@ function App() {
               {currentModule}
             </h1>
 
-            <DialogContext.Provider value={dialogValue}>
+            <DialogContext.Provider value={{ dialog, setDialog }}>
               <Routes>
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/dashboard" element={<Dashboard />} />

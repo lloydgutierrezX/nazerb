@@ -20,6 +20,8 @@ import {
   Check,
   ToggleLeft,
   ToggleRight,
+  TriangleAlert,
+  RotateCcw,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -112,6 +114,17 @@ export const Icon = memo(function Icon(props: {
           case "toggle-right":
             return (
               <ToggleRight className={classNames} color={color ?? undefined} />
+            );
+          case "triangle-alert":
+            return (
+              <TriangleAlert
+                className={classNames}
+                color={color ?? undefined}
+              />
+            );
+          case "rotate-ccw":
+            return (
+              <RotateCcw className={classNames} color={color ?? undefined} />
             );
           default:
             console.warn(`No icon for ${icon}`);

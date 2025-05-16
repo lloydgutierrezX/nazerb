@@ -11,19 +11,27 @@ import { moduleSchema } from "./ModuleSchema";
 import moment from "moment";
 import {
   addModule,
+  deleteModule,
   getAllModules,
-  IModulePostRequest,
+  IModuleDataChangeRequest,
+  retrieveModule,
   updateModule,
 } from "./ModuleActions";
 import { useQuery } from "@tanstack/react-query";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
+import { ConfirmDialog } from "Components/modal/confirm/Confirm";
+import {
+  ConfirmDialogContext,
+  IConfirmDialogContent,
+} from "Services/contexts/ConfirmDialogContext";
+import { useState } from "react";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<IData, string>[] = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "name", // key
+    header: "Name", // header name
     cell: (info: { getValue: () => string }) => info.getValue(),
     enableSorting: true,
     sortUndefined: -1,
@@ -156,32 +164,42 @@ export const Module = () => {
   });
 
   const { dialog } = useDialogContext();
+  const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
+    open: false,
+    module: "Modules",
+    buttons: {
+      onDeleteFn: (id: string) => deleteModule({ id }),
+      onRetrieveFn: (id: string) => retrieveModule({ id }),
+    },
+  });
 
   return (
     <>
-      <Dialog>
-        <Form
-          formFields={formFields}
-          schema={moduleSchema}
-          moduleName="Module"
-          apiUrl="/modules"
-          data={dialog.data}
-          onAddFn={(url: string, data: unknown) =>
-            addModule({ url, data } as IModulePostRequest)
-          }
-          onUpdateFn={(url: string, data: unknown) =>
-            updateModule({ url, data } as IModulePostRequest)
-          }
-        />
-      </Dialog>
+      <ConfirmDialogContext.Provider
+        value={{ confirmDialog, setConfirmDialog }}
+      >
+        <ConfirmDialog />
+        <Dialog>
+          <Form
+            formFields={formFields}
+            schema={moduleSchema}
+            moduleName="Module"
+            data={dialog.data}
+            onAddFn={(data) => addModule({ data } as IModuleDataChangeRequest)}
+            onUpdateFn={(id, data) =>
+              updateModule({ id, data } as IModuleDataChangeRequest)
+            }
+          />
+        </Dialog>
 
-      <DataTable
-        data={data?.data ?? []}
-        columnDef={columnDef}
-        config={config}
-        isFetching={isFetching}
-        refetch={refetch}
-      />
+        <DataTable
+          data={data?.data ?? []}
+          columnDef={columnDef}
+          config={config}
+          isFetching={isFetching}
+          refetch={refetch}
+        />
+      </ConfirmDialogContext.Provider>
     </>
   );
 };
