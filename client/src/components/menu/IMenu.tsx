@@ -1,9 +1,9 @@
-interface IMenuContent {
+type IMenuContent = {
   key: string;
   is_active: boolean;
   path?: string;
   icon?: string;
-}
+};
 
 export interface IMenu extends IMenuContent {
   children?: IMenu[];
@@ -52,6 +52,12 @@ export const jsonMenu = [
         path: "security/users",
         is_active: true,
         icon: "circleuser",
+      },
+      {
+        key: "modules",
+        path: "security/modules",
+        is_active: true,
+        icon: "component",
       },
       {
         key: "roles",

@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
-import Icon from "../icon/Icon";
-import { IMenu } from "./MenuInterface";
+import { Icon } from "Components/icon/Icon";
 import { memo, useMemo } from "react";
-import { usePageContext } from "../../hooks/Page";
+import { usePageContext } from "Services/contexts/PageContext";
+import { IMenu } from "./IMenu";
 
 const activeNavLink = {
   backgroundColor: "#ffffffe6",
@@ -13,7 +13,7 @@ const isCollapse = (menu: IMenu, curPage: string) => {
   return (menu?.children ?? []).some((m: IMenu) => m.key === curPage);
 };
 
-const MenuItem = memo(function MenuItem(props: { items: IMenu[] }) {
+export const MenuItem = memo(function MenuItem(props: { items: IMenu[] }) {
   const currentPath = usePageContext();
   const currentPage = useMemo(
     () => currentPath[currentPath.length - 1],
@@ -55,5 +55,3 @@ const MenuItem = memo(function MenuItem(props: { items: IMenu[] }) {
     );
   });
 });
-
-export default MenuItem;
