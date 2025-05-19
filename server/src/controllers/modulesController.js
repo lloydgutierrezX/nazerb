@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 // Function to create a new module
 export const createModule = async (req, res) => {
   console.log("Creating a new module");
-
   const { name, description } = req.body;
 
   try {
@@ -19,12 +18,15 @@ export const createModule = async (req, res) => {
       })
     ) {
       console.log(`Module name ${name} already exists`);
-      res.status(409).json({ error: `Module ${name} already taken` });
+      res
+        .status(409)
+        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
 
     console.log(
       `Processing create module with name ${name} and description ${description}`
     );
+
     // Create the new module
     const newModule = await prisma.module.create({
       data: {
@@ -40,7 +42,7 @@ export const createModule = async (req, res) => {
     console.log("Creating module failed", error);
 
     // If the module does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to create module" });
+    res.status(500).json({ message: "Failed to create module" });
   }
 };
 
@@ -50,7 +52,7 @@ export const getModules = async (req, res) => {
 
   try {
     const modules = await prisma.module.findMany({
-      where: { active: true },
+      // where: { active: true },
       orderBy: { active: "asc" },
     });
     res.status(200).json(modules);
@@ -58,7 +60,7 @@ export const getModules = async (req, res) => {
     console.log("Fetching all modules failed", error);
 
     // If the modules do not exist, return a 404 error
-    res.status(500).json({ error: "Failed to fetch modules" });
+    res.status(500).json({ message: "Failed to fetch modules" });
   }
 };
 
@@ -70,7 +72,7 @@ export const getModuleById = async (req, res) => {
   const { id } = req.params;
 
   if (isNaN(id)) {
-    return res.status(400).json({ error: "Invalid module ID" });
+    return res.status(400).json({ message: "Invalid module ID" });
   }
 
   // Fetch the module by ID
@@ -82,7 +84,7 @@ export const getModuleById = async (req, res) => {
     // Check if the module exists
     console.log(`Module with ID ${id} fetched successfully`);
     if (!module) {
-      return res.status(404).json({ error: "Module not found" });
+      return res.status(404).json({ message: "Module not found" });
     }
 
     // Return the module
@@ -92,7 +94,7 @@ export const getModuleById = async (req, res) => {
     console.log(`Fetching module with ID ${id} failed`, error);
 
     // If the module does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to fetch module" });
+    res.status(500).json({ message: "Failed to fetch module" });
   }
 };
 
@@ -104,20 +106,21 @@ export const updateModule = async (req, res) => {
   const { id } = req.params;
   if (isNaN(id)) {
     console.log(`Invalid module ID: ${id}`);
-    return res.status(400).json({ error: "Invalid module ID" });
+    return res.status(400).json({ message: "Invalid module ID" });
   }
 
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
+
+  const module = await prisma.module.findUnique({
+    where: { id: parseInt(id) },
+  });
+
   // Check if the module exists
   console.log(`Checking if module with ID ${id} exists`);
-  if (
-    !(await prisma.module.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
+  if (!module) {
     // If the module does not exist, return a 404 error
     console.log(`Module with ID ${id} not found`);
-    return res.status(404).json({ error: "Module not found" });
+    return res.status(404).json({ message: "Module not found" });
   }
 
   try {
@@ -125,26 +128,28 @@ export const updateModule = async (req, res) => {
     console.log(`Updating module with ID ${id}`);
 
     // Check if the module name already exists
-    if (
-      await prisma.module.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
+    if (name === module.name && id != module.id) {
       console.log(`Module name ${name} already exists`);
-      res.status(409).json({ error: `Module ${name} already taken` });
+      res
+        .status(409)
+        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
+    console.log(`Module name ${name} don't exist.`);
 
     // Update the module
     console.log(`Processing update of module with ID ${id}`);
 
+    const moduleData = {
+      active,
+      description,
+    };
+    if (name !== module.name) {
+      moduleData.name = name;
+    }
+
     const updatedModule = await prisma.module.update({
       where: { id: parseInt(id) },
-      data: {
-        name,
-        description,
-      },
+      data: moduleData,
     });
 
     console.log(`Module with ID ${id} updated successfully`);
@@ -154,7 +159,7 @@ export const updateModule = async (req, res) => {
   } catch (error) {
     console.log(`Updating module with ID ${id} failed`, error);
     // If the module does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to update module" });
+    res.status(500).json({ message: "Failed to update module" });
   }
 };
 
@@ -167,7 +172,7 @@ export const deleteModule = async (req, res) => {
 
   if (isNaN(id)) {
     console.log(`Invalid module ID: ${id}`);
-    return res.status(400).json({ error: "Invalid module ID" });
+    return res.status(400).json({ message: "Invalid module ID" });
   }
 
   // Check if the module exists
@@ -181,7 +186,7 @@ export const deleteModule = async (req, res) => {
     console.log(`Module with ID ${id} not found`);
 
     // If the module does not exist, return a 404 error
-    return res.status(404).json({ error: "Module not found" });
+    return res.status(404).json({ message: "Module not found" });
   }
   try {
     // Soft delete the module
@@ -200,7 +205,7 @@ export const deleteModule = async (req, res) => {
     console.log(`Soft deleting module with ID ${id} failed`, error);
 
     // If the module does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to delete module" });
+    res.status(500).json({ message: "Failed to delete module" });
   }
 
   // We do not hard delete data.
@@ -210,6 +215,6 @@ export const deleteModule = async (req, res) => {
   //   });
   //   res.status(204).send();
   // } catch (error) {
-  //   res.status(500).json({ error: "Failed to delete module" });
+  //   res.status(500).json({ message: "Failed to delete module" });
   // }
 };

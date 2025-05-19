@@ -11,7 +11,7 @@ POST http://localhost:3000/api/modules
 Content-Type: application/json
 
 {
-  "name": "user",
+  "name": "1111",
   "description": "user module"
 }
 

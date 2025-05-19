@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "postinstall": "prisma generate --schema=./prisma/schema.prisma",
-        "start": "nodemon server"
+        "dev": "nodemon server"
     },
     "keywords": [],
     "author": "JL Gutierrez",
