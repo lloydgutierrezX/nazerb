@@ -21,8 +21,7 @@ export const Form: React.FC<IFormProps> = ({
 }) => {
   const { dialog, setDialog } = useDialogContext();
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
-  const { form } = useFormContext();
-  const isCreate = form.action === "create";
+  const { form, setForm } = useFormContext();
 
   // useForm init
   const {
@@ -66,8 +65,9 @@ export const Form: React.FC<IFormProps> = ({
       queryClient.invalidateQueries({ queryKey: ["get-all-modules"] });
 
       // resets dialog and confirm dialog context params
-      setDialog({ ...dialog, open: false });
+      setDialog({ ...dialog, data: undefined, open: false });
       setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
+      setForm({ ...form, action: "create" });
     },
   });
 
@@ -139,7 +139,7 @@ export const Form: React.FC<IFormProps> = ({
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <fieldset className="fieldset border-base-300 rounded-box w-full border p-4">
         <legend className="fieldset-legend text-xl">
-          {(isCreate ? "Create" : "Update") + " " + moduleName}
+          {(form.action === "create" ? "Create" : "Update") + " " + moduleName}
         </legend>
 
         {formFields.map((field: IFormField) => {

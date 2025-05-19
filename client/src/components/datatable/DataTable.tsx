@@ -19,6 +19,7 @@ import {
 } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
 import { SkeletonTable } from "./SkeletonTable";
+import { useFormContext } from "Services/contexts/FormContext";
 
 export const DataTable = <T extends IData>({
   data,
@@ -29,6 +30,7 @@ export const DataTable = <T extends IData>({
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
   const { dialog, setDialog } = useDialogContext();
+  const { form, setForm } = useFormContext();
 
   useEffect(() => {
     setDataSource(data);
@@ -56,6 +58,8 @@ export const DataTable = <T extends IData>({
       ...dialog,
       open: params.open,
     });
+
+    setForm({ ...form, action: "create" });
   };
 
   if (isFetching) {
