@@ -1,6 +1,6 @@
 import { UseFormRegister } from "react-hook-form";
 import React from "react";
-import { IInputField } from "../IFormFields";
+import { IInputField } from "../IForm";
 
 interface IInputProps extends IInputField {
   register: UseFormRegister<Record<string, unknown>>;

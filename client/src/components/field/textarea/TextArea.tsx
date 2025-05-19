@@ -1,5 +1,5 @@
 import { UseFormRegister } from "react-hook-form";
-import { ITextAreaField } from "../IFormFields";
+import { ITextAreaField } from "../IForm";
 
 interface ITextAreaProps extends ITextAreaField {
   register: UseFormRegister<Record<string, unknown>>;

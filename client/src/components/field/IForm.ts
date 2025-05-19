@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import { ZodType } from "zod";
 
 export type IFormProps = {
@@ -6,13 +5,6 @@ export type IFormProps = {
   formFields: IFormField[];
   moduleName: string;
   data?: Record<string, unknown>;
-  onAddFn: (
-    data: unknown
-  ) => Promise<AxiosResponse<unknown, unknown>>;
-  onUpdateFn: (
-    id: string,
-    data: unknown
-  ) => Promise<AxiosResponse<unknown, unknown>>;
 };
 
 interface IBaseFormField {
@@ -40,4 +32,4 @@ interface IToggleField extends IBaseFormField {
 
 export type IFormField = IInputField | IToggleField | ITextAreaField;
 
-
+export type IAction = 'create' | 'update' | 'delete' | 'retrieve';

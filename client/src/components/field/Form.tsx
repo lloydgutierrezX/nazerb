@@ -4,23 +4,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input/Input";
 import { z } from "zod";
 import { Toggle } from "./toggle/Toggle";
-import { IFormField, IFormProps } from "./IFormFields";
-import { useMutation } from "@tanstack/react-query";
+import { IFormField, IFormProps } from "./IForm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { TextArea } from "./textarea/TextArea";
+import { useFormContext } from "Services/contexts/FormContext";
+import { DynamicObject } from "Utils/globalInterface";
+import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext";
 
 export const Form: React.FC<IFormProps> = ({
   schema,
   formFields,
   moduleName,
   data,
-  onAddFn,
-  onUpdateFn,
 }) => {
-  const isCreate = !data;
   const { dialog, setDialog } = useDialogContext();
+  const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
+  const { form } = useFormContext();
+  const isCreate = form.action === "create";
 
+  // useForm init
   const {
     register,
     handleSubmit,
@@ -34,11 +38,42 @@ export const Form: React.FC<IFormProps> = ({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<
-    z.infer<typeof schema> & Record<string, unknown>
-  > = (formData) => mutation.mutate(formData);
+  const queryClient = useQueryClient();
+  // react-query function for Create, Edit, Delete, Retrieve
+  const mutation = useMutation({
+    mutationFn: async (formData?: Record<string, unknown> | null) => {
+      switch (form.action) {
+        case "create":
+          return form.onAddFn(formData as DynamicObject);
+        case "update":
+          return (
+            data?.id &&
+            form.onUpdateFn(data.id as string, formData as DynamicObject)
+          );
+        case "delete":
+          console.log("delet");
+          return (
+            confirmDialog?.id && form.onDeleteFn(confirmDialog.id as string)
+          );
+        case "retrieve":
+          console.log("retreive");
+          return (
+            confirmDialog?.id && form.onRetrieveFn(confirmDialog.id as string)
+          );
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-all-modules"] });
 
+      // resets dialog and confirm dialog context params
+      setDialog({ ...dialog, open: false });
+      setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
+    },
+  });
+
+  // useEffect for field validation
   useEffect(() => {
+    // if we close the dialog, then we need to reset the fields.
     if (!dialog.open) {
       reset();
       return;
@@ -46,29 +81,36 @@ export const Form: React.FC<IFormProps> = ({
 
     formFields.forEach((f) => {
       const d = data as Record<string, unknown>;
+      // if data has value, meaning the form is called for update
+      // then we need to manually set the value to each field.
       if (data) {
         setValue(f.name, d[f.name]);
         return;
       }
 
+      // if the process goes here, then meaning this is form is for create.
+      // if the current field is a toggle, we need to set it's value to true.
+      // empty string or "" if its not a toggle.
       const isBoolean = f.type === "toggle";
-
       setValue(f.name, isBoolean ? true : "");
     });
   }, [dialog.open, data, formFields, setValue]);
 
-  // react-query function for Add, Edit, Delete
-  const mutation = useMutation({
-    mutationFn: async (formData: Record<string, unknown>) =>
-      isCreate ? onAddFn(formData) : onUpdateFn(data.id as string, formData),
-  });
-
+  // useEffect for confirmation dialog. this is for Delete and Retrieve actions.
   useEffect(() => {
-    if (mutation.isSuccess)
-      setDialog(() => {
-        return { ...dialog, hasChanges: true, open: false };
-      });
-  }, [mutation.isSuccess]);
+    if (
+      !confirmDialog.confirmAction ||
+      (form.action !== "retrieve" && form.action !== "delete")
+    ) {
+      return;
+    }
+
+    mutation.mutate(null);
+  }, [confirmDialog.confirmAction, form.action]);
+
+  const onSubmit: SubmitHandler<
+    z.infer<typeof schema> & Record<string, unknown>
+  > = (formData) => mutation.mutate(formData);
 
   // for Server response, if has error. We dynamically set this error on react-table
   useEffect(() => {
@@ -178,4 +220,3 @@ export const Form: React.FC<IFormProps> = ({
     </form>
   );
 };
-export type { IFormField };

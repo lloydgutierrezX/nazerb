@@ -1,5 +1,5 @@
 export type IData = {
-  id: number;
+  id: string;
   name: string;
   created_at?: string;
   updated_at?: string;

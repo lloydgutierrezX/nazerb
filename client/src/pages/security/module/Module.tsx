@@ -5,19 +5,19 @@ import { IData } from "Pages/IData";
 import { DataTable } from "Components/datatable/DataTable";
 import { ITableConfig } from "Components/datatable/IDatatable";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import { Form, IFormField } from "Components/field/Form";
+import { Form } from "Components/field/Form";
 import { moduleSchema } from "./ModuleSchema";
 
 import moment from "moment";
 import {
+  useGetAllModules,
   addModule,
   deleteModule,
-  getAllModules,
-  IModuleDataChangeRequest,
   retrieveModule,
   updateModule,
+  getAllModulesKey,
+  IModuleInput,
 } from "./ModuleActions";
-import { useQuery } from "@tanstack/react-query";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
@@ -26,6 +26,9 @@ import {
   IConfirmDialogContent,
 } from "Services/contexts/ConfirmDialogContext";
 import { useState } from "react";
+import { FormContext } from "Services/contexts/FormContext";
+import { DynamicObject } from "Utils/globalInterface";
+import { IAction, IFormField } from "Components/field/IForm";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<IData, string>[] = [
@@ -158,48 +161,47 @@ const formFields: IFormField[] = [
 ];
 
 export const Module = () => {
-  const { data, isFetching, refetch } = useQuery({
-    queryFn: getAllModules,
-    queryKey: ["getModules"],
-  });
-
+  const { data, isFetching } = useGetAllModules();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
     module: "Modules",
-    buttons: {
-      onDeleteFn: (id: string) => deleteModule({ id }),
-      onRetrieveFn: (id: string) => retrieveModule({ id }),
-    },
+  });
+  const [form, setForm] = useState({
+    url: "/modules",
+    fetchQueryKey: getAllModulesKey,
+    action: "create" as IAction, // defaults to create
+    onAddFn: (data: DynamicObject) => addModule(data as IModuleInput),
+    onUpdateFn: (id: string, data: DynamicObject) =>
+      updateModule(id, data as IModuleInput),
+    onDeleteFn: (id: string) => deleteModule(id),
+    onRetrieveFn: (id: string) => retrieveModule(id),
   });
 
   return (
     <>
-      <ConfirmDialogContext.Provider
-        value={{ confirmDialog, setConfirmDialog }}
-      >
-        <ConfirmDialog />
-        <Dialog>
-          <Form
-            formFields={formFields}
-            schema={moduleSchema}
-            moduleName="Module"
-            data={dialog.data}
-            onAddFn={(data) => addModule({ data } as IModuleDataChangeRequest)}
-            onUpdateFn={(id, data) =>
-              updateModule({ id, data } as IModuleDataChangeRequest)
-            }
-          />
-        </Dialog>
+      <FormContext.Provider value={{ form, setForm }}>
+        <ConfirmDialogContext.Provider
+          value={{ confirmDialog, setConfirmDialog }}
+        >
+          <ConfirmDialog />
+          <Dialog>
+            <Form
+              formFields={formFields}
+              schema={moduleSchema}
+              moduleName="Module"
+              data={dialog.data}
+            />
+          </Dialog>
 
-        <DataTable
-          data={data?.data ?? []}
-          columnDef={columnDef}
-          config={config}
-          isFetching={isFetching}
-          refetch={refetch}
-        />
-      </ConfirmDialogContext.Provider>
+          <DataTable
+            data={data ?? []}
+            columnDef={columnDef}
+            config={config}
+            isFetching={isFetching}
+          />
+        </ConfirmDialogContext.Provider>
+      </FormContext.Provider>
     </>
   );
 };

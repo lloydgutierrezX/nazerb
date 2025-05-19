@@ -6,7 +6,6 @@ export type IDataTableProps<T extends IData> = {
   columnDef: ColumnDef<T, string>[];
   config: ITableConfig;
   isFetching: boolean;
-  refetch: () => void;
 }
 
 type IPermissionsConfig = {

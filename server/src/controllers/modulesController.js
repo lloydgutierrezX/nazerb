@@ -134,6 +134,7 @@ export const updateModule = async (req, res) => {
         .status(409)
         .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
+    console.log(`Module name ${name} don't exist.`);
 
     // Update the module
     console.log(`Processing update of module with ID ${id}`);

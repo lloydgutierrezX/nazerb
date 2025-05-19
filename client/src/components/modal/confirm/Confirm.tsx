@@ -1,16 +1,18 @@
 import { Icon } from "Components/icon/Icon";
 import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext";
+import { useFormContext } from "Services/contexts/FormContext";
 
 export const ConfirmDialog = () => {
-  const { setConfirmDialog, confirmDialog } = useConfirmDialogContext();
+  const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
+  const { form, setForm } = useFormContext();
 
   const closeConfirmDialog = () =>
-    setConfirmDialog({ ...confirmDialog, open: false });
+    setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
 
-  const handleOnClick = () =>
-    confirmDialog.action === "delete"
-      ? confirmDialog.buttons.onDeleteFn(confirmDialog.id as string)
-      : confirmDialog.buttons.onRetrieveFn(confirmDialog.id as string);
+  const handleOnClick = () => {
+    setForm({ ...form, action: confirmDialog.action! });
+    setConfirmDialog({ ...confirmDialog, confirmAction: true });
+  };
 
   return (
     <>
@@ -42,14 +44,17 @@ export const ConfirmDialog = () => {
           <div className="flex flex-row-reverse gap-2">
             <button
               className="btn btn-soft btn-success"
-              onClick={() => handleOnClick()}
+              onClick={handleOnClick}
+              disabled={confirmDialog.confirmAction}
+              // confirmDialog.confirmAction will not return to false until our mutation is onSuccess.
             >
-              Confirm
+              {confirmDialog.confirmAction ? "Loading..." : "Confirm"}
             </button>
 
             <button
               className="btn btn-soft btn-error"
               onClick={closeConfirmDialog}
+              disabled={confirmDialog.confirmAction}
             >
               Cancel
             </button>

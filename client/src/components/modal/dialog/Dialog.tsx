@@ -8,9 +8,8 @@ export const Dialog = ({ children }: { children: ReactNode }) => {
     setDialog(() => {
       return {
         ...dialog,
-        data: undefined,
-        hasChanges: false,
         open: false,
+        data: undefined,
       };
     });
   };

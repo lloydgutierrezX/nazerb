@@ -3,7 +3,6 @@ import { createContext, useContext } from "react";
 export type IDialogContent = {
   open: boolean;
   module?: string;
-  hasChanges?: boolean;
   data?: Record<string, unknown>;
 }
 

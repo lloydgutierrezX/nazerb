@@ -1,15 +1,15 @@
-import { AxiosResponse } from "axios";
+import { IAction } from "Components/field/IForm";
 import { useContext } from "react"
 import { createContext } from "react"
 
 export type IConfirmDialogContent = {
   open: boolean,
   module: string;
+  // callback function, this may have other value in the future.
+  action?: IAction;
+  // this is needed for the callback function for sending api request
   id?: string;
-  action?: 'delete' | 'retreive';
-  buttons: {
-    [key: string]: (id: string) => Promise<AxiosResponse<unknown, unknown>>;
-  }
+  confirmAction?: boolean;
 }
 
 type IConfirmDialogContext = {
@@ -21,8 +21,6 @@ export const ConfirmDialogContext = createContext<IConfirmDialogContext | undefi
 
 export function useConfirmDialogContext() {
   const context = useContext(ConfirmDialogContext);
-
-  console.log(context)
   if (context === undefined) {
     throw new Error('useConfirmDialogContext must be used with a ConfirmDialogContext');
   }

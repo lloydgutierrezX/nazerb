@@ -25,7 +25,6 @@ export const DataTable = <T extends IData>({
   columnDef,
   config,
   isFetching,
-  refetch,
 }: IDataTableProps<T>) => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
@@ -34,13 +33,6 @@ export const DataTable = <T extends IData>({
   useEffect(() => {
     setDataSource(data);
   }, [data]);
-
-  // We check when the modal dialog.open value changes,
-  // if it is closed and there are some data changes, we do refetch
-  useEffect(() => {
-    if (!dialog.open && dialog.hasChanges) refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dialog.open, dialog.hasChanges]);
 
   // Initialize the table instance
   const table = useReactTable<T>({
