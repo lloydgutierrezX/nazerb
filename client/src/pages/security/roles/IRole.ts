@@ -1,4 +1,4 @@
-export type IModuleResponse = {
+export type IRoleResponse = {
   id: string;
   name: string;
   description: string;
@@ -7,6 +7,6 @@ export type IModuleResponse = {
   updated_at: string;
 }
 
-export type IModuleInput = {
+export type IRoleInput = {
   name: string, description: string, is_active: boolean
 }

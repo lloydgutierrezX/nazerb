@@ -62,7 +62,7 @@ export const Form: React.FC<IFormProps> = ({
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get-all-modules"] });
+      queryClient.invalidateQueries({ queryKey: [form.fetchQueryKey] });
 
       // resets dialog and confirm dialog context params
       setDialog({ ...dialog, data: undefined, open: false });
