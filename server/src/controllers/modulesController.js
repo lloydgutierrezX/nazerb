@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 // Function to create a new module
 export const createModule = async (req, res) => {
   console.log("Creating a new module");
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
 
   try {
     // Check if the module name already exists
@@ -31,6 +31,7 @@ export const createModule = async (req, res) => {
     const newModule = await prisma.module.create({
       data: {
         name,
+        active,
         description,
       },
     });
@@ -53,7 +54,7 @@ export const getModules = async (req, res) => {
   try {
     const modules = await prisma.module.findMany({
       // where: { active: true },
-      orderBy: { active: "asc" },
+      orderBy: { createdAt: "desc" },
     });
     res.status(200).json(modules);
   } catch (error) {

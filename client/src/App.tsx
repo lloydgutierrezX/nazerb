@@ -10,6 +10,7 @@ import { NotFound } from "./pages/NotFound";
 import { PageContext } from "./services/contexts/PageContext";
 import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
+import { Role } from "Pages/security/roles/Role";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 <Route path="/security/modules" element={<Module />} />
+                <Route path="/security/roles" element={<Role />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

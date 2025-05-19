@@ -1,7 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
-import { IModuleResponse } from "./IModule";
-import { IAction } from "Components/field/IForm";
+import { IModuleInput, IModuleResponse } from "./IModule";
 
 const url = '/modules';
 export const getAllModulesKey = 'get-all-modules';
@@ -20,9 +19,6 @@ export const useGetAllModules = () => {
   })
 }
 
-export type IModuleInput = {
-  name: string, description: string, is_active: boolean
-}
 // add module request
 export const addModule =
   async (data: IModuleInput) => await addData({ url, data });
@@ -35,25 +31,3 @@ export const deleteModule =
 
 export const retrieveModule =
   async (id: string) => await retreiveData({ url: `${url}/${id}` });
-
-// useQuery implementation for add module request
-export const useModuleMutation = (action: IAction, id?: string, formData?: Record<string, unknown>) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async () => {
-      switch (action) {
-        case 'create':
-          return addModule(formData as IModuleInput);
-        case 'update':
-          return updateModule(id!, formData as IModuleInput);
-        case 'delete':
-          return deleteModule(id!);
-        case 'retrieve':
-          return retrieveModule(id!);
-        default:
-          throw new Error(`${action} is not registered in useModuleMutation`);
-      }
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['get-all-modules'] })
-  })
-}

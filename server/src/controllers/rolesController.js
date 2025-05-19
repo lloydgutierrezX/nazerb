@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const createRole = async (req, res) => {
   console.log("Creating a new role");
 
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
 
   try {
     // Check if the role name already exists
@@ -15,6 +15,8 @@ export const createRole = async (req, res) => {
       await prisma.role.findUnique({
         where: {
           name,
+          active,
+          description,
         },
       })
     ) {
@@ -29,6 +31,7 @@ export const createRole = async (req, res) => {
     const newRole = await prisma.role.create({
       data: {
         name,
+        active,
         description,
       },
     });
@@ -51,8 +54,8 @@ export const getRoles = async (req, res) => {
 
   try {
     const roles = await prisma.role.findMany({
-      where: { active: true },
-      orderBy: { active: "asc" },
+      // where: { active: true },
+      orderBy: { createdAt: "desc" },
     });
     console.log("Roles fetched successfully");
     // Return the roles
@@ -111,14 +114,15 @@ export const updateRole = async (req, res) => {
     return res.status(400).json({ error: "Invalid role ID" });
   }
 
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
+
+  const role = await prisma.role.findUnique({
+    where: { id: parseInt(id) },
+  });
+
   // Check if the role exists
   console.log(`Checking if role with ID ${id} exists`);
-  if (
-    !(await prisma.role.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
+  if (!role) {
     // If the role does not exist, return a 404 error
     console.log(`Role with ID ${id} not found`);
     return res.status(404).json({ error: "Role not found" });
@@ -129,26 +133,28 @@ export const updateRole = async (req, res) => {
     console.log(`Updating role with ID ${id}`);
 
     // Check if the role name already exists
-    if (
-      await prisma.role.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
+    if (name === role.name && id != role.id) {
       console.log(`Role name ${name} already exists`);
-      res.status(409).json({ error: `Role ${name} already taken` });
+      res
+        .status(409)
+        .json({ message: `Role ${name} is already taken`, fields: ["name"] });
     }
+    console.log(`Role name ${name} don't exist.`);
 
     // Update the role
     console.log(`Processing update of role with ID ${id}`);
 
+    const roleData = {
+      active,
+      description,
+    };
+    if (name !== role.name) {
+      roleData.name = name;
+    }
+
     const updatedRole = await prisma.role.update({
       where: { id: parseInt(id) },
-      data: {
-        name,
-        description,
-      },
+      data: roleData,
     });
 
     console.log(`Role with ID ${id} updated successfully`);

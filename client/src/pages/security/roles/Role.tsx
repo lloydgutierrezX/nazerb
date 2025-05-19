@@ -1,36 +1,34 @@
-import { ColumnDef } from "@tanstack/react-table";
-
-import { IData } from "Pages/IData";
-
-import { DataTable } from "Components/datatable/DataTable";
-import { ITableConfig } from "Components/datatable/IDatatable";
-import { Dialog } from "Components/modal/dialog/Dialog";
-import { Form } from "Components/field/Form";
-import { moduleSchema } from "./ModuleSchema";
-
 import moment from "moment";
-import {
-  useGetAllModules,
-  addModule,
-  deleteModule,
-  retrieveModule,
-  updateModule,
-  getAllModulesKey,
-} from "./ModuleActions";
-import { useDialogContext } from "Services/contexts/DialogContext";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { IData } from "Pages/IData";
 import { Icon } from "Components/icon/Icon";
-import { ConfirmDialog } from "Components/modal/confirm/Confirm";
+import { ITableConfig } from "Components/datatable/IDatatable";
+import { IAction, IFormField } from "Components/field/IForm";
+import { useState } from "react";
 import {
   ConfirmDialogContext,
   IConfirmDialogContent,
 } from "Services/contexts/ConfirmDialogContext";
-import { useState } from "react";
-import { FormContext } from "Services/contexts/FormContext";
+import { useDialogContext } from "Services/contexts/DialogContext";
 import { DynamicObject } from "Utils/globalInterface";
-import { IAction, IFormField } from "Components/field/IForm";
-import { IModuleInput } from "./IModule";
+import {
+  url,
+  getAllRolesKey,
+  useGetAllRoles,
+  addRole,
+  deleteRole,
+  retrieveRole,
+  updateRole,
+} from "./RoleActions";
+import { IRoleInput } from "./IRole";
+import { DataTable } from "Components/datatable/DataTable";
+import { ConfirmDialog } from "Components/modal/confirm/Confirm";
+import { Dialog } from "Components/modal/dialog/Dialog";
+import { Form } from "Components/field/Form";
+import { FormContext } from "Services/contexts/FormContext";
+import { moduleSchema } from "../module/ModuleSchema";
 
-// ColumnsDef: for react-table column display
 const columnDef: ColumnDef<IData, string>[] = [
   {
     accessorKey: "name", // key
@@ -92,9 +90,8 @@ const columnDef: ColumnDef<IData, string>[] = [
   },
 ];
 
-// Config for the datatable view
 const config: ITableConfig = {
-  module: "module",
+  module: "role",
   serverSide: false,
   permissions: {
     search: {
@@ -103,18 +100,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add module",
-      popover: "Add new module",
+      placeholder: "Add role",
+      popover: "Add new role",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this module?",
+      popover: "Delete this role?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this module?",
+      popover: "Update this role?",
     },
   },
   filters: {
@@ -146,7 +143,7 @@ const formFields: IFormField[] = [
     type: "text",
     placeholder: "Input the module name",
     name: "name",
-    label: "Module Name",
+    label: "Role Name",
     labelClassName: "w-full",
     className: "",
   },
@@ -160,22 +157,22 @@ const formFields: IFormField[] = [
   },
 ];
 
-export const Module = () => {
-  const { data, isFetching } = useGetAllModules();
+export const Role = () => {
+  const { data, isFetching } = useGetAllRoles();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Modules",
+    module: "Roles",
   });
   const [form, setForm] = useState({
-    url: "/modules",
-    fetchQueryKey: getAllModulesKey,
+    url: url,
+    fetchQueryKey: getAllRolesKey,
     action: "create" as IAction, // defaults to create
-    onAddFn: (data: DynamicObject) => addModule(data as IModuleInput),
+    onAddFn: (data: DynamicObject) => addRole(data as IRoleInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateModule(id, data as IModuleInput),
-    onDeleteFn: (id: string) => deleteModule(id),
-    onRetrieveFn: (id: string) => retrieveModule(id),
+      updateRole(id, data as IRoleInput),
+    onDeleteFn: (id: string) => deleteRole(id),
+    onRetrieveFn: (id: string) => retrieveRole(id),
   });
 
   return (
@@ -189,7 +186,7 @@ export const Module = () => {
             <Form
               formFields={formFields}
               schema={moduleSchema}
-              moduleName="Module"
+              moduleName="Role"
               data={dialog.data}
             />
           </Dialog>
