@@ -114,18 +114,6 @@ const config: ITableConfig = {
       popover: "Update this role?",
     },
   },
-  filters: {
-    date: [
-      {
-        name: "created_at",
-        placeholder: "Date Created",
-      },
-      {
-        name: "updated_at",
-        placeholder: "Last Update",
-      },
-    ],
-  },
 };
 
 const formFields: IFormField[] = [

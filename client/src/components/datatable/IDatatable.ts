@@ -1,4 +1,4 @@
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { IData } from "Pages/IData";
 
 export type IDataTableProps<T extends IData> = {
