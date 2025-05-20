@@ -1,23 +1,38 @@
 import { memo } from "react";
 
-export const SkeletonTable = memo(function SkeletonTable() {
+type ISekeletonColumn = { columnCount: number };
+interface ISkeletonTableProps extends ISekeletonColumn {
+  type: "column" | "pagination";
+}
+
+const SkeletonColumn = ({ columnCount }: ISekeletonColumn) => {
   return (
-    <div className="flex w-full max-w-[600px] flex-col rounded-xl border border-base-content/5 bg-base-100 shadow-md justify-self-center mt-10">
-      <div className="flex flex-row h-15 border-b-1 border-gray-200">
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-      </div>
-      <div className="flex flex-row h-15 border-b-1 border-gray-200">
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-      </div>
-      <div className="flex flex-row h-15 border-gray-200">
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-        <div className="flex skeleton h-2 flex-grow mx-10 self-center"></div>
-      </div>
+    <tbody>
+      {[...Array(10).keys()].map((_, idx) => (
+        <tr key={idx}>
+          {[...Array(columnCount).keys()].map((_, idx) => (
+            <td key={idx}>
+              <div className="skeleton h-10" />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  );
+};
+
+export const SkeletonTable = memo(function SkeletonTable({
+  columnCount,
+  type,
+}: ISkeletonTableProps) {
+  return type === "column" ? (
+    <SkeletonColumn columnCount={columnCount + 1} />
+  ) : (
+    <div className="flex flex-col w-full shadow-md c">
+      {/* {[...Array(10).keys()].map((_, idx) => ( */}
+      <div></div>
+      {/* // <SkeletonColumn key={idx} columnCount={columnCount} type={type} /> */}
+      {/* ))} */}
     </div>
   );
 });

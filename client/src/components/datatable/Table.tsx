@@ -6,6 +6,7 @@ import {
   getSortedRowModel,
   HeaderGroup,
   Row,
+  Table,
   useReactTable,
 } from "@tanstack/react-table";
 import { DataTableHeader } from "./THeader";
@@ -22,6 +23,26 @@ import { Icon } from "Components/icon/Icon";
 import { SkeletonTable } from "./TSkeleton";
 import { useFormContext } from "Services/contexts/FormContext";
 import { TNavigation } from "./TNavigation";
+
+type IPaginationButton = "first" | "previous" | "next" | "last";
+const isDisabled = <T,>(
+  tableFetching: boolean,
+  table?: Table<T>,
+  paginationButton?: IPaginationButton
+) => {
+  switch (paginationButton) {
+    case "first":
+    case "previous":
+      return tableFetching || !table?.getCanPreviousPage();
+
+    case "next":
+    case "last":
+      return tableFetching || !table?.getCanNextPage();
+
+    default:
+      return tableFetching;
+  }
+};
 
 export const DataTable = memo(function DataTable<T extends IData>({
   data,
@@ -70,32 +91,28 @@ export const DataTable = memo(function DataTable<T extends IData>({
     {
       icon: "chevrons-left",
       popover: "Move to first page",
-      disabled: !table.getCanPreviousPage(),
+      disabled: isDisabled(isFetching, table, "first"),
       onClick: () => table.setPageIndex(0),
     },
     {
       icon: "chevron-left",
       popover: "Move to previous page",
-      disabled: !table.getCanPreviousPage(),
+      disabled: isDisabled(isFetching, table, "previous"),
       onClick: () => table.previousPage(),
     },
     {
       icon: "chevron-right",
       popover: "Move to next page",
-      disabled: !table.getCanNextPage(),
+      disabled: isDisabled(isFetching, table, "next"),
       onClick: () => table.nextPage(),
     },
     {
       icon: "chevrons-right",
       popover: "Move to last page",
-      disabled: !table.getCanNextPage(),
+      disabled: isDisabled(isFetching, table, "last"),
       onClick: () => table.lastPage(),
     },
   ];
-
-  if (isFetching) {
-    return <SkeletonTable />;
-  }
 
   return (
     <>
@@ -108,10 +125,12 @@ export const DataTable = memo(function DataTable<T extends IData>({
           }
           setGlobalFilter={setGlobalFilter}
           searchPlaceholder={config.permissions.search?.placeholder}
+          disabled={isDisabled(isFetching)}
         />
 
         {config.permissions.add.isAllowed && (
           <button
+            disabled={isDisabled(isFetching)}
             className="btn btn-primary hover:text-blue-500 hover:bg-blue-100"
             onClick={() => {
               handleDialog({ open: true });
@@ -132,16 +151,26 @@ export const DataTable = memo(function DataTable<T extends IData>({
               table.getHeaderGroups as unknown as () => HeaderGroup<IData>[]
             }
           />
-          <DataTableBody
-            rowModel={table.getRowModel}
-            permissions={config.permissions}
-          />
+
+          {isFetching ? (
+            <SkeletonTable columnCount={columnDef.length} type="column" />
+          ) : (
+            <DataTableBody
+              rowModel={table.getRowModel}
+              permissions={config.permissions}
+            />
+          )}
         </table>
       </div>
       <div className="my-2 flex flex-row gap-5">
         <div className="flex flex-row gap-2 grow">
-          <span>Showing page</span> {table.getState().pagination.pageIndex + 1}
-          <span>of {table.getPageCount()}</span>
+          {!isFetching && (
+            <>
+              <span>Showing page </span>
+              <span>{table.getState().pagination.pageIndex + 1}</span>
+              <span> of {table.getPageCount()}</span>
+            </>
+          )}
         </div>
         <TNavigation config={navConfig} />
       </div>

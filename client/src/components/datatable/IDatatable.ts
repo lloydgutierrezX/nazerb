@@ -60,13 +60,6 @@ export type ITableConfig = {
   }
 };
 
-export type DataTableBodyProps<TData> = {
-  rowModel: () => {
-    rows: Row<TData>[];
-  };
-  permissions: IPermissions;
-};
-
 export type ITNavigationConfig = {
   icon: string;
   popover: string;

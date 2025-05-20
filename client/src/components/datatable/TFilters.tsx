@@ -9,6 +9,7 @@ export const DatatableFilter = (props: {
   };
   setGlobalFilter: (value: string) => void;
   searchPlaceholder?: string;
+  disabled?: boolean;
 }) => {
   const providerValue = {
     placeholder: props.searchPlaceholder || "Search here...",
@@ -21,7 +22,7 @@ export const DatatableFilter = (props: {
   return (
     <SearchContext.Provider value={providerValue}>
       <div className="flex items-center justify-between py-4 w-1/3">
-        <Search />
+        <Search disabled={props.disabled} />
       </div>
     </SearchContext.Provider>
   );
