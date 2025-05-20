@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
+import { addData, deleteData, fetchAll, IRequestParams, retreiveData, updateData } from "Services/axios/request";
 import { IModuleInput, IModuleResponse } from "./IModule";
 
 const url = '/modules';
 export const getAllModulesKey = 'get-all-modules';
 // get all modules request
 const getAllModules =
-  async (url: string) => await fetchAll({ url });
+  async (url: string, config?: IRequestParams) => await fetchAll(url, config);
 
 // get all modules useQuery implementation
-export const useGetAllModules = () => {
+export const useGetAllModules = (config?: IRequestParams) => {
   return useQuery<IModuleResponse[], unknown>({
     queryFn: async () => {
-      const response = await getAllModules(url);
+      const response = await getAllModules(url, config);
       return response?.data ?? [];
     },
     queryKey: [getAllModulesKey]

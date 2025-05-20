@@ -32,7 +32,7 @@ export const DataTableHeader = (props: {
                     </span>
                     <div className="flex flex-col items-center">
                       <Icon
-                        icon="chevronup"
+                        icon="chevron-up"
                         color={`${
                           header.column.getIsSorted() === "asc"
                             ? "#000000"
@@ -41,7 +41,7 @@ export const DataTableHeader = (props: {
                         classNames="w-3 h-3"
                       />
                       <Icon
-                        icon="chevrondown"
+                        icon="chevron-down"
                         color={`${
                           header.column.getIsSorted() === "desc"
                             ? "#000000"

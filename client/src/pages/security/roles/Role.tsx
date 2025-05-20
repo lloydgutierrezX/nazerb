@@ -22,7 +22,7 @@ import {
   updateRole,
 } from "./RoleActions";
 import { IRoleInput } from "./IRole";
-import { DataTable } from "Components/datatable/DataTable";
+import { DataTable } from "Components/datatable/Table";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import { Form } from "Components/field/Form";

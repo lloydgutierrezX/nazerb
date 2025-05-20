@@ -61,7 +61,7 @@ export const DataTableBody = <
                   }
                   className="btn scale-75 btn-primary btn-square hover:text-blue-500 hover:bg-blue-100"
                 >
-                  <Icon icon="penciloff" classNames="" />
+                  <Icon icon="pencil-off" classNames="" />
                 </button>
               )}
 

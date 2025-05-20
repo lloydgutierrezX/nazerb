@@ -22,6 +22,10 @@ import {
   ToggleRight,
   TriangleAlert,
   RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -60,42 +64,62 @@ export const Icon = memo(function Icon(props: {
             return <Menu className={classNames} color={color ?? undefined} />;
           case "house":
             return <House className={classNames} color={color ?? undefined} />;
-          case "calendarclock":
+          case "calendar-clock":
             return (
               <CalendarClock
                 className={classNames}
                 color={color ?? undefined}
               />
             );
-          case "foldercog":
+          case "folder-cog":
             return (
               <FolderCog className={classNames} color={color ?? undefined} />
             );
-          case "fileuser":
+          case "file-user":
             return (
               <FileUser className={classNames} color={color ?? undefined} />
             );
-          case "usercog":
-            return (
-              <UserCog className={classNames} color={color ?? undefined} />
-            );
-          case "circleuser":
+
+          case "circle-user":
             return (
               <CircleUser className={classNames} color={color ?? undefined} />
             );
-          case "shielduser":
+          case "shield-user":
             return (
               <ShieldUser className={classNames} color={color ?? undefined} />
             );
-          case "chevronup":
+
+          case "chevron-left":
+            return (
+              <ChevronLeft className={classNames} color={color ?? undefined} />
+            );
+          case "chevrons-left":
+            return (
+              <ChevronsLeft className={classNames} color={color ?? undefined} />
+            );
+
+          case "chevron-right":
+            return (
+              <ChevronRight className={classNames} color={color ?? undefined} />
+            );
+          case "chevrons-right":
+            return (
+              <ChevronsRight
+                className={classNames}
+                color={color ?? undefined}
+              />
+            );
+
+          case "chevron-up":
             return (
               <ChevronUp className={classNames} color={color ?? undefined} />
             );
-          case "chevrondown":
+          case "chevron-down":
             return (
               <ChevronDown className={classNames} color={color ?? undefined} />
             );
-          case "penciloff":
+
+          case "pencil-off":
             return (
               <PencilOff className={classNames} color={color ?? undefined} />
             );
@@ -126,6 +150,7 @@ export const Icon = memo(function Icon(props: {
             return (
               <RotateCcw className={classNames} color={color ?? undefined} />
             );
+
           default:
             console.warn(`No icon for ${icon}`);
             return "";

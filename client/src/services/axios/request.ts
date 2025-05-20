@@ -1,16 +1,25 @@
 import { DynamicObject } from 'Utils/globalInterface';
 import { request } from './requestIntercepter';
-import { AxiosRequestConfig } from 'axios';
+import { IPagination } from 'Components/datatable/IDatatable';
 
 // Get
-type IFetchRequest = {
-  url: string;
-  options?: AxiosRequestConfig<unknown>
-}
+export type IRequestParams = {
+  pagination: IPagination;
+  query?: string;
+};
 
-export const fetchAll = ({ url, options }: IFetchRequest) => {
+export const fetchAll = (url: string, params?: IRequestParams) => {
   try {
-    return request.get(url, options)
+    const config = params
+      ? {
+        page: params.pagination.page,
+        limit: params.pagination.limit
+      }
+      : {};
+
+    return request.get(url, {
+      params: config
+    })
   } catch (error) {
     console.log(error)
   }

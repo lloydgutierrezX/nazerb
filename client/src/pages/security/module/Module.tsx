@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { IData } from "Pages/IData";
 
-import { DataTable } from "Components/datatable/DataTable";
+import { DataTable } from "Components/datatable/Table";
 import { ITableConfig } from "Components/datatable/IDatatable";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import { Form } from "Components/field/Form";
@@ -116,18 +116,6 @@ const config: ITableConfig = {
       placeholder: "Edit",
       popover: "Update this module?",
     },
-  },
-  filters: {
-    date: [
-      {
-        name: "created_at",
-        placeholder: "Date Created",
-      },
-      {
-        name: "updated_at",
-        placeholder: "Last Update",
-      },
-    ],
   },
 };
 

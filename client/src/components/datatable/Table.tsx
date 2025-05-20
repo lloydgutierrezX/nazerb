@@ -1,32 +1,34 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   HeaderGroup,
   Row,
   useReactTable,
 } from "@tanstack/react-table";
-import { DataTableHeader } from "./DataTableHeader";
-import { DataTableBody } from "./DataTableBody";
+import { DataTableHeader } from "./THeader";
+import { DataTableBody } from "./TBody";
 import { IData } from "Pages/IData";
-import { DatatableFilter } from "./DatatableFilter";
-import { IDataTableProps } from "./IDatatable";
+import { DatatableFilter } from "./TFilters";
+import { IDataTableProps, ITNavigationConfig } from "./IDatatable";
 
 import {
   IDialogContent,
   useDialogContext,
 } from "Services/contexts/DialogContext";
 import { Icon } from "Components/icon/Icon";
-import { SkeletonTable } from "./SkeletonTable";
+import { SkeletonTable } from "./TSkeleton";
 import { useFormContext } from "Services/contexts/FormContext";
+import { TNavigation } from "./TNavigation";
 
-export const DataTable = <T extends IData>({
+export const DataTable = memo(function DataTable<T extends IData>({
   data,
   columnDef,
   config,
   isFetching,
-}: IDataTableProps<T>) => {
+}: IDataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
   const { dialog, setDialog } = useDialogContext();
@@ -51,6 +53,8 @@ export const DataTable = <T extends IData>({
     state: {
       globalFilter,
     },
+
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleDialog = (params: IDialogContent) => {
@@ -61,6 +65,33 @@ export const DataTable = <T extends IData>({
 
     setForm({ ...form, action: "create" });
   };
+
+  const navConfig: ITNavigationConfig[] = [
+    {
+      icon: "chevrons-left",
+      popover: "Move to first page",
+      disabled: !table.getCanPreviousPage(),
+      onClick: () => table.setPageIndex(0),
+    },
+    {
+      icon: "chevron-left",
+      popover: "Move to previous page",
+      disabled: !table.getCanPreviousPage(),
+      onClick: () => table.previousPage(),
+    },
+    {
+      icon: "chevron-right",
+      popover: "Move to next page",
+      disabled: !table.getCanNextPage(),
+      onClick: () => table.nextPage(),
+    },
+    {
+      icon: "chevrons-right",
+      popover: "Move to last page",
+      disabled: !table.getCanNextPage(),
+      onClick: () => table.lastPage(),
+    },
+  ];
 
   if (isFetching) {
     return <SkeletonTable />;
@@ -107,6 +138,13 @@ export const DataTable = <T extends IData>({
           />
         </table>
       </div>
+      <div className="my-2 flex flex-row gap-5">
+        <div className="flex flex-row gap-2 grow">
+          <span>Showing page</span> {table.getState().pagination.pageIndex + 1}
+          <span>of {table.getPageCount()}</span>
+        </div>
+        <TNavigation config={navConfig} />
+      </div>
     </>
   );
-};
+});

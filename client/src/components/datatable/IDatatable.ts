@@ -21,27 +21,42 @@ export type IPermissions = {
   update: IPermissionsConfig;
 }
 
+export type IPagination = {
+  page: number,
+  limit: number
+}
+
+export type IFilterDate = {
+  name: string;
+  defaultValue?: string;
+  placeholder?: string;
+}
+
+export type IFilterDateRange = {
+  startDateName: string;
+  endDateName: string;
+  defaultValue?: string;
+  placeholder?: string;
+}
+
+export type IFilterSelect = {
+  name: string;
+  placeholder?: string;
+  type: "select" | "multi-select";
+}
+
 export type ITableConfig = {
   module: string;
   serverSide: boolean;
   permissions: IPermissions;
-  filters?: {
-    date?: {
-      name: string;
-      defaultValue?: string;
-      placeholder?: string;
-    }[];
-    dateRange?: {
-      startDateName: string;
-      endDateName: string;
-      defaultValue?: string;
-      placeholder?: string;
-    }[],
-    select?: {
-      name: string;
-      placeholder?: string;
-      type: "select" | "multi-select";
-    }[];
+  serverConfig?: {
+    filters: {
+      query: string;
+      date: IFilterDate;
+      dateRange: IFilterDateRange,
+      select: IFilterSelect[];
+    },
+    pagination: IPagination
   }
 };
 
@@ -51,3 +66,10 @@ export type DataTableBodyProps<TData> = {
   };
   permissions: IPermissions;
 };
+
+export type ITNavigationConfig = {
+  icon: string;
+  popover: string;
+  disabled: boolean;
+  onClick: React.MouseEventHandler<HTMLButtonElement>
+}

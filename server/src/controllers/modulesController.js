@@ -50,11 +50,15 @@ export const createModule = async (req, res) => {
 // Function to get all modules
 export const getModules = async (req, res) => {
   console.log("Fetching all modules");
+  // const take = parseInt(req.query.limit);
+  // const skip = (parseInt(req.query.page) - 1) * take;
 
   try {
     const modules = await prisma.module.findMany({
       // where: { active: true },
       orderBy: { createdAt: "desc" },
+      // skip,
+      // take,
     });
     res.status(200).json(modules);
   } catch (error) {
