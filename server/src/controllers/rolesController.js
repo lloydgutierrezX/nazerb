@@ -15,8 +15,6 @@ export const createRole = async (req, res) => {
       await prisma.role.findUnique({
         where: {
           name,
-          active,
-          description,
         },
       })
     ) {
@@ -133,7 +131,7 @@ export const updateRole = async (req, res) => {
     console.log(`Updating role with ID ${id}`);
 
     // Check if the role name already exists
-    if (name === role.name && id != role.id) {
+    if (name === role.name && id !== role.id) {
       console.log(`Role name ${name} already exists`);
       res
         .status(409)

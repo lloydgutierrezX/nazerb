@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export const createPermission = async (req, res) => {
   console.log("Creating a new permission");
 
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
 
   try {
     // Check if the permission name already exists
@@ -30,6 +30,7 @@ export const createPermission = async (req, res) => {
       data: {
         name,
         description,
+        active,
       },
     });
 
@@ -51,7 +52,6 @@ export const getPermissions = async (req, res) => {
 
   try {
     const permissions = await prisma.permission.findMany({
-      where: { active: true },
       orderBy: { active: "asc" },
     });
     console.log("Permissions fetched successfully");
@@ -111,14 +111,15 @@ export const updatePermission = async (req, res) => {
     return res.status(400).json({ error: "Invalid permission ID" });
   }
 
-  const { name, description } = req.body;
+  const { name, description, active } = req.body;
+
+  const permission = await prisma.permission.findUnique({
+    where: { id: parseInt(id) },
+  });
+
   // Check if the permission exists
   console.log(`Checking if permission with ID ${id} exists`);
-  if (
-    !(await prisma.permission.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
+  if (!permission) {
     // If the permission does not exist, return a 404 error
     console.log(`Permission with ID ${id} not found`);
     return res.status(404).json({ error: "Permission not found" });
@@ -129,26 +130,28 @@ export const updatePermission = async (req, res) => {
     console.log(`Updating permission with ID ${id}`);
 
     // Check if the permission name already exists
-    if (
-      await prisma.permission.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
+    if (name === permission.name && id !== permission.id) {
       console.log(`Permission name ${name} already exists`);
-      res.status(409).json({ error: `Permission ${name} already taken` });
+      res
+        .status(409)
+        .json({ error: `Permission ${name} already taken`, fields: ["name"] });
     }
 
     // Update the permission
     console.log(`Processing update of permission with ID ${id}`);
 
+    const permissionData = {
+      active,
+      description,
+    };
+
+    if (name !== permission.name) {
+      permissionData.name = name;
+    }
+
     const updatedPermission = await prisma.permission.update({
       where: { id: parseInt(id) },
-      data: {
-        name,
-        description,
-      },
+      data: permissionData,
     });
 
     console.log(`Permission with ID ${id} updated successfully`);
