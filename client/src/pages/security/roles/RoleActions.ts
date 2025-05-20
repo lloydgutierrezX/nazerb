@@ -5,7 +5,7 @@ import { IRoleResponse, IRoleInput } from "./IRole";
 export const url = '/roles';
 export const getAllRolesKey = 'get-all-roles';
 
-export const getAllRoles = async (url: string) => await fetchAll({ url });
+export const getAllRoles = async (url: string) => await fetchAll(url);
 
 export const useGetAllRoles = () => {
   return useQuery<IRoleResponse[], unknown>({
