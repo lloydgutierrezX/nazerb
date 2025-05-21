@@ -1,0 +1,55 @@
+model Module {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  link String @db.VarChar(120) @unique
+  active Boolean @default(true) @map("is_active")
+  description String? @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  // Relations
+  permission Permission[]
+
+  @@map("modules")
+}
+
+model Permission {
+  id Int @id @default(autoincrement())
+  moduleId Int @map("module_id")
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  module Module @relation(fields: [moduleId], references: [id])
+  rolePermission RolePermission[]
+
+  @@map("permissions")
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String? @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User[]
+  rolePermission RolePermission[]
+
+  @@map("roles")
+}
+
+model RolePermission {
+  roleId Int @map("role_id")
+  permissionId Int @map("permission_id")
+
+  role Role @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+  @@map("role_permission")
+}

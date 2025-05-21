@@ -25,5 +25,8 @@
     },
     "imports": {
         "#root/*": "./*"
+    },
+    "prisma": {
+        "schema": "./prisma/schema"
     }
 }

@@ -1,0 +1,104 @@
+model UsersBasicInfo {
+  userId Int @unique @map("user_id")
+  firstName String @db.VarChar(60) @map("first_name")
+  lastName String @db.VarChar(60) @map("last_name")
+  birthdate DateTime
+  email String @db.VarChar(60) @unique
+  mobileNumber String @db.VarChar(11) @map("mobile_number") @unique
+  maritalStatus String @db.VarChar(10) @map("marital_status")
+  gender String @db.VarChar(6)
+
+  nationality String @db.VarChar(60)
+
+  provinceCode String @db.VarChar(5) @map("province_code")
+  cityCode String @db.VarChar(7) @map("city_code")
+  brangayCode String @db.VarChar(10) @map("brangay_code")
+  address String @db.VarChar(120)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_basic_info")
+}
+
+model UserEmploymentBackground {
+  userId Int @unique @map("user_id")
+  company String @db.VarChar(120)
+  position String @db.VarChar(120)
+  dateStart DateTime @map("date_start")
+  dateEnd DateTime @map("date_end")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_employment_background")
+}
+
+model UserEducationalBackground {
+  userId Int @unique @map("user_id")
+  school String @db.Text
+  dateStart DateTime @map("date_start")
+  dateEnd DateTime @map("date_end")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("user_educational_background")
+}
+
+model UserEmployementInfo {
+  userId Int @unique @map("user_id")
+  employeeId Int @unique @map("employee_id")
+  salary Decimal
+  dateRegularization DateTime @map("date_regularization")
+  dateStart DateTime @map("date_start")
+  dateEnd DateTime @map("date_end")
+
+  @@map("user_employment_info")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  positionId Int @map("position_id")
+  roleId Int @map("role_id")
+  employmentStatusId Int @map("employee_status_id")
+  allowanceId Int @map("allowance_id")
+  deductionId Int @map("deduction_id")
+
+  isActive Boolean @default(true) @map("is_active")
+  password String @db.VarChar(60)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  position Position @relation(fields: [positionId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+  employmentStatus EmployeeStatus @relation(fields: [employmentStatusId], references: [id])
+
+  allowance UserAllowance[]
+  deduction UserDeduction[]
+  basicInfo UsersBasicInfo?
+  employmentBackground UserEmploymentBackground[]
+  educationalBackground UserEducationalBackground[]
+
+  @@map("users")
+}
+
+model UserAllowance {
+  userId Int @map("user_id")
+  allowanceId Int @map("allowance_id")
+
+  user User @relation(fields: [userId], references: [id], map: "user_allowance_user_id_fkey")
+  allowance Allowance @relation(fields: [allowanceId], references: [id], map: "user_allowance_allowance_id_fkey")
+
+  @@id([userId, allowanceId])
+  @@map("user_allowance")
+}
+
+model UserDeduction {
+  userId Int @map("user_id")
+  deductionId Int @map("deduction_id")
+
+  user User @relation(fields: [userId], references: [id], map: "user_deduction_user_id_fkey")
+  deduction Deduction @relation(fields: [deductionId], references: [id], map: "user_deduction_deduction_id_fkey")
+
+  @@id([userId, deductionId])
+  @@map("user_deduction")
+}

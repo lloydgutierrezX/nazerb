@@ -1,0 +1,73 @@
+model Allowance {
+  id Int @id @default(autoincrement()) @map("id")
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userAllowance UserAllowance[]
+
+  @@map("allowance")
+}
+
+model Deduction {
+  id Int @id @default(autoincrement()) @map("id")
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userDeduction UserDeduction[]
+
+  @@map("deduction")
+}
+
+model EmployeeStatus {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User[]
+
+  @@map("employee_status")
+}
+
+model ProjectStatus {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("project_status")
+}
+
+model Position {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User[]
+
+  @@map("position")
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(60) @unique
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("task")
+}
