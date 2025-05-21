@@ -13,7 +13,7 @@ export const createModule = async (req, res) => {
 
   try {
     if (await findUnique(module, { name: name })) {
-      res
+      return res
         .status(409)
         .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
@@ -27,14 +27,14 @@ export const createModule = async (req, res) => {
     });
 
     // Return the created module
-    res.status(201).json(newModule);
+    return res.status(201).json(newModule);
   } catch (error) {
-    console.log(error, "error");
+    consoleLog(error, "error");
 
     // If the module does not exist, return a 404 error
-    res.status(500).json({ message: "Failed to create module" });
+    return res.status(500).json({ message: "Failed to create module" });
   } finally {
-    console.log("Leaving createModule fn", "title");
+    consoleLog("Leaving createModule fn", "title");
   }
 };
 
@@ -46,12 +46,12 @@ export const getModules = async (req, res) => {
     const modules = await findMany(module, {
       orderBy: { createdAt: "desc" },
     });
-    res.status(200).json(modules);
+    return res.status(200).json(modules);
   } catch (error) {
     consoleLog(error, "error");
 
     // If the modules do not exist, return a 404 error
-    res.status(500).json({ message: "Failed to fetch modules" });
+    return res.status(500).json({ message: "Failed to fetch modules" });
   } finally {
     console.log("Leaving getModules fn", "title");
   }
@@ -64,7 +64,7 @@ export const updateModule = async (req, res) => {
   // Check if the ID is a valid number
   const { id } = req.params;
   if (isNaN(id)) {
-    console.log(`Invalid module ID: ${id}`);
+    consoleLog(`Invalid module ID: ${id}`);
     return res.status(400).json({ message: "Invalid module ID" });
   }
 
@@ -79,12 +79,11 @@ export const updateModule = async (req, res) => {
 
   try {
     // Update the module
-    console.log(`Updating module with ID ${id}`);
+    consoleLog(`Updating module with ID ${id}`);
 
     // Check if the module name already exists
     if (name === unique.name && id != unique.id) {
-      console.log(`Module name ${name} already exists`);
-      res
+      return res
         .status(409)
         .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
@@ -104,17 +103,19 @@ export const updateModule = async (req, res) => {
     });
 
     // Return the updated module
-    res.status(200).json(updatedModule);
+    return res.status(200).json(updatedModule);
   } catch (error) {
-    console.log(`Updating module with ID ${id} failed`, error);
+    consoleLog(error, "error");
     // If the module does not exist, return a 404 error
-    res.status(500).json({ message: "Failed to update module" });
+    return res.status(500).json({ message: "Failed to update module" });
+  } finally {
+    consoleLog("Leaving updateModule fn", "title");
   }
 };
 
 // Function to SOFT delete a module
 export const deleteModule = async (req, res) => {
-  console.log(`Soft deleting module with ID: ${req.params.id}`);
+  consoleLog(`Soft deleting module with ID: ${req.params.id}`, "title");
 
   // Check if the ID is a valid number
   const { id } = req.params;
@@ -136,11 +137,11 @@ export const deleteModule = async (req, res) => {
       { id: parseInt(id) }
     );
     // Return the deleted module
-    res.status(200).json(deletedModule);
+    return res.status(200).json(deletedModule);
   } catch (error) {
     console.log(`Soft deleting module with ID ${id} failed`, error);
     // If the module does not exist, return a 404 error
-    res.status(500).json({ message: "Failed to delete module" });
+    return res.status(500).json({ message: "Failed to delete module" });
   }
 
   // We do not hard delete data.

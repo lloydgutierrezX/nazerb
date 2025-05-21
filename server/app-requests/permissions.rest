@@ -7,7 +7,7 @@ GET http://localhost:3000/api/permissions
 Content-Type: application/json
 
 ### Get Permission by ID Request
-GET http://localhost:3000/api/permissions/5
+GET http://localhost:3000/api/permissions/6
 Content-Type: application/json
 
 ### Create Permission Request
@@ -15,19 +15,20 @@ POST http://localhost:3000/api/permissions
 Content-Type: application/json
 
 {
-  "name": "datatables",
-  "description": "datatables permission"
+  "name": "retrieve1",
+  "moduleId": 1,
+  "description": "user has a delete permission on user's module",
+  "active": true
 }
 
 ### Update Permission Request
-PUT http://localhost:3000/api/permissions/1
+PUT http://localhost:3000/api/permissions/8
 Content-Type: application/json
 
 {
-  "name": "datatable",
-  "description": "permission to view datatables"
+  "active": true
 }
 
 ### Delete Permission Request
-DELETE http://localhost:3000/api/permissions/5
+DELETE http://localhost:3000/api/permissions/8
 Content-Type: application/json

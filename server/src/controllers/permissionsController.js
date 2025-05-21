@@ -1,99 +1,95 @@
 import { PrismaClient } from "#root/generated/prisma/client.js";
+import { consoleLog } from "../utils.js";
+import { create, findMany, findUnique, update } from "./helper.js";
 
 const prisma = new PrismaClient();
 
+const module = "permission";
+
 // Function to create a new permission
 export const createPermission = async (req, res) => {
-  console.log("Creating a new permission");
+  consoleLog("Entering createPermission fn", "title");
 
-  const { name, description, active } = req.body;
+  const { name, moduleId, active, description } = req.body;
 
   try {
-    // Check if the permission name already exists
-    console.log(`Checking if permission name ${name} already exists`);
-    if (
-      await prisma.permission.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
-      console.log(`Permission name ${name} already exists`);
-      res.status(409).json({ error: `Permission ${name} already taken` });
+    // checking if moduleId exist in module
+    if (!(await findUnique("module", { id: moduleId }))) {
+      return res.status(409).json({
+        error: `Module does not exist`,
+        fields: ["moduleId"],
+      });
     }
 
-    console.log(
-      `Processing create permission with name ${name} and description ${description}`
-    );
+    const record = await findMany(module, { where: { name, moduleId } });
+    if (record.length !== 0) {
+      return res.status(409).json({
+        error: `Permission ${name}:${module} already taken`,
+        fields: ["name"],
+      });
+    }
+
     // Create the new permission
-    const newPermission = await prisma.permission.create({
-      data: {
-        name,
-        description,
-        active,
-      },
+    const newPermission = await create(module, {
+      name,
+      moduleId,
+      description,
+      active,
     });
 
-    console.log(`Permission ${name} created successfully`);
     // Return the created permission
-    res.status(201).json(newPermission);
+    return res.status(201).json(newPermission);
   } catch (error) {
-    console.log("Creating permission failed", error);
+    consoleLog(error, "error");
 
     // If the permission does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to create permission" });
+    return res.status(500).json({ error: "Failed to create permission" });
+  } finally {
+    consoleLog("Leaving createPermissions fn", "title");
   }
 };
 
 // Function to get all permissions
 export const getPermissions = async (req, res) => {
-  console.log("Fetching all permissions");
+  consoleLog("Fetching all modules", "title");
   // Fetch all permissions
 
   try {
-    const permissions = await prisma.permission.findMany({
-      orderBy: { active: "asc" },
+    const permissions = await findMany(module, {
+      orderBy: { createdAt: "desc" },
     });
-    console.log("Permissions fetched successfully");
-    // Return the permissions
-
-    res.status(200).json(permissions);
+    return res.status(200).json(permissions);
   } catch (error) {
-    console.log("Fetching all permissions failed", error);
+    consoleLog(error, "error");
 
     // If the permissions do not exist, return a 404 error
-    res.status(500).json({ error: "Failed to fetch permissions" });
+    return res.status(500).json({ error: "Failed to fetch permissions" });
+  } finally {
+    console.log("Leaving getPermissions fn", "title");
   }
 };
 
 // Function to get a permission by ID
 export const getPermissionById = async (req, res) => {
-  console.log(`Fetching permission by ID: ${req.params.id}`);
+  consoleLog(`Fetching permission by ID: ${req.params.id}`, "title");
 
   // Check if the ID is a valid number
   const { id } = req.params;
-
   if (isNaN(id)) {
     return res.status(400).json({ error: "Invalid permission ID" });
   }
 
   // Fetch the permission by ID
   try {
-    const permission = await prisma.permission.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    // Check if the permission exists
-    console.log(`Permission with ID ${id} fetched successfully`);
+    const permission = await findUnique(module, { id: parseInt(id) });
     if (!permission) {
       return res.status(404).json({ error: "Permission not found" });
     }
 
     // Return the permission
-    console.log(`Permission with ID ${id} found`);
-    res.status(200).json(permission);
+    return res.status(200).json(permission);
   } catch (error) {
-    console.log(`Fetching permission with ID ${id} failed`, error);
+    consoleLog(error, "error");
 
     // If the permission does not exist, return a 404 error
     res.status(500).json({ error: "Failed to fetch permission" });
@@ -102,112 +98,103 @@ export const getPermissionById = async (req, res) => {
 
 // Function to update a permission
 export const updatePermission = async (req, res) => {
-  console.log(`Updating permission with ID: ${req.params.id}`);
+  console.log(`Updating module with ID: ${req.params.id}`, "title");
+  const { name, moduleId, description, active } = req.body;
 
   // Check if the ID is a valid number
   const { id } = req.params;
   if (isNaN(id)) {
-    console.log(`Invalid permission ID: ${id}`);
+    consoleLog(`Invalid module ID: ${id}`);
     return res.status(400).json({ error: "Invalid permission ID" });
   }
 
-  const { name, description, active } = req.body;
-
-  const permission = await prisma.permission.findUnique({
-    where: { id: parseInt(id) },
-  });
+  // Check if module exist via moduleId
+  // if moduleId is undefined, meaning this will be for retrieve request
+  if (moduleId) {
+    const uniqueModule = await findUnique("module", { id: moduleId });
+    if (!uniqueModule) {
+      return res.status(404).json({ message: "Module not found" });
+    }
+  }
 
   // Check if the permission exists
-  console.log(`Checking if permission with ID ${id} exists`);
-  if (!permission) {
+  const unique = await findUnique(module, { id: parseInt(id) });
+  if (!unique) {
     // If the permission does not exist, return a 404 error
-    console.log(`Permission with ID ${id} not found`);
     return res.status(404).json({ error: "Permission not found" });
   }
 
+  // Check if the permission name already exists
+  if (
+    name === unique.name &&
+    moduleId === unique.moduleId &&
+    id !== unique.id
+  ) {
+    res.status(409).json({
+      error: `Permission ${name}:${uniqueModule.name} already taken`,
+      fields: ["name", "moduleId"],
+    });
+  }
+
   try {
-    // Update the permission
-    console.log(`Updating permission with ID ${id}`);
-
-    // Check if the permission name already exists
-    if (name === permission.name && id !== permission.id) {
-      console.log(`Permission name ${name} already exists`);
-      res
-        .status(409)
-        .json({ error: `Permission ${name} already taken`, fields: ["name"] });
-    }
-
     // Update the permission
     console.log(`Processing update of permission with ID ${id}`);
 
     const permissionData = {
       active,
       description,
+      moduleId,
     };
-
-    if (name !== permission.name) {
-      permissionData.name = name;
-    }
 
     const updatedPermission = await prisma.permission.update({
       where: { id: parseInt(id) },
       data: permissionData,
     });
 
-    console.log(`Permission with ID ${id} updated successfully`);
-
     // Return the updated permission
     res.status(200).json(updatedPermission);
   } catch (error) {
-    console.log(`Updating permission with ID ${id} failed`, error);
+    consoleLog(error, "error");
     // If the permission does not exist, return a 404 error
     res.status(500).json({ error: "Failed to update permission" });
+  } finally {
+    consoleLog("Leaving updatePermission fn", "title");
   }
 };
 
 // Function to SOFT delete a permission
 export const deletePermission = async (req, res) => {
-  console.log(`Soft deleting permission with ID: ${req.params.id}`);
+  consoleLog(`Soft deleting permission with ID: ${req.params.id}`, "title");
 
   // Check if the ID is a valid number
   const { id } = req.params;
 
   if (isNaN(id)) {
-    console.log(`Invalid permission ID: ${id}`);
     return res.status(400).json({ error: "Invalid permission ID" });
   }
 
   // Check if the permission exists
-  console.log(`Checking if permission with ID ${id} exists`);
-
-  if (
-    !(await prisma.permission.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
-    console.log(`Permission with ID ${id} not found`);
-
+  if (!(await findUnique(module, { id: parseInt(id) }))) {
     // If the permission does not exist, return a 404 error
     return res.status(404).json({ error: "Permission not found" });
   }
+
   try {
     // Soft delete the permission
-    console.log(`processing soft delete of permission with ID ${id}`);
-
-    const deletedPermission = await prisma.permission.update({
-      where: { id: parseInt(id) },
-      data: { active: false },
-    });
-
-    console.log(`Permission with ID ${id} soft deleted successfully`);
-
+    const deletedPermission = await update(
+      module,
+      { active: false },
+      { id: parseInt(id) }
+    );
     // Return the deleted permission
-    res.status(200).json(deletedPermission);
+    return res.status(200).json(deletedPermission);
   } catch (error) {
-    console.log(`Soft deleting permission with ID ${id} failed`, error);
+    console.log(error, "error");
 
     // If the permission does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to delete permission" });
+    return res.status(500).json({ error: "Failed to delete permission" });
+  } finally {
+    console.log("Leaving deletePermission fn.", "title");
   }
 
   // We do not hard delete data.
