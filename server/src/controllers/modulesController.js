@@ -1,105 +1,59 @@
 import { PrismaClient } from "#root/generated/prisma/client.js";
+import { consoleLog } from "../utils.js";
+import { create, findMany, findUnique, update } from "./helper.js";
 
 const prisma = new PrismaClient();
 
+const module = "module";
+
 // Function to create a new module
 export const createModule = async (req, res) => {
-  console.log("Creating a new module");
-  const { name, description, active } = req.body;
+  consoleLog("Entering createModule fn", "title");
+  const { name, description, active, link } = req.body;
 
   try {
-    // Check if the module name already exists
-    console.log(`Checking if module name ${name} already exists`);
-    if (
-      await prisma.module.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
-      console.log(`Module name ${name} already exists`);
+    if (await findUnique(module, { name: name })) {
       res
         .status(409)
         .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
 
-    console.log(
-      `Processing create module with name ${name} and description ${description}`
-    );
-
     // Create the new module
-    const newModule = await prisma.module.create({
-      data: {
-        name,
-        active,
-        description,
-      },
+    const newModule = await create(module, {
+      name,
+      active,
+      description,
+      link,
     });
 
-    console.log(`Module ${name} created successfully`);
     // Return the created module
     res.status(201).json(newModule);
   } catch (error) {
-    console.log("Creating module failed", error);
+    console.log(error, "error");
 
     // If the module does not exist, return a 404 error
     res.status(500).json({ message: "Failed to create module" });
+  } finally {
+    console.log("Leaving createModule fn", "title");
   }
 };
 
 // Function to get all modules
 export const getModules = async (req, res) => {
-  console.log("Fetching all modules");
-  // const take = parseInt(req.query.limit);
-  // const skip = (parseInt(req.query.page) - 1) * take;
+  consoleLog("Fetching all modules", "title");
 
   try {
-    const modules = await prisma.module.findMany({
-      // where: { active: true },
+    const modules = await findMany(module, {
       orderBy: { createdAt: "desc" },
-      // skip,
-      // take,
     });
     res.status(200).json(modules);
   } catch (error) {
-    console.log("Fetching all modules failed", error);
+    consoleLog(error, "error");
 
     // If the modules do not exist, return a 404 error
     res.status(500).json({ message: "Failed to fetch modules" });
-  }
-};
-
-// Function to get a module by ID
-export const getModuleById = async (req, res) => {
-  console.log(`Fetching module by ID: ${req.params.id}`);
-
-  // Check if the ID is a valid number
-  const { id } = req.params;
-
-  if (isNaN(id)) {
-    return res.status(400).json({ message: "Invalid module ID" });
-  }
-
-  // Fetch the module by ID
-  try {
-    const module = await prisma.module.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    // Check if the module exists
-    console.log(`Module with ID ${id} fetched successfully`);
-    if (!module) {
-      return res.status(404).json({ message: "Module not found" });
-    }
-
-    // Return the module
-    console.log(`Module with ID ${id} found`);
-    res.status(200).json(module);
-  } catch (error) {
-    console.log(`Fetching module with ID ${id} failed`, error);
-
-    // If the module does not exist, return a 404 error
-    res.status(500).json({ message: "Failed to fetch module" });
+  } finally {
+    console.log("Leaving getModules fn", "title");
   }
 };
 
@@ -114,17 +68,12 @@ export const updateModule = async (req, res) => {
     return res.status(400).json({ message: "Invalid module ID" });
   }
 
-  const { name, description, active } = req.body;
-
-  const module = await prisma.module.findUnique({
-    where: { id: parseInt(id) },
-  });
+  const { name, description, active, link } = req.body;
+  const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the module exists
-  console.log(`Checking if module with ID ${id} exists`);
-  if (!module) {
+  if (!unique) {
     // If the module does not exist, return a 404 error
-    console.log(`Module with ID ${id} not found`);
     return res.status(404).json({ message: "Module not found" });
   }
 
@@ -133,31 +82,26 @@ export const updateModule = async (req, res) => {
     console.log(`Updating module with ID ${id}`);
 
     // Check if the module name already exists
-    if (name === module.name && id != module.id) {
+    if (name === unique.name && id != unique.id) {
       console.log(`Module name ${name} already exists`);
       res
         .status(409)
         .json({ message: `Module ${name} is already taken`, fields: ["name"] });
     }
-    console.log(`Module name ${name} don't exist.`);
 
     // Update the module
-    console.log(`Processing update of module with ID ${id}`);
-
     const moduleData = {
       active,
       description,
+      link,
     };
-    if (name !== module.name) {
+
+    if (name !== unique.name) {
       moduleData.name = name;
     }
-
-    const updatedModule = await prisma.module.update({
-      where: { id: parseInt(id) },
-      data: moduleData,
+    const updatedModule = await update(module, moduleData, {
+      id: parseInt(id),
     });
-
-    console.log(`Module with ID ${id} updated successfully`);
 
     // Return the updated module
     res.status(200).json(updatedModule);
@@ -174,41 +118,27 @@ export const deleteModule = async (req, res) => {
 
   // Check if the ID is a valid number
   const { id } = req.params;
-
   if (isNaN(id)) {
-    console.log(`Invalid module ID: ${id}`);
     return res.status(400).json({ message: "Invalid module ID" });
   }
 
   // Check if the module exists
-  console.log(`Checking if module with ID ${id} exists`);
-
-  if (
-    !(await prisma.module.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
-    console.log(`Module with ID ${id} not found`);
-
+  if (!(await findUnique(module, { id: parseInt(id) }))) {
     // If the module does not exist, return a 404 error
     return res.status(404).json({ message: "Module not found" });
   }
+
   try {
-    // Soft delete the module
-    console.log(`processing soft delete of module with ID ${id}`);
-
-    const deletedModule = await prisma.module.update({
-      where: { id: parseInt(id) },
-      data: { active: false },
-    });
-
-    console.log(`Module with ID ${id} soft deleted successfully`);
-
+    // Soft delete the module by updating its active to false
+    const deletedModule = await update(
+      module,
+      { active: false },
+      { id: parseInt(id) }
+    );
     // Return the deleted module
     res.status(200).json(deletedModule);
   } catch (error) {
     console.log(`Soft deleting module with ID ${id} failed`, error);
-
     // If the module does not exist, return a 404 error
     res.status(500).json({ message: "Failed to delete module" });
   }
