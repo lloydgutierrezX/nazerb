@@ -139,6 +139,14 @@ const formFields: IFormField[] = [
     className: "",
   },
   {
+    type: "text",
+    placeholder: "Input module link",
+    name: "link",
+    label: "URL",
+    labelClassName: "w-full",
+    className: "",
+  },
+  {
     type: "textarea",
     placeholder: "Input the module description",
     name: "description",
