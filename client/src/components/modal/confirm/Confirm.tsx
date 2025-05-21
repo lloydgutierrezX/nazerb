@@ -4,14 +4,18 @@ import { useFormContext } from "Services/contexts/FormContext";
 
 export const ConfirmDialog = () => {
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
-  const { form, setForm } = useFormContext();
+  const { setForm } = useFormContext();
 
   const closeConfirmDialog = () =>
-    setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
+    setConfirmDialog((prev) => ({
+      ...prev,
+      confirmAction: false,
+      open: false,
+    }));
 
   const handleOnClick = () => {
-    setForm({ ...form, action: confirmDialog.action! });
-    setConfirmDialog({ ...confirmDialog, confirmAction: true });
+    setForm((prev) => ({ ...prev, action: confirmDialog.action! }));
+    setConfirmDialog((prev) => ({ ...prev, confirmAction: true }));
   };
 
   return (

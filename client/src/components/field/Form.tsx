@@ -65,9 +65,13 @@ export const Form: React.FC<IFormProps> = ({
       queryClient.invalidateQueries({ queryKey: [form.fetchQueryKey] });
 
       // resets dialog and confirm dialog context params
-      setDialog({ ...dialog, data: undefined, open: false });
-      setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
-      setForm({ ...form, action: "create" });
+      setDialog((prev) => ({ ...prev, data: undefined, open: false }));
+      setConfirmDialog((prev) => ({
+        ...prev,
+        confirmAction: false,
+        open: false,
+      }));
+      setForm((prev) => ({ ...prev, action: "create" }));
     },
   });
 

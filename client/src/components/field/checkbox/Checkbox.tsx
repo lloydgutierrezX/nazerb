@@ -25,7 +25,7 @@ export const Checkbox = (props: {
         defaultChecked={props.defaultChecked}
         className={`checkbox ${props.labelClassName}`}
         checked={value}
-        onClick={() => setValue(!value)}
+        onClick={() => setValue((prev) => !prev)}
       />
     </>
   );

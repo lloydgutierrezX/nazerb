@@ -52,8 +52,8 @@ export const DataTable = memo(function DataTable<T extends IData>({
 }: IDataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
-  const { dialog, setDialog } = useDialogContext();
-  const { form, setForm } = useFormContext();
+  const { setDialog } = useDialogContext();
+  const { setForm } = useFormContext();
 
   useEffect(() => {
     setDataSource(data);
@@ -79,12 +79,12 @@ export const DataTable = memo(function DataTable<T extends IData>({
   });
 
   const handleDialog = (params: IDialogContent) => {
-    setDialog({
-      ...dialog,
+    setDialog((prev) => ({
+      ...prev,
       open: params.open,
-    });
+    }));
 
-    setForm({ ...form, action: "create" });
+    setForm((prev) => ({ ...prev, action: "create" }));
   };
 
   const navConfig: ITNavigationConfig[] = [
