@@ -2,7 +2,7 @@ import express from "express";
 import {
   createModule,
   getModules,
-  getModuleById,
+  // getModuleById,
   updateModule,
   deleteModule,
 } from "../controllers/modulesController.js";
@@ -16,7 +16,7 @@ moduleRoutes.post("/", createModule);
 moduleRoutes.get("/", getModules);
 
 // Route to get a module by ID
-moduleRoutes.get("/:id", getModuleById);
+// moduleRoutes.get("/:id", getModuleById);
 
 // Route to update a module by ID
 moduleRoutes.put("/:id", updateModule);

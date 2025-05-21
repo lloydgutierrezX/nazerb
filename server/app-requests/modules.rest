@@ -11,8 +11,10 @@ POST http://localhost:3000/api/modules
 Content-Type: application/json
 
 {
-  "name": "1111",
-  "description": "user module"
+  "name": "User",
+  "description": "User module",
+  "active": true,
+  "link": "/users"
 }
 
 ### Get Module by ID Request
@@ -20,14 +22,16 @@ GET http://localhost:3000/api/modules/16
 Content-Type: application/json
 
 ### Update Module Request
-PUT http://localhost:3000/api/modules/16
+PUT http://localhost:3000/api/modules/4
 Content-Type: application/json
 
 {
-  "name": "testing 1233",
-  "description": "test module"
+  "name": "Module",
+  "description": "Module module",
+  "link": "/modules",
+  "active": true
 }
 
 ### Delete Module Request
-DELETE http://localhost:3000/api/modules/5
+DELETE http://localhost:3000/api/modules/4
 Content-Type: application/json
