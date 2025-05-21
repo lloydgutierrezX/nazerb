@@ -5,9 +5,9 @@ export const Dialog = ({ children }: { children: ReactNode }) => {
   const { dialog, setDialog } = useDialogContext();
 
   const closeDialog = () => {
-    setDialog(() => {
+    setDialog((prev) => {
       return {
-        ...dialog,
+        ...prev,
         open: false,
         data: undefined,
       };

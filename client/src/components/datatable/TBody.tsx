@@ -19,22 +19,22 @@ export const DataTableBody = <
   rowModel,
   permissions,
 }: DataTableBodyProps<TData>) => {
-  const { dialog, setDialog } = useDialogContext();
-  const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
-  const { form, setForm } = useFormContext();
+  const { setDialog } = useDialogContext();
+  const { setConfirmDialog } = useConfirmDialogContext();
+  const { setForm } = useFormContext();
 
   const handleAction = (
     id: string,
     action: IAction,
     data?: Record<string, unknown>
   ) => {
-    setForm({ ...form, action });
+    setForm((prev) => ({ ...prev, action }));
     if (action === "update") {
-      setDialog({ ...dialog, data, open: true });
+      setDialog((prev) => ({ ...prev, data, open: true }));
       return;
     }
 
-    setConfirmDialog({ ...confirmDialog, id, action, open: true });
+    setConfirmDialog((prev) => ({ ...prev, id, action, open: true }));
   };
 
   const rows = rowModel().rows;
