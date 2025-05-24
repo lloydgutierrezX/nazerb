@@ -26,6 +26,10 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Mail,
+  KeyRound,
+  Smartphone,
+  Link,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -150,6 +154,20 @@ export const Icon = memo(function Icon(props: {
             return (
               <RotateCcw className={classNames} color={color ?? undefined} />
             );
+
+          case "mail":
+            return <Mail className={classNames} color={color ?? undefined} />;
+
+          case "key-round":
+            return (
+              <KeyRound className={classNames} color={color ?? undefined} />
+            );
+          case "smartphone":
+            return (
+              <Smartphone className={classNames} color={color ?? undefined} />
+            );
+          case "link":
+            return <Link className={classNames} color={color ?? undefined} />;
 
           default:
             console.warn(`No icon for ${icon}`);

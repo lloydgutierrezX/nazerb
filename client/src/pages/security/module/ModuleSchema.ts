@@ -1,10 +1,10 @@
-import { z } from "zod";
 
+import { z } from "zod";
 export const moduleSchema = z.object({
-  name: z.string().min(4).max(60).default(""),
+  active: z.coerce.boolean(),
+  name: z.string().min(4).max(60),
   link: z.string().min(1).max(120),
-  description: z.string().nullable().default(null),
-  active: z.boolean().default(true),
+  description: z.string().nullable(),
   createdAt: z.date().nullish(),
   updatedAt: z.date().nullish(),
 });

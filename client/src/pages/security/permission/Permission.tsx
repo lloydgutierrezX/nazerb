@@ -1,9 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ITableConfig } from "Components/datatable/IDatatable";
-import { IAction, IFormField } from "Components/field/IForm";
+import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 import { Icon } from "Components/icon/Icon";
 import moment from "moment";
-import { IData } from "Pages/IData";
 import {
   addPermission,
   deletePermission,
@@ -14,7 +13,7 @@ import {
   useGetAllPermissions,
 } from "./PermissionActions";
 import { useDialogContext } from "Services/contexts/DialogContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ConfirmDialogContext,
   IConfirmDialogContent,
@@ -24,16 +23,27 @@ import { IPermissionInput } from "./IPermission";
 import { DataTable } from "Components/datatable/Table";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import { Form } from "Components/field/Form";
+import { FormGroup } from "Components/field/FormGroup";
 import { FormContext } from "Services/contexts/FormContext";
-import { moduleSchema } from "../module/ModuleSchema";
+import { IModuleResponse } from "../module/IModule";
+import { useGetAllModules } from "../module/ModuleActions";
+import { permissionSchema } from "./PermissionSchema";
 
 // ColumnsDef: for react-table column display
-const columnDef: ColumnDef<IData, string>[] = [
+const columnDef: ColumnDef<DynamicObject, string>[] = [
   {
-    accessorKey: "name", // key
-    header: "Name", // header name
-    cell: (info: { getValue: () => string }) => info.getValue(),
+    accessorKey: "action", // key
+    header: "Action", // header name
+    cell: (cell) => {
+      const value = cell.getValue();
+      const moduleObj = cell.row.original.module;
+      const moduleName = (moduleObj as { name: string }).name;
+      return (
+        <span className="lowercase">
+          {value}:{moduleName}
+        </span>
+      );
+    },
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
@@ -117,42 +127,92 @@ const config: ITableConfig = {
   },
 };
 
-const formFields: IFormField[] = [
+const formFields: IBaseFormGroupField[] = [
   {
-    type: "toggle",
-    placeholder: "Toggle this to turn on/off this module",
     name: "active",
-    className: "justify-end",
-    containerClassName: "flex flex-row gap-2",
-    defaultChecked: true,
-    label: "Is Actve?",
-    labelClassName: "w-full justify-end",
+    className: "flex flex-row w-full items-center",
+    label: {
+      className: "w-full justify-end",
+      value: "Is Actve?",
+    },
+    field: {
+      type: "checkbox",
+      className: "flex dirc checkbox",
+      placeholder: "Toggle this to turn on/off this module",
+    },
+    error: {
+      className: "float-right",
+    },
   },
   {
-    type: "text",
-    placeholder: "Input the module name",
-    name: "name",
-    label: "Permission Name",
-    labelClassName: "w-full",
-    className: "",
+    name: "moduleId",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Module",
+    },
+    field: {
+      type: "select",
+      className: "input select w-full",
+      placeholder: "Select a module",
+      options: [],
+    },
   },
   {
-    type: "textarea",
-    placeholder: "Input the module description",
+    name: "action",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Action",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Action for the selected module above",
+    },
+  },
+  {
     name: "description",
-    label: "Description",
-    labelClassName: "w-full",
-    className: "h-40",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Description",
+    },
+    field: {
+      type: "textarea",
+      className: "input w-full",
+      placeholder: "Permission description.",
+    },
   },
 ];
 
+const defaultValues = {
+  active: true,
+};
+
 export const Permission = () => {
   const { data, isFetching } = useGetAllPermissions();
+  const moduleRequest = useGetAllModules();
+
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
     module: "Permissions",
   });
+
+  useEffect(() => {
+    if (formFields[1].field.type !== "select" || !moduleRequest?.data) {
+      return;
+    }
+
+    formFields[1].field.options = moduleRequest.data!.map(
+      (mod: IModuleResponse) => ({
+        key: mod.id,
+        value: mod.name,
+        className: "",
+      })
+    );
+  }, [moduleRequest]);
 
   const [form, setForm] = useState({
     url,
@@ -173,11 +233,12 @@ export const Permission = () => {
         >
           <ConfirmDialog />
           <Dialog>
-            <Form
+            <FormGroup
               formFields={formFields}
-              schema={moduleSchema}
+              schema={permissionSchema}
               moduleName="Permission"
               data={dialog.data}
+              defaultValues={defaultValues}
             />
           </Dialog>
 

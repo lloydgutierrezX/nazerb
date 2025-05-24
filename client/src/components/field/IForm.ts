@@ -1,35 +1,43 @@
-import { ZodType } from "zod";
-
-export type IFormProps = {
-  schema: ZodType<Record<string, unknown>>;
-  formFields: IFormField[];
-  moduleName: string;
-  data?: Record<string, unknown>;
-};
-
-interface IBaseFormField {
-  name: string;
-  className?: string;
-  containerClassName?: string;
-  placeholder?: string;
-  label?: string;
-  labelClassName?: string;
-
-};
-
-export interface IInputField extends IBaseFormField {
-  type: "text" | "number";
+interface IFormGroupLabel extends React.LabelHTMLAttributes<HTMLLabelElement> {
+  value?: string;
+  className: string;
 }
 
-export interface ITextAreaField extends IBaseFormField {
+export type IFieldType = IInputField | IToggleField | ITextAreaField | ISelectField;
+
+export interface IBaseFormGroupField {
+  name: string;
+  field: IFieldType;
+  error?: IFormGroupLabel;
+  label?: IFormGroupLabel;
+  className?: string;
+};
+
+export interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
+  type: "text" | "number" | "password" | "email" | "date" | "checkbox" | "radio" | "url" | "time" | "tel" | "username";
+}
+
+interface ITextAreaField extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   type: "textarea";
 }
 
-interface IToggleField extends IBaseFormField {
-  type: "toggle"
-  defaultChecked?: boolean;
+type IOptions = {
+  key: string;
+  value: string | number;
+  className: string;
+};
+
+interface ISelectField extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  type: "select";
+  options: IOptions[];
+  placeholder: string;
 }
 
-export type IFormField = IInputField | IToggleField | ITextAreaField;
+export interface IToggleField {
+  type: "toggle"
+  className?: string;
+  placeholder?: string;
+  defaultChecked?: boolean;
+}
 
 export type IAction = 'create' | 'update' | 'delete' | 'retrieve';
