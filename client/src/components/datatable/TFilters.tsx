@@ -1,11 +1,11 @@
 import { Row } from "@tanstack/react-table";
-import { IData } from "Pages/IData";
 import { Search } from "Components/field/search/Search";
 import { SearchContext } from "Services/contexts/SearchContext";
+import { DynamicObject } from "Utils/globalInterface";
 
 export const DatatableFilter = (props: {
   filterRowModel: () => {
-    rows: Row<IData>[];
+    rows: Row<DynamicObject>[];
   };
   setGlobalFilter: (value: string) => void;
   searchPlaceholder?: string;

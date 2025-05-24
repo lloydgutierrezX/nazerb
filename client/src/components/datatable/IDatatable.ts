@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { IData } from "Pages/IData";
+import { DynamicObject } from "Utils/globalInterface";
 
-export type IDataTableProps<T extends IData> = {
+export type IDataTableProps<T extends DynamicObject> = {
   data: T[];
   columnDef: ColumnDef<T, string>[];
   config: ITableConfig;

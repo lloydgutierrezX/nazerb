@@ -1,9 +1,9 @@
 import { HeaderGroup } from "@tanstack/react-table";
 import { Icon } from "Components/icon/Icon";
-import { IData } from "Pages/IData";
+import { DynamicObject } from "Utils/globalInterface";
 
 export const DataTableHeader = (props: {
-  headerGroups: () => HeaderGroup<IData>[];
+  headerGroups: () => HeaderGroup<DynamicObject>[];
 }) => {
   return (
     <thead>
