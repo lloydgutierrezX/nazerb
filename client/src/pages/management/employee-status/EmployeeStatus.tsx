@@ -185,7 +185,7 @@ export const EmployeeStatus = () => {
 
   useEffect(() => {
     setRecord((prev) => (error ? [] : prev));
-    // show toas in the future...
+    // show toast in the future...
   }, [error]);
 
   return (
