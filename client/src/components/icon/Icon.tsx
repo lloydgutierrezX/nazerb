@@ -30,6 +30,8 @@ import {
   KeyRound,
   Smartphone,
   Link,
+  HandCoins,
+  PhilippinePeso,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -168,6 +170,19 @@ export const Icon = memo(function Icon(props: {
             );
           case "link":
             return <Link className={classNames} color={color ?? undefined} />;
+
+          case "hand-coins":
+            return (
+              <HandCoins className={classNames} color={color ?? undefined} />
+            );
+
+          case "peso":
+            return (
+              <PhilippinePeso
+                className={classNames}
+                color={color ?? undefined}
+              />
+            );
 
           default:
             console.warn(`No icon for ${icon}`);

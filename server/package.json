@@ -4,7 +4,7 @@
     "main": "server.js",
     "type": "module",
     "scripts": {
-        "postinstall": "prisma generate --schema=./prisma/schema.prisma",
+        "postinstall": "prisma generate --schema=./prisma/schema/schema.prisma",
         "dev": "nodemon server",
         "reset-db": "rm -rf prisma/migrations && npx prisma migrate dev --name init && npx prisma migrate reset --force"
     },
