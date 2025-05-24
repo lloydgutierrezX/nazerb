@@ -176,7 +176,7 @@ const formGroupFields: IBaseFormGroupField[] = [
 ];
 
 export const Module = () => {
-  const { data, isFetching } = useGetAllModules();
+  const { data, isFetching, isLoading } = useGetAllModules();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
@@ -214,6 +214,7 @@ export const Module = () => {
             columnDef={columnDef}
             config={config}
             isFetching={isFetching}
+            isLoading={isLoading}
           />
         </ConfirmDialogContext.Provider>
       </FormContext.Provider>

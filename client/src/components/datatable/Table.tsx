@@ -49,6 +49,7 @@ export const DataTable = memo(function DataTable<T extends DynamicObject>({
   columnDef,
   config,
   isFetching,
+  isLoading,
 }: IDataTableProps<T>) {
   const [globalFilter, setGlobalFilter] = useState<string>("");
   const [dataSource, setDataSource] = useState<T[]>(data);
@@ -125,12 +126,12 @@ export const DataTable = memo(function DataTable<T extends DynamicObject>({
           }
           setGlobalFilter={setGlobalFilter}
           searchPlaceholder={config.permissions.search?.placeholder}
-          disabled={isDisabled(isFetching)}
+          disabled={isDisabled(isFetching || isLoading)}
         />
 
         {config.permissions.add.isAllowed && (
           <button
-            disabled={isDisabled(isFetching)}
+            disabled={isDisabled(isFetching || isLoading)}
             className="btn btn-primary hover:text-blue-500 hover:bg-blue-100"
             onClick={() => {
               handleDialog({ open: true });
@@ -150,14 +151,16 @@ export const DataTable = memo(function DataTable<T extends DynamicObject>({
             headerGroups={
               table.getHeaderGroups as unknown as () => HeaderGroup<DynamicObject>[]
             }
+            showLoading={isFetching || isLoading}
           />
 
-          {isFetching ? (
+          {isLoading ? (
             <SkeletonTable columnCount={columnDef.length} type="column" />
           ) : (
             <DataTableBody
               rowModel={table.getRowModel}
               permissions={config.permissions}
+              disabled={isDisabled(isFetching || isLoading)}
             />
           )}
         </table>

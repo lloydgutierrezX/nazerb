@@ -11,6 +11,7 @@ type DataTableBodyProps<TData> = {
     rows: Row<TData>[];
   };
   permissions: IPermissions;
+  disabled: boolean;
 };
 
 export const DataTableBody = <
@@ -18,6 +19,7 @@ export const DataTableBody = <
 >({
   rowModel,
   permissions,
+  disabled,
 }: DataTableBodyProps<TData>) => {
   const { setDialog } = useDialogContext();
   const { setConfirmDialog } = useConfirmDialogContext();
@@ -59,6 +61,7 @@ export const DataTableBody = <
               <div className="flex justify-center">
                 {permissions.update.isAllowed && (
                   <button
+                    disabled={disabled}
                     onClick={() =>
                       row.original &&
                       handleAction(
@@ -80,6 +83,7 @@ export const DataTableBody = <
                       handleAction(row.original.id as string, "delete")
                     }
                     className="btn scale-75 btn-error text-white btn-square hover:text-red-500 hover:bg-red-100"
+                    disabled={disabled}
                   >
                     <Icon icon="trash" classNames="" />
                   </button>
@@ -90,6 +94,7 @@ export const DataTableBody = <
                       row.original &&
                       handleAction(row.original.id as string, "retrieve")
                     }
+                    disabled={disabled}
                   >
                     <Icon icon="rotate-ccw" classNames="" />
                   </button>

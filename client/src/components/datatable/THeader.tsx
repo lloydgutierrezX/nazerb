@@ -4,6 +4,7 @@ import { DynamicObject } from "Utils/globalInterface";
 
 export const DataTableHeader = (props: {
   headerGroups: () => HeaderGroup<DynamicObject>[];
+  showLoading: boolean;
 }) => {
   return (
     <thead>
@@ -58,6 +59,17 @@ export const DataTableHeader = (props: {
           </tr>
         );
       })}
+
+      {props.showLoading && (
+        <tr>
+          <td
+            className="table-td-loading"
+            colSpan={props.headerGroups()[0].headers.length + 1}
+          >
+            <div className="loading-line"></div>
+          </td>
+        </tr>
+      )}
     </thead>
   );
 };

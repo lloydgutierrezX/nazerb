@@ -6,6 +6,7 @@ export type IDataTableProps<T extends DynamicObject> = {
   columnDef: ColumnDef<T, string>[];
   config: ITableConfig;
   isFetching: boolean;
+  isLoading: boolean;
 }
 
 type IPermissionsConfig = {
