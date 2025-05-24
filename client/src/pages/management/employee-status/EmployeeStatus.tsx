@@ -3,12 +3,12 @@ import { ITableConfig } from "Components/datatable/IDatatable";
 import { DataTable } from "Components/datatable/Table";
 import { FormGroup } from "Components/field/FormGroup";
 import { IAction, IBaseFormGroupField } from "Components/field/IForm";
-import { Icon } from "Components/icon/Icon";
+
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import moment from "moment";
 import { moduleSchema } from "Pages/security/module/ModuleSchema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IConfirmDialogContent,
   ConfirmDialogContext,
@@ -25,6 +25,7 @@ import {
   retrieveEmployeeStatus,
 } from "./EmployeeStatusActions";
 import { IEmployeeStatusInput } from "./IEmployeeStatus";
+import { Icon } from "Components/icon/Icon";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -161,12 +162,13 @@ const formGroupFields: IBaseFormGroupField[] = [
 ];
 
 export const EmployeeStatus = () => {
-  const { data, isFetching, isLoading } = useGetAllEmployeeStatus();
+  const { data, isFetching, isLoading, error } = useGetAllEmployeeStatus();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
     module: "Employee Status",
   });
+
   const [form, setForm] = useState({
     url: "/modules",
     fetchQueryKey: getAllEmployeeStatusKey,
@@ -178,6 +180,13 @@ export const EmployeeStatus = () => {
     onDeleteFn: (id: string) => deleteEmployeeStatus(id),
     onRetrieveFn: (id: string) => retrieveEmployeeStatus(id),
   });
+
+  const [record, setRecord] = useState(data);
+
+  useEffect(() => {
+    setRecord((prev) => (error ? [] : prev));
+    // show toas in the future...
+  }, [error]);
 
   return (
     <>
@@ -196,7 +205,7 @@ export const EmployeeStatus = () => {
           </Dialog>
 
           <DataTable
-            data={data ?? []}
+            data={record ?? []}
             columnDef={columnDef}
             config={config}
             isFetching={isFetching}
