@@ -12,6 +12,7 @@ import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
+import { EmployeeStatus } from "Pages/management/employee-status/EmployeeStatus";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -53,9 +54,14 @@ function App() {
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/dashboard" element={<Dashboard />} />
 
+                <Route
+                  path="management/employee-status"
+                  element={<EmployeeStatus />}
+                />
+
                 <Route path="/security/modules" element={<Module />} />
-                <Route path="/security/roles" element={<Role />} />
                 <Route path="/security/permissions" element={<Permission />} />
+                <Route path="/security/roles" element={<Role />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>
