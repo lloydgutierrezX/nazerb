@@ -1,28 +1,38 @@
 import { UseFormRegister } from "react-hook-form";
-import { ITextAreaField } from "../IForm";
+import { IBaseFormGroupField } from "../IForm";
 
-interface ITextAreaProps extends ITextAreaField {
+interface ITextAreaProps {
   register: UseFormRegister<Record<string, unknown>>;
+  formField: IBaseFormGroupField;
+  error: string;
 }
 
 export const TextArea: React.FC<ITextAreaProps> = ({
-  name,
-  className,
-  containerClassName,
-  placeholder,
-  label,
-  labelClassName,
   register,
+  formField,
+  error,
 }) => {
+  const { name, field, label } = formField;
+
+  field.className += field.className?.includes("textarea") ? "" : " textarea";
+
   return (
-    <div className={`${containerClassName}`}>
-      {label && <label className={`label ${labelClassName}`}>{label}</label>}
-      <textarea
-        {...register(name)}
-        name={name}
-        className={`textarea ${className}`}
-        placeholder={placeholder}
-      />
-    </div>
+    <>
+      <fieldset className="fieldset">
+        <legend className={`fieldset-legend ${label?.className}`}>
+          {label?.value}
+        </legend>
+        <textarea
+          {...register(name as `${string}`)}
+          {...(field as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+        />
+      </fieldset>
+
+      {error && (
+        <label className={`error text-red-500 ${formField.error?.className}`}>
+          {error}
+        </label>
+      )}
+    </>
   );
 };

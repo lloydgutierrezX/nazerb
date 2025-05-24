@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { IRequestParams, addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
+import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
 import { IPermissionInput, IPermissionResponse } from "./IPermission";
 
 export const url = '/permissions';
 export const getAllPermissionsKey = 'get-all-permissions';
 
 const getAllPermissions =
-  async (url: string, config?: IRequestParams) => await fetchAll(url, config);
+  async () => await fetchAll(url);
 
 // get all permission useQuery implementation
-export const useGetAllPermissions = (config?: IRequestParams) => {
+export const useGetAllPermissions = () => {
   return useQuery<IPermissionResponse[], unknown>({
     queryFn: async () => {
-      const response = await getAllPermissions(url, config);
+      const response = await getAllPermissions();
       return response?.data ?? [];
     },
     queryKey: [getAllPermissionsKey]
@@ -31,4 +31,4 @@ export const deletePermission =
   async (id: string) => await deleteData({ url: `${url}/${id}` });
 
 export const retrievePermission =
-  async (id: string) => await retreiveData({ url: `${url}/${id}` });
+  async (id: string) => await retreiveData({ url: `${url}/retrieve/${id}` });

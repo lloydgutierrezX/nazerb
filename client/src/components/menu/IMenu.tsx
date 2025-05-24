@@ -60,16 +60,16 @@ export const jsonMenu = [
         icon: "component",
       },
       {
-        key: "roles",
-        path: "security/roles",
-        is_active: true,
-        icon: "user-cog",
-      },
-      {
         key: "permissions",
         path: "security/permissions",
         is_active: true,
         icon: "shield-user",
+      },
+      {
+        key: "roles",
+        path: "security/roles",
+        is_active: true,
+        icon: "user-cog",
       },
     ],
   },

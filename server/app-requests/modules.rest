@@ -11,10 +11,10 @@ POST http://localhost:3000/api/modules
 Content-Type: application/json
 
 {
-  "name": "User",
-  "description": "User module",
+  "name": "Permission",
+  "description": "Permission module",
   "active": true,
-  "link": "/users"
+  "link": "/permissions"
 }
 
 ### Get Module by ID Request
@@ -22,13 +22,10 @@ GET http://localhost:3000/api/modules/16
 Content-Type: application/json
 
 ### Update Module Request
-PUT http://localhost:3000/api/modules/4
+PUT http://localhost:3000/api/modules/1
 Content-Type: application/json
 
 {
-  "name": "Module",
-  "description": "Module module",
-  "link": "/modules",
   "active": true
 }
 

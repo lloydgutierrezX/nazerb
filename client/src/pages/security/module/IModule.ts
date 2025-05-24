@@ -1,6 +1,7 @@
 export type IModuleResponse = {
   id: string;
   name: string;
+  url: string;
   description: string;
   active: string;
   created_at: string;
@@ -8,5 +9,5 @@ export type IModuleResponse = {
 }
 
 export type IModuleInput = {
-  name: string, description: string, is_active: boolean
+  name: string, url: string, description: string, is_active: boolean
 }

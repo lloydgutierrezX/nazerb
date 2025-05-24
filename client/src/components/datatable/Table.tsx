@@ -11,7 +11,6 @@ import {
 } from "@tanstack/react-table";
 import { DataTableHeader } from "./THeader";
 import { DataTableBody } from "./TBody";
-import { IData } from "Pages/IData";
 import { DatatableFilter } from "./TFilters";
 import { IDataTableProps, ITNavigationConfig } from "./IDatatable";
 
@@ -23,6 +22,7 @@ import { Icon } from "Components/icon/Icon";
 import { SkeletonTable } from "./TSkeleton";
 import { useFormContext } from "Services/contexts/FormContext";
 import { TNavigation } from "./TNavigation";
+import { DynamicObject } from "Utils/globalInterface";
 
 type IPaginationButton = "first" | "previous" | "next" | "last";
 const isDisabled = <T,>(
@@ -44,7 +44,7 @@ const isDisabled = <T,>(
   }
 };
 
-export const DataTable = memo(function DataTable<T extends IData>({
+export const DataTable = memo(function DataTable<T extends DynamicObject>({
   data,
   columnDef,
   config,
@@ -120,7 +120,7 @@ export const DataTable = memo(function DataTable<T extends IData>({
         <DatatableFilter
           filterRowModel={
             table.getFilteredRowModel as unknown as () => {
-              rows: Row<IData>[];
+              rows: Row<DynamicObject>[];
             }
           }
           setGlobalFilter={setGlobalFilter}
@@ -148,7 +148,7 @@ export const DataTable = memo(function DataTable<T extends IData>({
         <table className="table">
           <DataTableHeader
             headerGroups={
-              table.getHeaderGroups as unknown as () => HeaderGroup<IData>[]
+              table.getHeaderGroups as unknown as () => HeaderGroup<DynamicObject>[]
             }
           />
 

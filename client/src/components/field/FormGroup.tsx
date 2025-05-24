@@ -2,9 +2,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input/Input";
-import { z } from "zod";
-import { Toggle } from "./toggle/Toggle";
-import { IFormField, IFormProps } from "./IForm";
+import { z, ZodType } from "zod";
+import { IBaseFormGroupField } from "./IForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
@@ -12,12 +11,22 @@ import { TextArea } from "./textarea/TextArea";
 import { useFormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext";
+import { Select } from "./select/Select";
 
-export const Form: React.FC<IFormProps> = ({
+type IFormGroupProps = {
+  schema: ZodType<Record<string, unknown>>;
+  formFields: IBaseFormGroupField[];
+  moduleName: string;
+  data?: Record<string, unknown>;
+  defaultValues?: Record<string, unknown>;
+};
+
+export const FormGroup: React.FC<IFormGroupProps> = ({
   schema,
   formFields,
   moduleName,
   data,
+  defaultValues,
 }) => {
   const { dialog, setDialog } = useDialogContext();
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
@@ -35,6 +44,7 @@ export const Form: React.FC<IFormProps> = ({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: zodResolver(schema),
+    defaultValues,
   });
 
   const queryClient = useQueryClient();
@@ -50,12 +60,10 @@ export const Form: React.FC<IFormProps> = ({
             form.onUpdateFn(data.id as string, formData as DynamicObject)
           );
         case "delete":
-          console.log("delet");
           return (
             confirmDialog?.id && form.onDeleteFn(confirmDialog.id as string)
           );
         case "retrieve":
-          console.log("retreive");
           return (
             confirmDialog?.id && form.onRetrieveFn(confirmDialog.id as string)
           );
@@ -69,32 +77,21 @@ export const Form: React.FC<IFormProps> = ({
       setConfirmDialog({ ...confirmDialog, confirmAction: false, open: false });
       setForm({ ...form, action: "create" });
     },
-  });
-
-  // useEffect for field validation
-  useEffect(() => {
-    // if we close the dialog, then we need to reset the fields.
-    if (!dialog.open) {
-      reset();
-      return;
-    }
-
-    formFields.forEach((f) => {
-      const d = data as Record<string, unknown>;
-      // if data has value, meaning the form is called for update
-      // then we need to manually set the value to each field.
-      if (data) {
-        setValue(f.name, d[f.name]);
+    onError: (error: { fields?: string[]; error?: string }) => {
+      if (!error.fields || !error.error) {
         return;
       }
+      error.fields.map((fieldName) =>
+        setError(fieldName, { type: "manual", message: error.error })
+      );
+    },
+  });
 
-      // if the process goes here, then meaning this is form is for create.
-      // if the current field is a toggle, we need to set it's value to true.
-      // empty string or "" if its not a toggle.
-      const isBoolean = f.type === "toggle";
-      setValue(f.name, isBoolean ? true : "");
-    });
-  }, [dialog.open, data, formFields, setValue]);
+  const onSubmit: SubmitHandler<
+    z.infer<typeof schema> & Record<string, unknown>
+  > = (formData) => {
+    mutation.mutate(formData);
+  };
 
   // useEffect for confirmation dialog. this is for Delete and Retrieve actions.
   useEffect(() => {
@@ -108,32 +105,31 @@ export const Form: React.FC<IFormProps> = ({
     mutation.mutate(null);
   }, [confirmDialog.confirmAction, form.action]);
 
-  const onSubmit: SubmitHandler<
-    z.infer<typeof schema> & Record<string, unknown>
-  > = (formData) => mutation.mutate(formData);
-
-  // for Server response, if has error. We dynamically set this error on react-table
+  // useData for onload
   useEffect(() => {
-    const errors = mutation.error as unknown as {
-      fields: string[];
-      message: string;
-    };
-
-    if (!errors?.fields) return;
-
-    errors.fields.map((fieldName) =>
-      setError(fieldName, { type: "manual", message: errors.message })
-    );
-    return;
-  }, [mutation.error]);
-
-  const showError = (name: string) => {
-    if (!errors[name]) {
-      return "";
+    // if we close the dialog, then we need to reset the fields.
+    if (!dialog.open) {
+      reset();
+      return;
     }
 
-    return <p className="label text-red-500 my-2">{errors[name]?.message}</p>;
-  };
+    formFields.forEach((f) => {
+      const d = data as Record<string, unknown>;
+      // if data has value, meaning the form is called for update
+      // then we need to manually set the value to each field.
+      if (data) {
+        console.log(data);
+        setValue(f.name, d[f.name]);
+        return;
+      }
+
+      // if the process goes here, then meaning this is form is for create.
+      // if the current field is a toggle, we need to set it's value to true.
+      // empty string or "" if its not a toggle.
+      const isBoolean = f.field.type === "checkbox";
+      setValue(f.name, isBoolean ? true : "");
+    });
+  }, [dialog.open, data, formFields, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -142,64 +138,49 @@ export const Form: React.FC<IFormProps> = ({
           {(form.action === "create" ? "Create" : "Update") + " " + moduleName}
         </legend>
 
-        {formFields.map((field: IFormField) => {
-          field.className += errors[field.name]
-            ? "color-red-500 border-red-500 focus:outline-red-500"
-            : "border-transparent outline-[#222222] focus:outline-[#222222]";
-
-          switch (field.type) {
+        {formFields.map((fg: IBaseFormGroupField) => {
+          switch (fg.field.type) {
+            case "number":
             case "text":
+            case "password":
+            case "email":
+            case "url":
+            case "date":
+            case "time":
+            case "tel":
+            case "username":
+            case "checkbox":
               return (
-                <div key={field.name} className="my-2">
+                <div key={fg.name}>
                   <Input
                     register={register}
-                    name={field.name}
-                    type={field.type}
-                    label={field?.label}
-                    labelClassName={`label ${field.labelClassName}`}
-                    className={`input w-full outline focus:outline focus:border-transparent ${field.className}`}
-                    containerClassName="flex flex-col gap-2"
+                    formField={fg}
+                    error={errors[fg.name]?.message ?? ""}
                   />
-                  {showError(field.name)}
-                </div>
-              );
-
-            case "toggle":
-              return (
-                <div
-                  key={field.name}
-                  className={`my-2 ${field.containerClassName}`}
-                >
-                  <Toggle
-                    register={register}
-                    name={field.name}
-                    className={field.className}
-                    label={field?.label}
-                    labelClassName={`label ${field.labelClassName}`}
-                    formFields={formFields}
-                  />
-
-                  {showError(field.name)}
                 </div>
               );
 
             case "textarea":
               return (
-                <div
-                  key={field.name}
-                  className={`my-2 ${field.containerClassName}`}
-                >
+                <div key={`${fg.name}-containter`}>
                   <TextArea
+                    key={fg.name}
                     register={register}
-                    name={field.name}
-                    label={field?.label}
-                    labelClassName={`label ${field.labelClassName}`}
-                    className={`input w-full outline focus:outline focus:border-transparent ${field.className}`}
-                    containerClassName="flex flex-col gap-2"
-                    type={field.type}
+                    formField={fg}
+                    error={errors[fg.name]?.message ?? ""}
                   />
+                </div>
+              );
 
-                  {showError(field.name)}
+            case "select":
+              return (
+                <div key={`${fg.name}-containter`}>
+                  <Select
+                    key={fg.name}
+                    register={register}
+                    formField={fg}
+                    error={errors[fg.name]?.message ?? ""}
+                  />
                 </div>
               );
             default:

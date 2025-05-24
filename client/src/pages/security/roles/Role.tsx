@@ -25,7 +25,7 @@ import { IRoleInput } from "./IRole";
 import { DataTable } from "Components/datatable/Table";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import { Form } from "Components/field/Form";
+import { FormGroup } from "Components/field/FormGroup";
 import { FormContext } from "Services/contexts/FormContext";
 import { moduleSchema } from "../module/ModuleSchema";
 
@@ -171,7 +171,7 @@ export const Role = () => {
         >
           <ConfirmDialog />
           <Dialog>
-            <Form
+            <FormGroup
               formFields={formFields}
               schema={moduleSchema}
               moduleName="Role"

@@ -1,3 +1,3 @@
 export type DynamicObject = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | DynamicObject;
 }

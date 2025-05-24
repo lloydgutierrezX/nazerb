@@ -15,9 +15,9 @@ POST http://localhost:3000/api/permissions
 Content-Type: application/json
 
 {
-  "name": "retrieve1",
-  "moduleId": 1,
-  "description": "user has a delete permission on user's module",
+  "action": "create",
+  "moduleId": 3,
+  "description": "",
   "active": true
 }
 

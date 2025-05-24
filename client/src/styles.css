@@ -21,3 +21,11 @@
   );
   color: var(--badge-color, var(--color-base-content));
 }
+
+fieldset.fieldset :focus-within {
+  outline: none;
+}
+
+input[type="checkbox"]:checked {
+  background: none;
+}

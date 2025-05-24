@@ -1,6 +1,7 @@
 export type IPermissionResponse = {
   id: string;
-  name: string;
+  moduleId: string;
+  action: string;
   description: string;
   active: string;
   created_at: string;
@@ -8,5 +9,5 @@ export type IPermissionResponse = {
 }
 
 export type IPermissionInput = {
-  name: string, description: string, is_active: boolean
+  action: string, moduleId: string, description: string, is_active: boolean
 }

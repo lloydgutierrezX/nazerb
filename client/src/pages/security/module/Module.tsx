@@ -1,11 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { IData } from "Pages/IData";
-
 import { DataTable } from "Components/datatable/Table";
 import { ITableConfig } from "Components/datatable/IDatatable";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import { Form } from "Components/field/Form";
+import { FormGroup } from "Components/field/FormGroup";
 import { moduleSchema } from "./ModuleSchema";
 
 import moment from "moment";
@@ -27,11 +25,11 @@ import {
 import { useState } from "react";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
-import { IAction, IFormField } from "Components/field/IForm";
+import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 import { IModuleInput } from "./IModule";
 
 // ColumnsDef: for react-table column display
-const columnDef: ColumnDef<IData, string>[] = [
+const columnDef: ColumnDef<DynamicObject, string>[] = [
   {
     accessorKey: "name", // key
     header: "Name", // header name
@@ -119,40 +117,61 @@ const config: ITableConfig = {
   },
 };
 
-const formFields: IFormField[] = [
+const formGroupFields: IBaseFormGroupField[] = [
   {
-    type: "toggle",
-    placeholder: "Toggle this to turn on/off this module",
     name: "active",
-    className: "justify-end",
-    containerClassName: "flex flex-row gap-2",
-    defaultChecked: true,
-    label: "Is Actve?",
-    labelClassName: "w-full justify-end",
+    className: "flex flex-row w-full text-left content-center",
+    label: {
+      className: "w-full justify-end",
+      value: "Is Actve?",
+    },
+    field: {
+      type: "checkbox",
+      className: "flex dirc checkbox",
+      placeholder: "Toggle this to turn on/off this module",
+    },
+    error: {
+      className: "text-left",
+    },
   },
   {
-    type: "text",
-    placeholder: "Input the module name",
     name: "name",
-    label: "Module Name",
-    labelClassName: "w-full",
-    className: "",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Module Name",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Input the module name",
+    },
   },
   {
-    type: "text",
-    placeholder: "Input module link",
     name: "link",
-    label: "URL",
-    labelClassName: "w-full",
-    className: "",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "URL",
+    },
+    field: {
+      type: "url",
+      className: "w-full",
+      placeholder: "/module",
+    },
   },
   {
-    type: "textarea",
-    placeholder: "Input the module description",
     name: "description",
-    label: "Description",
-    labelClassName: "w-full",
-    className: "h-40",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Description",
+    },
+    field: {
+      type: "textarea",
+      placeholder: "Input the module description",
+      className: "h-40 w-full",
+    },
   },
 ];
 
@@ -182,8 +201,8 @@ export const Module = () => {
         >
           <ConfirmDialog />
           <Dialog>
-            <Form
-              formFields={formFields}
+            <FormGroup
+              formFields={formGroupFields}
               schema={moduleSchema}
               moduleName="Module"
               data={dialog.data}
