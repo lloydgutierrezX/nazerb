@@ -81,6 +81,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       if (!error.fields || !error.error) {
         return;
       }
+
+      // setting manual error per field
       error.fields.map((fieldName) =>
         setError(fieldName, { type: "manual", message: error.error })
       );
@@ -118,7 +120,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       // if data has value, meaning the form is called for update
       // then we need to manually set the value to each field.
       if (data) {
-        console.log(data);
         setValue(f.name, d[f.name]);
         return;
       }

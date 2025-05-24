@@ -26,7 +26,7 @@ export const createPermission = async (req, res) => {
     if (record.length !== 0) {
       return res.status(409).json({
         error: `Permission ${action}:${module} already taken`,
-        fields: ["action, moduleId"],
+        fields: ["action", "moduleId"],
       });
     }
 

@@ -17,8 +17,6 @@ export const Select: React.FC<ISelect> = ({ register, formField, error }) => {
     key: option.key.toString(),
   }));
 
-  console.log(options);
-
   return (
     <>
       <fieldset className={`fieldset ${className}`}>

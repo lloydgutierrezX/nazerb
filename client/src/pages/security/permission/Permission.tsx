@@ -181,7 +181,7 @@ const formFields: IBaseFormGroupField[] = [
     field: {
       type: "textarea",
       className: "input w-full",
-      placeholder: "Input desciption of actions here",
+      placeholder: "Permission description.",
     },
   },
 ];
