@@ -1,223 +1,202 @@
 import { PrismaClient } from "#root/generated/prisma/client.js";
+import { consoleLog } from "../utils.js";
+import { create, findMany, findUnique, update } from "./helper.js";
+
+const module = "role";
 
 const prisma = new PrismaClient();
 
 // Function to create a new role
 export const createRole = async (req, res) => {
-  console.log("Creating a new role");
+  consoleLog("Entering createRole fn", "title");
 
-  const { name, description, active } = req.body;
+  const { name, description, active, permissions } = req.body;
 
   try {
-    // Check if the role name already exists
-    console.log(`Checking if role name ${name} already exists`);
-    if (
-      await prisma.role.findUnique({
-        where: {
-          name,
-        },
-      })
-    ) {
-      console.log(`Role name ${name} already exists`);
-      res.status(409).json({ error: `Role ${name} already taken` });
+    if (!Array.isArray(permissions)) {
+      return res
+        .status(409)
+        .json({ message: "Permissions must be an array of permission id." });
     }
 
-    console.log(
-      `Processing create role with name ${name} and description ${description}`
-    );
+    if (await findUnique(module, { name: name })) {
+      return res
+        .status(409)
+        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
+    }
+
     // Create the new role
-    const newRole = await prisma.role.create({
-      data: {
-        name,
-        active,
-        description,
+    const newPermission = await create(module, {
+      name,
+      active,
+      description,
+      rolePermission: {
+        create: permissions,
       },
     });
 
-    console.log(`Role ${name} created successfully`);
     // Return the created role
-    res.status(201).json(newRole);
+    return res.status(201).json(newPermission);
   } catch (error) {
-    console.log("Creating role failed", error);
+    consoleLog(error, "error");
 
     // If the role does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to create role" });
+    return res.status(500).json({ message: "Failed to create role" });
+  } finally {
+    consoleLog("Leaving createModule fn", "title");
   }
 };
 
 // Function to get all roles
 export const getRoles = async (req, res) => {
-  console.log("Fetching all roles");
-  // Fetch all roles
+  consoleLog("Fetching all roles", "title");
 
   try {
-    const roles = await prisma.role.findMany({
-      // where: { active: true },
+    const roles = await findMany(module, {
       orderBy: { createdAt: "desc" },
+      include: {
+        rolePermission: true,
+      },
     });
-    console.log("Roles fetched successfully");
-    // Return the roles
-
-    res.status(200).json(roles);
+    return res.status(200).json(roles);
   } catch (error) {
-    console.log("Fetching all roles failed", error);
+    consoleLog(error, "error");
 
     // If the roles do not exist, return a 404 error
-    res.status(500).json({ error: "Failed to fetch roles" });
-  }
-};
-
-// Function to get a role by ID
-export const getRoleById = async (req, res) => {
-  console.log(`Fetching role by ID: ${req.params.id}`);
-
-  // Check if the ID is a valid number
-  const { id } = req.params;
-
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "Invalid role ID" });
-  }
-
-  // Fetch the role by ID
-  try {
-    const role = await prisma.role.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    // Check if the role exists
-    console.log(`Role with ID ${id} fetched successfully`);
-    if (!role) {
-      return res.status(404).json({ error: "Role not found" });
-    }
-
-    // Return the role
-    console.log(`Role with ID ${id} found`);
-    res.status(200).json(role);
-  } catch (error) {
-    console.log(`Fetching role with ID ${id} failed`, error);
-
-    // If the role does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to fetch role" });
+    return res.status(500).json({ message: "Failed to fetch roles" });
+  } finally {
+    console.log("Leaving getModules fn", "title");
   }
 };
 
 // Function to update a role
 export const updateRole = async (req, res) => {
-  console.log(`Updating role with ID: ${req.params.id}`);
+  console.log(`Updating roles with ID: ${req.params.id}`);
 
   // Check if the ID is a valid number
   const { id } = req.params;
   if (isNaN(id)) {
-    console.log(`Invalid role ID: ${id}`);
-    return res.status(400).json({ error: "Invalid role ID" });
+    consoleLog(`Invalid role ID: ${id}`);
+    return res.status(400).json({ message: "Invalid role ID" });
   }
 
-  const { name, description, active } = req.body;
-
-  const role = await prisma.role.findUnique({
-    where: { id: parseInt(id) },
-  });
+  const { name, description, active, permissions } = req.body;
+  const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the role exists
-  console.log(`Checking if role with ID ${id} exists`);
-  if (!role) {
+  if (!unique) {
     // If the role does not exist, return a 404 error
-    console.log(`Role with ID ${id} not found`);
-    return res.status(404).json({ error: "Role not found" });
+    return res.status(404).json({ message: "Role not found" });
   }
 
   try {
     // Update the role
-    console.log(`Updating role with ID ${id}`);
+    consoleLog(`Updating role with ID ${id}`);
 
     // Check if the role name already exists
-    if (name === role.name && id !== role.id) {
-      console.log(`Role name ${name} already exists`);
-      res
-        .status(409)
-        .json({ message: `Role ${name} is already taken`, fields: ["name"] });
+    if (name === unique.name && id != unique.id) {
+      return res.status(409).json({
+        message: `Permission ${name} is already taken`,
+        fields: ["name"],
+      });
     }
-    console.log(`Role name ${name} don't exist.`);
 
     // Update the role
-    console.log(`Processing update of role with ID ${id}`);
-
     const roleData = {
       active,
       description,
+      rolePermission: {
+        deleteMany: {
+          roleId: parseInt(id),
+        },
+        createMany: {
+          data: permissions,
+        },
+      },
+      // include: { roles: true },
     };
-    if (name !== role.name) {
+
+    if (name && name !== unique.name) {
       roleData.name = name;
     }
-
-    const updatedRole = await prisma.role.update({
-      where: { id: parseInt(id) },
-      data: roleData,
+    const updatedRole = await update(module, roleData, {
+      id: parseInt(id),
     });
 
-    console.log(`Role with ID ${id} updated successfully`);
-
     // Return the updated role
-    res.status(200).json(updatedRole);
+    return res.status(200).json(updatedRole);
   } catch (error) {
-    console.log(`Updating role with ID ${id} failed`, error);
+    consoleLog(error, "error");
     // If the role does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to update role" });
+    return res.status(500).json({ message: "Failed to update role" });
+  } finally {
+    consoleLog("Leaving updateRole fn", "title");
   }
 };
 
 // Function to SOFT delete a role
 export const deleteRole = async (req, res) => {
-  console.log(`Soft deleting role with ID: ${req.params.id}`);
+  consoleLog(`Soft deleting role with ID: ${req.params.id}`, "title");
+
+  // Check if the ID is a valid number
+  const { id } = req.params;
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "Invalid role ID" });
+  }
+
+  // Check if the module exists
+  if (!(await findUnique(module, { id: parseInt(id) }))) {
+    // If the module does not exist, return a 404 error
+    return res.status(404).json({ message: "Role not found" });
+  }
+
+  try {
+    // Soft delete the module by updating its active to false
+    const deletedRole = await update(
+      module,
+      { active: false },
+      { id: parseInt(id) }
+    );
+    // Return the deleted module
+    return res.status(200).json(deletedRole);
+  } catch (error) {
+    console.log(`Soft deleting module with ID ${id} failed`, error);
+    // If the module does not exist, return a 404 error
+    return res.status(500).json({ message: "Failed to delete module" });
+  }
+};
+
+export const retrieveRole = async (req, res) => {
+  consoleLog(`Retrieving soft deleted role with ID: ${req.params.id}`, "title");
 
   // Check if the ID is a valid number
   const { id } = req.params;
 
   if (isNaN(id)) {
-    console.log(`Invalid role ID: ${id}`);
     return res.status(400).json({ error: "Invalid role ID" });
   }
 
   // Check if the role exists
-  console.log(`Checking if role with ID ${id} exists`);
-
-  if (
-    !(await prisma.role.findUnique({
-      where: { id: parseInt(id) },
-    }))
-  ) {
-    console.log(`Role with ID ${id} not found`);
-
+  if (!(await findUnique(module, { id: parseInt(id) }))) {
     // If the role does not exist, return a 404 error
     return res.status(404).json({ error: "Role not found" });
   }
+
   try {
     // Soft delete the role
-    console.log(`processing soft delete of role with ID ${id}`);
-
-    const deletedRole = await prisma.role.update({
-      where: { id: parseInt(id) },
-      data: { active: false },
-    });
-
-    console.log(`Role with ID ${id} soft deleted successfully`);
-
+    const retrievedPermission = await update(
+      module,
+      { active: true },
+      { id: parseInt(id) }
+    );
     // Return the deleted role
-    res.status(200).json(deletedRole);
+    return res.status(200).json(retrievedPermission);
   } catch (error) {
-    console.log(`Soft deleting role with ID ${id} failed`, error);
+    console.log(error, "error");
 
     // If the role does not exist, return a 404 error
-    res.status(500).json({ error: "Failed to delete role" });
+    return res.status(500).json({ error: "Failed to delete role" });
+  } finally {
+    console.log("Leaving deletePermission fn.", "title");
   }
-
-  // We do not hard delete data.
-  // try {
-  //   await prisma.role.delete({
-  //     where: { id: parseInt(id) },
-  //   });
-  //   res.status(204).send();
-  // } catch (error) {
-  //   res.status(500).json({ error: "Failed to delete role" });
-  // }
 };

@@ -59,8 +59,6 @@ model User {
   positionId Int @map("position_id")
   roleId Int @map("role_id")
   employmentStatusId Int @map("employee_status_id")
-  allowanceId Int @map("allowance_id")
-  deductionId Int @map("deduction_id")
 
   isActive Boolean @default(true) @map("is_active")
   password String @db.VarChar(60)
@@ -72,33 +70,21 @@ model User {
   role Role @relation(fields: [roleId], references: [id])
   employmentStatus EmployeeStatus @relation(fields: [employmentStatusId], references: [id])
 
-  allowance UserAllowance[]
-  deduction UserDeduction[]
   basicInfo UsersBasicInfo?
   employmentBackground UserEmploymentBackground[]
   educationalBackground UserEducationalBackground[]
+  benefit UserBenefit[]
 
   @@map("users")
 }
 
-model UserAllowance {
+model UserBenefit {
   userId Int @map("user_id")
-  allowanceId Int @map("allowance_id")
+  benefitId Int @map("benefit_id")
 
-  user User @relation(fields: [userId], references: [id], map: "user_allowance_user_id_fkey")
-  allowance Allowance @relation(fields: [allowanceId], references: [id], map: "user_allowance_allowance_id_fkey")
+  user User @relation(fields: [userId], references: [id])
+  benefit Benefit @relation(fields: [benefitId], references: [id])
 
-  @@id([userId, allowanceId])
-  @@map("user_allowance")
-}
-
-model UserDeduction {
-  userId Int @map("user_id")
-  deductionId Int @map("deduction_id")
-
-  user User @relation(fields: [userId], references: [id], map: "user_deduction_user_id_fkey")
-  deduction Deduction @relation(fields: [deductionId], references: [id], map: "user_deduction_deduction_id_fkey")
-
-  @@id([userId, deductionId])
-  @@map("user_deduction")
+  @@id([userId, benefitId])
+  @@map("user_benefit")
 }

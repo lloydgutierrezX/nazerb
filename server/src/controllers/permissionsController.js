@@ -69,12 +69,7 @@ export const getPermissions = async (req, res) => {
       },
     });
 
-    return res.status(200).json(
-      permissions.map((permission) => ({
-        ...permission,
-        moduleId: permission.moduleId.toString(),
-      }))
-    );
+    return res.status(200).json(permissions);
   } catch (error) {
     consoleLog(error, "error");
 

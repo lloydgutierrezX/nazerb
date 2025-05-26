@@ -2,9 +2,9 @@ import express from "express";
 import {
   createRole,
   getRoles,
-  getRoleById,
   updateRole,
   deleteRole,
+  retrieveRole,
 } from "../controllers/rolesController.js";
 
 const roleRoutes = express.Router();
@@ -16,12 +16,14 @@ roleRoutes.post("/", createRole);
 roleRoutes.get("/", getRoles);
 
 // Route to get a module by ID
-roleRoutes.get("/:id", getRoleById);
+// roleRoutes.get("/:id", getRoleById);
 
 // Route to update a module by ID
 roleRoutes.put("/:id", updateRole);
 
 // Route to delete a module by ID
 roleRoutes.delete("/:id", deleteRole);
+
+roleRoutes.put("/retrieve/:id", retrieveRole);
 
 export default roleRoutes;

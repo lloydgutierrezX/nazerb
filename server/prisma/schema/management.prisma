@@ -1,28 +1,16 @@
-// model Allowance {
-//   id Int @id @default(autoincrement()) @map("id")
-//   name String @db.VarChar(60) @unique
-//   active Boolean @default(true) @map("is_active")
-//   description String @db.VarChar(255)
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
+model Benefit {
+  id Int @id @default(autoincrement()) @map("id")
+  name String @db.VarChar(60) @unique
+  type String @db.VarChar(6) // debit | credit
+  active Boolean @default(true) @map("is_active")
+  description String @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-//   userAllowance UserAllowance[]
+  userAllowance UserBenefit[]
 
-//   @@map("allowance")
-// }
-
-// model Deduction {
-//   id Int @id @default(autoincrement()) @map("id")
-//   name String @db.VarChar(60) @unique
-//   active Boolean @default(true) @map("is_active")
-//   description String @db.VarChar(255)
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
-
-//   userDeduction UserDeduction[]
-
-//   @@map("deduction")
-// }
+  @@map("benefit")
+}
 
 model EmployeeStatus {
   id Int @id @default(autoincrement())

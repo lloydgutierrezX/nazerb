@@ -15,8 +15,17 @@ POST http://localhost:3000/api/roles
 Content-Type: application/json
 
 {
-  "name": "Employee 1",
-  "description": "Employee 1 role"
+  "name": "admin 2",
+  "description": "Admin role",
+  "active": true,
+  "permissions": [
+    {
+      "permissionId": 1
+    },
+    {
+      "permissionId": 2
+    }
+  ]
 }
 
 ### Update Role Request
@@ -24,10 +33,15 @@ PUT http://localhost:3000/api/roles/1
 Content-Type: application/json
 
 {
-  "name": "Super Admin",
-  "description": "Super Admin role that has all permissions"
+  "description": "Admin role",
+  "active": true,
+  "permissions": []
 }
 
 ### Delete Role Request
-DELETE http://localhost:3000/api/roles/5
+DELETE http://localhost:3000/api/roles/1
+Content-Type: application/json
+
+### Retrieve Role Request
+PUT http://localhost:3000/api/roles/retrieve/1
 Content-Type: application/json

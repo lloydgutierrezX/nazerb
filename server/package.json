@@ -28,6 +28,7 @@
         "#root/*": "./*"
     },
     "prisma": {
-        "schema": "./prisma/schema"
+        "schema": "./prisma/schema",
+        "seed": "node ./prisma/seeders/seed.js"
     }
 }
