@@ -5,8 +5,8 @@ import { IModuleInput, IModuleResponse } from "./IModule";
 const url = '/modules';
 export const getAllModulesKey = 'get-all-modules';
 // get all modules request
-const getAllModules =
-  async (url: string, config?: IRequestParams) => await fetchAll(url, config);
+export const getAllModules =
+  async (passedUrl?: string, config?: IRequestParams) => await fetchAll(passedUrl ?? url, config);
 
 // get all modules useQuery implementation
 export const useGetAllModules = (config?: IRequestParams) => {

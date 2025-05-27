@@ -12,13 +12,13 @@ import { useFormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext";
 import { Select } from "./select/Select";
+import { Checklist } from "./checklist/Checklist";
 
 type IFormGroupProps = {
   schema: ZodType<Record<string, unknown>>;
   formFields: IBaseFormGroupField[];
   moduleName: string;
   data?: Record<string, unknown>;
-  defaultValues?: Record<string, unknown>;
 };
 
 export const FormGroup: React.FC<IFormGroupProps> = ({
@@ -26,7 +26,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   formFields,
   moduleName,
   data,
-  defaultValues,
 }) => {
   const { dialog, setDialog } = useDialogContext();
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
@@ -44,7 +43,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: zodResolver(schema),
-    defaultValues,
   });
 
   const queryClient = useQueryClient();
@@ -188,6 +186,19 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
                   />
                 </div>
               );
+
+            case "checklist":
+              return (
+                <div key={`${fg.name}-containter`}>
+                  <Checklist
+                    key={fg.name}
+                    register={register}
+                    formField={fg}
+                    error={errors[fg.name]?.message ?? ""}
+                  />
+                </div>
+              );
+
             default:
               return null;
           }

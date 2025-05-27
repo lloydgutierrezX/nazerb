@@ -1,11 +1,10 @@
 import moment from "moment";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { IData } from "Pages/IData";
 import { Icon } from "Components/icon/Icon";
 import { ITableConfig } from "Components/datatable/IDatatable";
-import { IAction, IFormField } from "Components/field/IForm";
-import { useState } from "react";
+import { IAction, IBaseFormGroupField } from "Components/field/IForm";
+import { useEffect, useState } from "react";
 import {
   ConfirmDialogContext,
   IConfirmDialogContent,
@@ -15,21 +14,27 @@ import { DynamicObject } from "Utils/globalInterface";
 import {
   url,
   getAllRolesKey,
-  useGetAllRoles,
   addRole,
   deleteRole,
   retrieveRole,
   updateRole,
+  getAllRoles,
 } from "./RoleActions";
 import { IRoleInput } from "./IRole";
 import { DataTable } from "Components/datatable/Table";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import { FormGroup } from "Components/field/FormGroup";
-import { FormContext } from "Services/contexts/FormContext";
+import { FormContext, IForm } from "Services/contexts/FormContext";
 import { moduleSchema } from "../module/ModuleSchema";
+import {
+  getAllPermissions,
+  getAllPermissionsKey,
+} from "../permission/PermissionActions";
+import { useQueries } from "@tanstack/react-query";
+import { getAllModules, getAllModulesKey } from "../module/ModuleActions";
 
-const columnDef: ColumnDef<IData, string>[] = [
+const columnDef: ColumnDef<DynamicObject, string>[] = [
   {
     accessorKey: "name", // key
     header: "Name", // header name
@@ -116,43 +121,170 @@ const config: ITableConfig = {
   },
 };
 
-const formFields: IFormField[] = [
+const formFields: IBaseFormGroupField[] = [
   {
-    type: "toggle",
-    placeholder: "Toggle this to turn on/off this module",
     name: "active",
-    className: "justify-end",
-    containerClassName: "flex flex-row gap-2",
-    defaultChecked: true,
-    label: "Is Actve?",
-    labelClassName: "w-full justify-end",
+    className: "flex flex-row w-full items-center",
+    label: {
+      className: "w-full justify-end",
+      value: "Is Actve?",
+    },
+    field: {
+      type: "checkbox",
+      className: "flex dirc checkbox",
+      placeholder: "Toggle this to turn on/off this role",
+    },
+    error: {
+      className: "float-right",
+    },
   },
   {
-    type: "text",
-    placeholder: "Input the module name",
     name: "name",
-    label: "Role Name",
-    labelClassName: "w-full",
-    className: "",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Role name",
+    },
+    field: {
+      type: "textarea",
+      className: "input w-full",
+      placeholder: "Permission description.",
+    },
   },
   {
-    type: "textarea",
-    placeholder: "Input the module description",
     name: "description",
-    label: "Description",
-    labelClassName: "w-full",
-    className: "h-40",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Description",
+    },
+    field: {
+      type: "textarea",
+      className: "input w-full",
+      placeholder: "Role description.",
+    },
+  },
+  {
+    name: "modules",
+    className: "mt-5",
+    label: {
+      className: "w-full",
+      value: "Filter permissions below by selecting a module here ",
+    },
+    field: {
+      type: "select",
+      options: [],
+      className: "input select w-full",
+      placeholder: "Select modules",
+    },
+    includeAll: true,
+    excludeDisabledOption: true,
+  },
+  {
+    name: "permissions",
+    className: "",
+    label: {
+      className: "w-1/2 lowercase items-center",
+      value: "Select allowed permission for this role",
+    },
+    field: {
+      type: "checklist",
+      className: "input",
+      checklist: [],
+    },
   },
 ];
 
+const filterPermissionsByModule = (
+  permissionsByModule: DynamicObject[],
+  moduleId?: string
+) => {
+  console.log("filterPermissionsByModule", permissionsByModule, moduleId);
+  return (
+    permissionsByModule?.map((permission: DynamicObject) => {
+      const module =
+        permission.module &&
+        typeof permission.module === "object" &&
+        "name" in permission.module
+          ? (permission.module as DynamicObject)
+          : {};
+
+      return {
+        key: String(permission.id),
+        value: `${permission.action}:${module.name}`,
+        isHidden: moduleId !== "all" || (module && moduleId === module.id),
+      };
+    }) ?? []
+  );
+};
+
 export const Role = () => {
-  const { data, isFetching } = useGetAllRoles();
+  const result = useQueries({
+    queries: [
+      {
+        queryKey: [getAllRolesKey],
+        queryFn: () => getAllRoles(),
+      },
+      {
+        queryKey: [getAllModulesKey],
+        queryFn: () => getAllModules(),
+      },
+      {
+        queryKey: [getAllPermissionsKey],
+        queryFn: () => getAllPermissions(),
+      },
+    ],
+  });
+
+  const [isFetching, isLoading] = result
+    .map((res) => [res.isFetching, res.isLoading])
+    .flat();
+
+  useEffect(() => {
+    // Modules (index 1 in result, index 3 in formFields)
+    if (result[1]?.data?.status === 200) {
+      const formFieldIndex = 3;
+      if (formFields[formFieldIndex].field.type !== "select") return;
+
+      formFields[formFieldIndex].field.options =
+        result[1]?.data?.data?.map((module: DynamicObject) => ({
+          key: module.id,
+          value: module.name,
+        })) ?? [];
+    }
+
+    // Permissions (index 2 in result, index 4 in formFields)
+    if (result[2]?.data?.status === 200) {
+      const formFieldIndex = 4;
+      if (formFields[formFieldIndex].field.type !== "checklist") return;
+
+      formFields[formFieldIndex].field.checklist = result[2]?.data?.data
+        ? filterPermissionsByModule(result[2]?.data?.data, "all")
+        : [];
+
+      if (formFields[3].field.type !== "select") {
+        return;
+      }
+
+      formFields[3].field.onClick = (e) => {
+        if (formFields[formFieldIndex].field.type !== "checklist") {
+          return;
+        }
+
+        formFields[formFieldIndex].field.checklist = filterPermissionsByModule(
+          result[2]?.data?.data,
+          (e.target as HTMLSelectElement).value
+        );
+      };
+    }
+  }, [result]);
+
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
     module: "Roles",
   });
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<IForm>({
     url: url,
     fetchQueryKey: getAllRolesKey,
     action: "create" as IAction, // defaults to create
@@ -161,6 +293,9 @@ export const Role = () => {
       updateRole(id, data as IRoleInput),
     onDeleteFn: (id: string) => deleteRole(id),
     onRetrieveFn: (id: string) => retrieveRole(id),
+    defaultValues: {
+      modules: "all",
+    },
   });
 
   return (
@@ -180,10 +315,11 @@ export const Role = () => {
           </Dialog>
 
           <DataTable
-            data={data ?? []}
+            data={result[0].data?.data ?? []}
             columnDef={columnDef}
             config={config}
             isFetching={isFetching}
+            isLoading={isLoading}
           />
         </ConfirmDialogContext.Provider>
       </FormContext.Provider>

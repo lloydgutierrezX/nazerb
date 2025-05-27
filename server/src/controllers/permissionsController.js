@@ -22,6 +22,14 @@ export const createPermission = async (req, res) => {
       });
     }
 
+    // check if action:module already exist
+    if (!action || !moduleId) {
+      return res.status(400).json({
+        error: "Action and moduleId are required fields",
+        fields: ["action", "moduleId"],
+      });
+    }
+
     const record = await findMany(module, { where: { action, moduleId } });
     if (record.length !== 0) {
       return res.status(409).json({

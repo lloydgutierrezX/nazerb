@@ -5,7 +5,7 @@ import { IPermissionInput, IPermissionResponse } from "./IPermission";
 export const url = '/permissions';
 export const getAllPermissionsKey = 'get-all-permissions';
 
-const getAllPermissions =
+export const getAllPermissions =
   async () => await fetchAll(url);
 
 // get all permission useQuery implementation

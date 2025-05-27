@@ -32,6 +32,7 @@ import {
   Link,
   HandCoins,
   PhilippinePeso,
+  UserCheck,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -184,6 +185,10 @@ export const Icon = memo(function Icon(props: {
               />
             );
 
+          case "user-check":
+            return (
+              <UserCheck className={classNames} color={color ?? undefined} />
+            );
           default:
             console.warn(`No icon for ${icon}`);
             return "";
