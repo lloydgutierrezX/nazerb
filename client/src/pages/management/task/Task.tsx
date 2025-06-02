@@ -6,7 +6,7 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
-// import moment from "moment";
+import moment from "moment";
 import { moduleSchema } from "Pages/security/module/ModuleSchema";
 import { useEffect, useState } from "react";
 import {
@@ -67,34 +67,34 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     sortDescFirst: false,
     enableGlobalFilter: false,
   },
+  // {
+  //   accessorKey: "description", // key
+  //   header: "Description", // header name
+  //   cell: (info: { getValue: () => string }) => info.getValue(),
+  //   enableSorting: true,
+  //   sortUndefined: -1,
+  //   sortDescFirst: false,
+  // },
   {
-    accessorKey: "description", // key
-    header: "Description", // header name
-    cell: (info: { getValue: () => string }) => info.getValue(),
+    accessorKey: "createdAt",
+    header: "Date Created",
+    cell: (info: { getValue: () => string }) =>
+      moment(info.getValue()).format("MMM DD, YYYY"),
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
+    enableGlobalFilter: false,
   },
-//   {
-//     accessorKey: "createdAt",
-//     header: "Date Created",
-//     cell: (info: { getValue: () => string }) =>
-//       moment(info.getValue()).format("MMM DD, YYYY"),
-//     enableSorting: true,
-//     sortUndefined: -1,
-//     sortDescFirst: false,
-//     enableGlobalFilter: false,
-//   },
-//   {
-//     accessorKey: "updatedAt",
-//     header: "Last Update",
-//     cell: (info: { getValue: () => string }) =>
-//       moment(info.getValue()).format("MMM DD, YYYY"),
-//     enableSorting: true,
-//     sortUndefined: -1,
-//     sortDescFirst: false,
-//     enableGlobalFilter: false,
-//   },
+  {
+    accessorKey: "updatedAt",
+    header: "Last Update",
+    cell: (info: { getValue: () => string }) =>
+      moment(info.getValue()).format("MMM DD, YYYY"),
+    enableSorting: true,
+    sortUndefined: -1,
+    sortDescFirst: false,
+    enableGlobalFilter: false,
+  },
 ];
 
 // Config for the datatable view
