@@ -6,7 +6,7 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import moment from "moment";
+// import moment from "moment";
 import { moduleSchema } from "Pages/security/module/ModuleSchema";
 import { useEffect, useState } from "react";
 import {
@@ -68,25 +68,33 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     enableGlobalFilter: false,
   },
   {
-    accessorKey: "createdAt",
-    header: "Date Created",
-    cell: (info: { getValue: () => string }) =>
-      moment(info.getValue()).format("MMM DD, YYYY"),
+    accessorKey: "description", // key
+    header: "Description", // header name
+    cell: (info: { getValue: () => string }) => info.getValue(),
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
-    enableGlobalFilter: false,
   },
-  {
-    accessorKey: "updatedAt",
-    header: "Last Update",
-    cell: (info: { getValue: () => string }) =>
-      moment(info.getValue()).format("MMM DD, YYYY"),
-    enableSorting: true,
-    sortUndefined: -1,
-    sortDescFirst: false,
-    enableGlobalFilter: false,
-  },
+//   {
+//     accessorKey: "createdAt",
+//     header: "Date Created",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
+//   {
+//     accessorKey: "updatedAt",
+//     header: "Last Update",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
 ];
 
 // Config for the datatable view
@@ -100,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add module",
-      popover: "Add new module",
+      placeholder: "Add Task",
+      popover: "Add new Task",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this module?",
+      popover: "Delete this Task?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this module?",
+      popover: "Update this Task?",
     },
   },
 };

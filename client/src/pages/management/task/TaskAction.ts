@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData } from "Services/axios/request";
 import { ITaskInput, ITaskResponse } from "./ITask";
 
-const url = '/management/employee-status';
+const url = '/management/task';
 export const getAllTaskKey = 'get-all-modules';
 // get all modules request
 const getAllTask =
