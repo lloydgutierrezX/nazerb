@@ -21,7 +21,12 @@ export const Select: React.FC<ISelect> = ({ register, formField, error }) => {
           </legend>
         )}
 
-        <select {...register(name)} {...field} className={field.className}>
+        <select
+          {...register(name)}
+          {...field}
+          className={field.className}
+          onChange={field.onChange}
+        >
           {!excludeDisabledOption && (
             <option value="-1" disabled>
               {field.placeholder ?? "Select an option"}

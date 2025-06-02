@@ -1,8 +1,5 @@
-import { PrismaClient } from "#root/generated/prisma/client.js";
 import { consoleLog } from "../utils.js";
 import { create, findMany, findUnique, update } from "./helper.js";
-
-const prisma = new PrismaClient();
 
 const module = "module";
 

@@ -26,13 +26,13 @@ import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import { FormGroup } from "Components/field/FormGroup";
 import { FormContext, IForm } from "Services/contexts/FormContext";
-import { moduleSchema } from "../module/ModuleSchema";
 import {
   getAllPermissions,
   getAllPermissionsKey,
 } from "../permission/PermissionActions";
 import { useQueries } from "@tanstack/react-query";
 import { getAllModules, getAllModulesKey } from "../module/ModuleActions";
+import { roleSchema } from "./RoleSchema";
 
 const columnDef: ColumnDef<DynamicObject, string>[] = [
   {
@@ -121,7 +121,7 @@ const config: ITableConfig = {
   },
 };
 
-const formFields: IBaseFormGroupField[] = [
+const formFieldsDefaultConfig: IBaseFormGroupField[] = [
   {
     name: "active",
     className: "flex flex-row w-full items-center",
@@ -146,7 +146,7 @@ const formFields: IBaseFormGroupField[] = [
       value: "Role name",
     },
     field: {
-      type: "textarea",
+      type: "text",
       className: "input w-full",
       placeholder: "Permission description.",
     },
@@ -181,7 +181,7 @@ const formFields: IBaseFormGroupField[] = [
     excludeDisabledOption: true,
   },
   {
-    name: "permissions",
+    name: "rolePermission",
     className: "",
     label: {
       className: "w-1/2 lowercase items-center",
@@ -191,6 +191,7 @@ const formFields: IBaseFormGroupField[] = [
       type: "checklist",
       className: "input",
       checklist: [],
+      key: "permissionId",
     },
   },
 ];
@@ -198,27 +199,41 @@ const formFields: IBaseFormGroupField[] = [
 const filterPermissionsByModule = (
   permissionsByModule: DynamicObject[],
   moduleId?: string
-) => {
-  console.log("filterPermissionsByModule", permissionsByModule, moduleId);
-  return (
-    permissionsByModule?.map((permission: DynamicObject) => {
-      const module =
-        permission.module &&
-        typeof permission.module === "object" &&
-        "name" in permission.module
-          ? (permission.module as DynamicObject)
-          : {};
+) =>
+  permissionsByModule?.map((permission: DynamicObject) => {
+    const module =
+      permission.module &&
+      typeof permission.module === "object" &&
+      "name" in permission.module
+        ? (permission.module as DynamicObject)
+        : {};
 
-      return {
-        key: String(permission.id),
-        value: `${permission.action}:${module.name}`,
-        isHidden: moduleId !== "all" || (module && moduleId === module.id),
-      };
-    }) ?? []
-  );
-};
+    return {
+      key: permission.id,
+      value: `${permission.action}:${module.name}`,
+      isHidden:
+        moduleId !== "all" && module && moduleId !== module.id.toString(),
+    };
+  }) ?? [];
 
 export const Role = () => {
+  const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
+    open: false,
+    module: "Roles",
+  });
+  const [form, setForm] = useState<IForm>({
+    url: url,
+    fetchQueryKey: getAllRolesKey,
+    action: "create" as IAction, // defaults to create
+    onAddFn: (data: DynamicObject) => addRole(data as IRoleInput),
+    onUpdateFn: (id: string, data: DynamicObject) =>
+      updateRole(id, data as IRoleInput),
+    onDeleteFn: (id: string) => deleteRole(id),
+    onRetrieveFn: (id: string) => retrieveRole(id),
+  });
+
+  const [formFields, setFormFields] = useState(formFieldsDefaultConfig);
+
   const result = useQueries({
     queries: [
       {
@@ -236,67 +251,64 @@ export const Role = () => {
     ],
   });
 
+  useEffect(() => {
+    setFormFields((prev) => {
+      return prev.map((p) => {
+        if (p.name === "modules" && p.field.type === "select") {
+          return {
+            ...p,
+            field: {
+              ...p.field,
+              options:
+                result[1]?.data?.data?.map((module: DynamicObject) => ({
+                  key: module.id,
+                  value: module.name,
+                })) ?? [],
+              onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
+                setFormFields((prev) => {
+                  return prev.map((p) => {
+                    if (p.name !== "permission" && p.field.type !== "checklist")
+                      return p;
+                    return {
+                      ...p,
+                      field: {
+                        ...p.field,
+                        checklist: result[2]?.data?.data
+                          ? filterPermissionsByModule(
+                              result[2].data.data,
+                              e.target.value
+                            )
+                          : [],
+                      },
+                    };
+                  });
+                });
+              },
+            },
+          };
+        } else if (p.name === "rolePermission") {
+          return {
+            ...p,
+            field: {
+              ...p.field,
+              checklist: result[2]?.data?.data
+                ? filterPermissionsByModule(result[2].data.data, "all")
+                : [],
+            },
+          };
+        } else {
+          return p;
+        }
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result[1].data, result[2].data]);
+
+  const { dialog } = useDialogContext();
+
   const [isFetching, isLoading] = result
     .map((res) => [res.isFetching, res.isLoading])
     .flat();
-
-  useEffect(() => {
-    // Modules (index 1 in result, index 3 in formFields)
-    if (result[1]?.data?.status === 200) {
-      const formFieldIndex = 3;
-      if (formFields[formFieldIndex].field.type !== "select") return;
-
-      formFields[formFieldIndex].field.options =
-        result[1]?.data?.data?.map((module: DynamicObject) => ({
-          key: module.id,
-          value: module.name,
-        })) ?? [];
-    }
-
-    // Permissions (index 2 in result, index 4 in formFields)
-    if (result[2]?.data?.status === 200) {
-      const formFieldIndex = 4;
-      if (formFields[formFieldIndex].field.type !== "checklist") return;
-
-      formFields[formFieldIndex].field.checklist = result[2]?.data?.data
-        ? filterPermissionsByModule(result[2]?.data?.data, "all")
-        : [];
-
-      if (formFields[3].field.type !== "select") {
-        return;
-      }
-
-      formFields[3].field.onClick = (e) => {
-        if (formFields[formFieldIndex].field.type !== "checklist") {
-          return;
-        }
-
-        formFields[formFieldIndex].field.checklist = filterPermissionsByModule(
-          result[2]?.data?.data,
-          (e.target as HTMLSelectElement).value
-        );
-      };
-    }
-  }, [result]);
-
-  const { dialog } = useDialogContext();
-  const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
-    open: false,
-    module: "Roles",
-  });
-  const [form, setForm] = useState<IForm>({
-    url: url,
-    fetchQueryKey: getAllRolesKey,
-    action: "create" as IAction, // defaults to create
-    onAddFn: (data: DynamicObject) => addRole(data as IRoleInput),
-    onUpdateFn: (id: string, data: DynamicObject) =>
-      updateRole(id, data as IRoleInput),
-    onDeleteFn: (id: string) => deleteRole(id),
-    onRetrieveFn: (id: string) => retrieveRole(id),
-    defaultValues: {
-      modules: "all",
-    },
-  });
 
   return (
     <>
@@ -308,9 +320,12 @@ export const Role = () => {
           <Dialog>
             <FormGroup
               formFields={formFields}
-              schema={moduleSchema}
+              schema={roleSchema}
               moduleName="Role"
               data={dialog.data}
+              defaultValues={{
+                modules: "all",
+              }}
             />
           </Dialog>
 

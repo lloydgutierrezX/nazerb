@@ -3,7 +3,7 @@ interface IFormGroupLabel extends React.LabelHTMLAttributes<HTMLLabelElement> {
   className: string;
 }
 
-export type IFieldType = IInputField | IToggleField | ITextAreaField | ISelectField | ICheclistField;
+export type IFieldType = IInputField | IToggleField | ITextAreaField | ISelectField | ICheckListField;
 
 export interface IBaseFormGroupField {
   name: string;
@@ -37,6 +37,7 @@ interface ISelectField extends React.SelectHTMLAttributes<HTMLSelectElement> {
   placeholder: string;
   includeAll?: boolean;
   excludeDisabledOption?: boolean;
+  defaultValue?: string;
 }
 
 export type IToggleField = {
@@ -46,9 +47,10 @@ export type IToggleField = {
   defaultChecked?: boolean;
 }
 
-export type ICheclistField = {
+export type ICheckListField = {
   type: 'checklist',
   className: string;
+  key: string;
   checklist: IOptions[];
 }
 

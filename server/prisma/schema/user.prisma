@@ -1,6 +1,7 @@
 model UsersBasicInfo {
   userId Int @unique @map("user_id")
   firstName String @db.VarChar(60) @map("first_name")
+  middleName String @db.VarChar(60) @map("middle_name")
   lastName String @db.VarChar(60) @map("last_name")
   birthdate DateTime
   email String @db.VarChar(60) @unique
@@ -13,6 +14,7 @@ model UsersBasicInfo {
   provinceCode String @db.VarChar(5) @map("province_code")
   cityCode String @db.VarChar(7) @map("city_code")
   brangayCode String @db.VarChar(10) @map("brangay_code")
+  zipCode String @db.VarChar(4) @map("zip_code")
   address String @db.VarChar(120)
 
   user User @relation(fields: [userId], references: [id])
@@ -35,6 +37,7 @@ model UserEmploymentBackground {
 model UserEducationalBackground {
   userId Int @unique @map("user_id")
   school String @db.Text
+  level  String @db.VarChar(120)
   dateStart DateTime @map("date_start")
   dateEnd DateTime @map("date_end")
 
@@ -58,7 +61,7 @@ model User {
   id Int @id @default(autoincrement())
   positionId Int @map("position_id")
   roleId Int @map("role_id")
-  employmentStatusId Int @map("employee_status_id")
+  employmentTypeId Int @map("employee_type_id")
 
   isActive Boolean @default(true) @map("is_active")
   password String @db.VarChar(60)
@@ -68,19 +71,20 @@ model User {
   // Relations
   position Position @relation(fields: [positionId], references: [id])
   role Role @relation(fields: [roleId], references: [id])
-  employmentStatus EmployeeStatus @relation(fields: [employmentStatusId], references: [id])
+  employmentType EmployeeType @relation(fields: [employmentTypeId], references: [id])
 
   basicInfo UsersBasicInfo?
   employmentBackground UserEmploymentBackground[]
   educationalBackground UserEducationalBackground[]
   benefit UserBenefit[]
 
-  @@map("users")
+  @@map("user")
 }
 
 model UserBenefit {
   userId Int @map("user_id")
   benefitId Int @map("benefit_id")
+  amount Decimal
 
   user User @relation(fields: [userId], references: [id])
   benefit Benefit @relation(fields: [benefitId], references: [id])

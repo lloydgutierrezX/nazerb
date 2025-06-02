@@ -11,10 +11,10 @@ POST http://localhost:3000/api/modules
 Content-Type: application/json
 
 {
-  "name": "Permission",
-  "description": "Permission module",
+  "name": "Employee type",
+  "description": "Employee type module",
   "active": true,
-  "link": "/permissions"
+  "link": "/management/Employee type"
 }
 
 ### Get Module by ID Request

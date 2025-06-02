@@ -1,10 +1,7 @@
-import { PrismaClient } from "#root/generated/prisma/client.js";
 import { consoleLog } from "../utils.js";
 import { create, findMany, findUnique, update } from "./helper.js";
 
 const module = "role";
-
-const prisma = new PrismaClient();
 
 // Function to create a new role
 export const createRole = async (req, res) => {
@@ -105,20 +102,24 @@ export const updateRole = async (req, res) => {
     const roleData = {
       active,
       description,
+      // include: { roles: true },
       rolePermission: {
         deleteMany: {
           roleId: parseInt(id),
         },
-        createMany: {
-          data: permissions,
-        },
       },
-      // include: { roles: true },
     };
 
     if (name && name !== unique.name) {
       roleData.name = name;
     }
+
+    if (permissions) {
+      roleData.rolePermission.createMany = {
+        data: permissions,
+      };
+    }
+
     const updatedRole = await update(module, roleData, {
       id: parseInt(id),
     });

@@ -156,7 +156,18 @@ const formFields: IBaseFormGroupField[] = [
       type: "select",
       className: "input select w-full",
       placeholder: "Select a module",
-      options: [],
+      options: [
+        {
+          key: "debit",
+          value: "Select a module",
+          className: "text-gray-500",
+        },
+        {
+          key: "credit",
+          value: "Credit",
+          className: "text-gray-500",
+        },
+      ],
     },
   },
   {
@@ -216,7 +227,7 @@ export const Permission = () => {
       return;
     }
 
-    formFields[1].field.options = result[1].data.data.map(
+    formFields[1].field.options = result[1].data?.data?.map(
       (mod: IModuleResponse) => ({
         key: mod.id,
         value: mod.name,

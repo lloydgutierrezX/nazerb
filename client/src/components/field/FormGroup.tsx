@@ -5,7 +5,7 @@ import { Input } from "./input/Input";
 import { z, ZodType } from "zod";
 import { IBaseFormGroupField } from "./IForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { TextArea } from "./textarea/TextArea";
 import { useFormContext } from "Services/contexts/FormContext";
@@ -19,6 +19,8 @@ type IFormGroupProps = {
   formFields: IBaseFormGroupField[];
   moduleName: string;
   data?: Record<string, unknown>;
+  children?: ReactNode;
+  defaultValues?: Record<string, unknown>;
 };
 
 export const FormGroup: React.FC<IFormGroupProps> = ({
@@ -26,6 +28,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   formFields,
   moduleName,
   data,
+  children,
+  defaultValues,
 }) => {
   const { dialog, setDialog } = useDialogContext();
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
@@ -38,12 +42,16 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     formState: { errors },
     setError,
     setValue,
+    getValues,
     reset,
   } = useForm<z.infer<typeof schema> & Record<string, unknown>>({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: zodResolver(schema),
+    defaultValues,
   });
+
+  console.log(getValues(), errors);
 
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve
@@ -120,9 +128,14 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     formFields.forEach((f) => {
       const d = data as Record<string, unknown>;
       // if data has value, meaning the form is called for update
-      // then we need to manually set the value to each field.
+      // else, this is for create. we need to implement the default value
       if (data) {
+        console.log(f.name, d[f.name]);
         setValue(f.name, d[f.name]);
+        return;
+      } else if (defaultValues?.[f.name]) {
+        console.log(defaultValues, f.name);
+        setValue(f.name, defaultValues?.[f.name]);
         return;
       }
 
@@ -132,7 +145,9 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       const isBoolean = f.field.type === "checkbox";
       setValue(f.name, isBoolean ? true : "");
     });
-  }, [dialog.open, data, formFields, setValue]);
+
+    console.log(getValues());
+  }, [dialog.open]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -193,7 +208,10 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
                   <Checklist
                     key={fg.name}
                     register={register}
+                    setValue={setValue}
                     formField={fg}
+                    getValues={getValues}
+                    defaultValues={defaultValues ?? {}}
                     error={errors[fg.name]?.message ?? ""}
                   />
                 </div>
@@ -204,6 +222,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
           }
         })}
       </fieldset>
+
+      {children}
 
       <div className="flex justify-end">
         <button
