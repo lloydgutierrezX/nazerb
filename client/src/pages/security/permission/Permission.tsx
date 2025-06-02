@@ -156,18 +156,7 @@ const formFields: IBaseFormGroupField[] = [
       type: "select",
       className: "input select w-full",
       placeholder: "Select a module",
-      options: [
-        {
-          key: "debit",
-          value: "Select a module",
-          className: "text-gray-500",
-        },
-        {
-          key: "credit",
-          value: "Credit",
-          className: "text-gray-500",
-        },
-      ],
+      options: [],
     },
   },
   {
