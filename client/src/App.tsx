@@ -13,6 +13,7 @@ import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeStatus } from "Pages/management/employee-status/EmployeeStatus";
+import { Position } from "Pages/management/position/Position";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -57,6 +58,10 @@ function App() {
                 <Route
                   path="management/employee-status"
                   element={<EmployeeStatus />}
+                />
+                <Route
+                  path="management/position"
+                  element={<Position />}
                 />
 
                 <Route path="/security/modules" element={<Module />} />
