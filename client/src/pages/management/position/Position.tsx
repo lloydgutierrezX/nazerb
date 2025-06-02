@@ -18,8 +18,8 @@ import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
   useGetAllPosition,
-  getAllPositionKey,
   addPosition,
+  getAllPositionKey,
   updatePosition,
   deletePosition,
   retrievePosition,
@@ -173,8 +173,7 @@ export const Position = () => {
     url: "/modules",
     fetchQueryKey: getAllPositionKey,
     action: "create" as IAction, // defaults to create
-    onAddFn: (data: DynamicObject) =>
-      addPosition(data as IPositionInput),
+    onAddFn: (data: DynamicObject) => addPosition(data as IPositionInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
       updatePosition(id, data as IPositionInput),
     onDeleteFn: (id: string) => deletePosition(id),
