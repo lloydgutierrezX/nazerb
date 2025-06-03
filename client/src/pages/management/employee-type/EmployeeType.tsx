@@ -6,7 +6,7 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
-import moment from "moment";
+// import moment from "moment";
 import { moduleSchema } from "Pages/security/module/ModuleSchema";
 import { useEffect, useState } from "react";
 import {
@@ -17,14 +17,14 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
-  useGetAllTask,
-  getAllTaskKey,
-  addTask,
-  updateTask,
-  deleteTask,
-  retrieveTask,
-} from "./TaskAction";
-import { ITaskInput } from "./ITask";
+  useGetAllEmployeeType,
+  getAllEmployeeTypeKey,
+  addEmployeeType,
+  updateEmployeeType,
+  deleteEmployeeType,
+  retrieveEmployeeType,
+} from "./EmployeetypeActions";
+import { IEmployeeTypeInput } from "./IEmployeetype";
 import { Icon } from "Components/icon/Icon";
 
 // ColumnsDef: for react-table column display
@@ -67,39 +67,39 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     sortDescFirst: false,
     enableGlobalFilter: false,
   },
-  // {
-  //   accessorKey: "description", // key
-  //   header: "Description", // header name
-  //   cell: (info: { getValue: () => string }) => info.getValue(),
-  //   enableSorting: true,
-  //   sortUndefined: -1,
-  //   sortDescFirst: false,
-  // },
-  {
-    accessorKey: "createdAt",
-    header: "Date Created",
-    cell: (info: { getValue: () => string }) =>
-      moment(info.getValue()).format("MMM DD, YYYY"),
+   {
+    accessorKey: "description", // key
+    header: "Description", // header name
+    cell: (info: { getValue: () => string }) => info.getValue(),
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
-    enableGlobalFilter: false,
   },
-  {
-    accessorKey: "updatedAt",
-    header: "Last Update",
-    cell: (info: { getValue: () => string }) =>
-      moment(info.getValue()).format("MMM DD, YYYY"),
-    enableSorting: true,
-    sortUndefined: -1,
-    sortDescFirst: false,
-    enableGlobalFilter: false,
-  },
+//   {
+//     accessorKey: "createdAt",
+//     header: "Date Created",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
+//   {
+//     accessorKey: "updatedAt",
+//     header: "Last Update",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
 ];
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "task",
+  module: "employee-status",
   serverSide: false,
   permissions: {
     search: {
@@ -108,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add Task",
-      popover: "Add new Task",
+      placeholder: "Add Employee Type",
+      popover: "Add new Employee Type",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Task?",
+      popover: "Delete this Employee Type?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Task?",
+      popover: "Update this Employee Type?",
     },
   },
 };
@@ -151,7 +151,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the Task name",
+      placeholder: "Input the Employee Type name",
     },
   },
   {
@@ -163,38 +163,38 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the Task description",
+      placeholder: "Input the Employee Type description",
       className: "h-40 w-full",
     },
   },
 ];
 
-export const Task = () => {
-  const { data, isFetching, isLoading, error } = useGetAllTask();
+export const EmployeeType = () => {
+  const { data, isFetching, isLoading, error } = useGetAllEmployeeType();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Task",
+    module: "Employee Type",
   });
 
   const [form, setForm] = useState({
     url: "/modules",
-    fetchQueryKey: getAllTaskKey,
+    fetchQueryKey: getAllEmployeeTypeKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
-      addTask(data as ITaskInput),
+      addEmployeeType(data as IEmployeeTypeInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateTask(id, data as ITaskInput),
-    onDeleteFn: (id: string) => deleteTask(id),
-    onRetrieveFn: (id: string) => retrieveTask(id),
+      updateEmployeeType(id, data as IEmployeeTypeInput),
+    onDeleteFn: (id: string) => deleteEmployeeType(id),
+    onRetrieveFn: (id: string) => retrieveEmployeeType(id),
   });
 
   const [record, setRecord] = useState(data);
 
   useEffect(() => {
-    setRecord(() => (error ? [] : data));
-    //show toast in the future...
-  }, [data,])
+    setRecord((prev) => (error ? [] : prev));
+    // show toast in the future...
+  }, [error]);
 
   return (
     <>
@@ -207,7 +207,7 @@ export const Task = () => {
             <FormGroup
               formFields={formGroupFields}
               schema={moduleSchema}
-              moduleName="Task" 
+              moduleName="Employee Type"
               data={dialog.data}
             />
           </Dialog>
