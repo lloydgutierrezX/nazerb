@@ -191,7 +191,7 @@ const defaultValues = {
 };
 
 export const Permission = () => {
-  const { data, isFetching } = useGetAllPermissions();
+  const { data, isFetching, isLoading } = useGetAllPermissions();
   const moduleRequest = useGetAllModules();
 
   const { dialog } = useDialogContext();
@@ -247,6 +247,7 @@ export const Permission = () => {
             columnDef={columnDef}
             config={config}
             isFetching={isFetching}
+            isLoading={moduleRequest.isLoading || isLoading}
           />
         </ConfirmDialogContext.Provider>
       </FormContext.Provider>
