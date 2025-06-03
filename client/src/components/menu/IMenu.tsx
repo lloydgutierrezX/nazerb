@@ -52,6 +52,12 @@ export const jsonMenu = [
         is_active: true,
         icon: "file-user",
       },
+      {
+        key: "employee-type",
+        path: "management/employee-type",
+        is_active: true,
+        icon: "file-user",
+      },
     ],
   },
   {
