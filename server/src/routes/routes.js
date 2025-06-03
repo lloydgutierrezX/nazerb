@@ -3,11 +3,18 @@ import moduleRoute from "./moduleRoutes.js";
 import roleRoutes from "./roleRoutes.js";
 import permissionRoutes from "./permissionRoutes.js";
 
+// management routes
+import employeeStatus from "./employeeTypeRoutes.js";
+import taskRoutes from "./taskRoutes.js";
+
 const routes = express.Router();
 // Define the routes for the application
 routes.use("/modules", moduleRoute);
 routes.use("/roles", roleRoutes);
 routes.use("/permissions", permissionRoutes);
+
+routes.use("/management/employee-type", employeeStatus);
+routes.use("/management/task", taskRoutes);
 
 export default routes;
 

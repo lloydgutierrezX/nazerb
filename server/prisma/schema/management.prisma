@@ -12,7 +12,7 @@ model Benefit {
   @@map("benefit")
 }
 
-model EmployeeStatus {
+model EmployeeType {
   id Int @id @default(autoincrement())
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")

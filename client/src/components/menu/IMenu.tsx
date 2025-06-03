@@ -41,8 +41,8 @@ export const jsonMenu = [
         icon: "hand-coins",
       },
       {
-        key: "employee-status",
-        path: "management/employee-status",
+        key: "employee status",
+        path: "management/employee-type",
         is_active: true,
         icon: "file-user",
       },

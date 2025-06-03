@@ -58,7 +58,7 @@ model User {
   id Int @id @default(autoincrement())
   positionId Int @map("position_id")
   roleId Int @map("role_id")
-  employmentStatusId Int @map("employee_status_id")
+  employmentTypeId Int @map("employee_status_id")
 
   isActive Boolean @default(true) @map("is_active")
   password String @db.VarChar(60)
@@ -68,7 +68,7 @@ model User {
   // Relations
   position Position @relation(fields: [positionId], references: [id])
   role Role @relation(fields: [roleId], references: [id])
-  employmentStatus EmployeeStatus @relation(fields: [employmentStatusId], references: [id])
+  employmentType EmployeeType @relation(fields: [employmentTypeId], references: [id])
 
   basicInfo UsersBasicInfo?
   employmentBackground UserEmploymentBackground[]

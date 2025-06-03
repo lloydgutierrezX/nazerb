@@ -12,7 +12,7 @@ import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
-import { EmployeeStatus } from "Pages/management/employee-status/EmployeeStatus";
+import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -55,8 +55,8 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 <Route
-                  path="management/employee-status"
-                  element={<EmployeeStatus />}
+                  path="management/employee-type"
+                  element={<EmployeeType />}
                 />
 
                 <Route path="/security/modules" element={<Module />} />
