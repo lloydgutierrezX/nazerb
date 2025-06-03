@@ -3,6 +3,7 @@ import moduleRoute from "./moduleRoutes.js";
 import roleRoutes from "./roleRoutes.js";
 import permissionRoutes from "./permissionRoutes.js";
 import benefitRoutes from "./benefitRoutes.js";
+import positionRoutes from "./positionRoutes.js";
 
 // management routes
 import employeeStatus from "./employeeTypeRoutes.js";
@@ -17,6 +18,7 @@ routes.use("/permissions", permissionRoutes);
 routes.use("/management/employee-type", employeeStatus);
 routes.use("/management/task", taskRoutes);
 routes.use("/management/benefit", benefitRoutes);
+routes.use("/management/position", positionRoutes);
 
 export default routes;
 
