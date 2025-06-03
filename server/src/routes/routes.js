@@ -2,6 +2,7 @@ import express from "express";
 import moduleRoute from "./moduleRoutes.js";
 import roleRoutes from "./roleRoutes.js";
 import permissionRoutes from "./permissionRoutes.js";
+import benefitRoutes from "./benefitRoutes.js";
 
 // management routes
 import employeeStatus from "./employeeTypeRoutes.js";
@@ -15,6 +16,7 @@ routes.use("/permissions", permissionRoutes);
 
 routes.use("/management/employee-type", employeeStatus);
 routes.use("/management/task", taskRoutes);
+routes.use("/management/benefit", benefitRoutes);
 
 export default routes;
 
