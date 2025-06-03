@@ -14,6 +14,7 @@ import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeStatus } from "Pages/management/employee-status/EmployeeStatus";
 import { Position } from "Pages/management/position/Position";
+import { EmployeeBenefit } from "Pages/management/EmployeeBenefit/EmployeeBenefit";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -62,6 +63,10 @@ function App() {
                 <Route
                   path="management/position"
                   element={<Position />}
+                />
+                <Route
+                  path="management/EmployeeBenefit"
+                  element={<EmployeeBenefit />}
                 />
 
                 <Route path="/security/modules" element={<Module />} />
