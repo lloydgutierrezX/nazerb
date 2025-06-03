@@ -192,9 +192,9 @@ export const Task = () => {
   const [record, setRecord] = useState(data);
 
   useEffect(() => {
-    setRecord((prev) => (error ? [] : prev));
-    // show toast in the future...
-  }, [error]);
+    setRecord(() => (error ? [] : data));
+    //show toast in the future...
+  }, [data, error]);
 
   return (
     <>
