@@ -100,18 +100,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add module",
-      popover: "Add new module",
+      placeholder: "Add Position",
+      popover: "Add new Position",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this module?",
+      popover: "Delete this Position?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this module?",
+      popover: "Update this Position?",
     },
   },
 };
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the employee status name",
+      placeholder: "Input the position name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the employee status description",
+      placeholder: "Input the position description",
       className: "h-40 w-full",
     },
   },
@@ -166,7 +166,7 @@ export const Position = () => {
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Employee Status",
+    module: "position",
   });
 
   const [form, setForm] = useState({
@@ -199,7 +199,7 @@ export const Position = () => {
             <FormGroup
               formFields={formGroupFields}
               schema={moduleSchema}
-              moduleName="Employee Status"
+              moduleName="position"
               data={dialog.data}
             />
           </Dialog>
