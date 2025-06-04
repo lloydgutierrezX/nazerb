@@ -1,7 +1,7 @@
-type IToast = {
-  type: "info" | "error";
-  message: string;
-};
+// type IToast = {
+//   type: "info" | "error";
+//   message: string;
+// };
 
 export const Toast = () => {
   return (

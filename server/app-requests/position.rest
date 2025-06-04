@@ -1,0 +1,29 @@
+# App Requests
+
+### ROLE ###
+
+### Get Position Request
+GET http://localhost:3000/api/management/position
+Content-Type: application/json
+
+### Create Position Request
+POST http://localhost:3000/api/management/position
+Content-Type: application/json
+
+{
+  "name": "CEO",
+  "description": "Big boss of the company",
+  "active": true
+}
+
+### Update Position Request
+PUT http://localhost:3000/api/management/position/1
+Content-Type: application/json
+
+{
+  "active": true
+}
+
+### Delete Position Request
+DELETE http://localhost:3000/api/management/position/1
+Content-Type: application/json

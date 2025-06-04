@@ -8,4 +8,4 @@ export const employeeStatusSchema = z.object({
   updatedAt: z.date().nullish(),
 });
 
-export type IEmployeeStatus = z.infer<typeof employeeStatusSchema>;
+export type IEmployeeType = z.infer<typeof employeeStatusSchema>;

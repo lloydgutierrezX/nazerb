@@ -1,7 +1,7 @@
 import express from "express";
 import {
-  createEmployeeType,
   getEmployeeTypes,
+  createEmployeeType,
   updateEmployeeType,
   deleteEmployeeType,
 } from "../controllers/employeeTypeController.js";

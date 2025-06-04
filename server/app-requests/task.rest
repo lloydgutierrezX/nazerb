@@ -1,0 +1,29 @@
+# App Requests
+
+### Task ###
+
+### Get Task Request
+GET http://localhost:3000/api/management/task
+Content-Type: application/json
+
+### Create Task Request
+POST http://localhost:3000/api/management/task
+Content-Type: application/json
+
+{
+  "name": "Sample task 1",
+  "description": "Sample task descripotion",
+  "active": true
+}
+
+### Update Task Request
+PUT http://localhost:3000/api/management/task/1
+Content-Type: application/json
+
+{
+  "active": true
+}
+
+### Delete Task Request
+DELETE http://localhost:3000/api/management/task/1
+Content-Type: application/json

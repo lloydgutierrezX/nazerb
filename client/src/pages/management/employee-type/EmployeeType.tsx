@@ -7,7 +7,6 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import moment from "moment";
-import { moduleSchema } from "Pages/security/module/ModuleSchema";
 import { useEffect, useState } from "react";
 import {
   IConfirmDialogContent,
@@ -17,15 +16,16 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
-  useGetAllEmployeeStatus,
-  getAllEmployeeStatusKey,
-  addEmployeeStatus,
-  updateEmployeeStatus,
-  deleteEmployeeStatus,
-  retrieveEmployeeStatus,
-} from "./EmployeeStatusActions";
-import { IEmployeeStatusInput } from "./IEmployeeStatus";
+  useGetAllEmployeeType,
+  getAllEmployeeTypeKey,
+  addEmployeeType,
+  updateEmployeeType,
+  deleteEmployeeType,
+  retrieveEmployeeType,
+} from "./EmployeeTypeActions";
+import { IEmployeeTypeInput } from "./IEmployeeType";
 import { Icon } from "Components/icon/Icon";
+import { employeeStatusSchema } from "./EmployeeTypeSchema";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -91,7 +91,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "employee-status",
+  module: "employee type",
   serverSide: false,
   permissions: {
     search: {
@@ -100,18 +100,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add module",
-      popover: "Add new module",
+      placeholder: "Add Employee Type",
+      popover: "Add new employee type?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this module?",
+      popover: "Delete this employee type?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this module?",
+      popover: "Update this employee type?",
     },
   },
 };
@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this module",
+      placeholder: "Toggle this to turn on/off this employee type",
     },
     error: {
       className: "text-left",
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the employee status name",
+      placeholder: "Input the employee type name",
     },
   },
   {
@@ -155,38 +155,38 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the employee status description",
+      placeholder: "Input the employee type description",
       className: "h-40 w-full",
     },
   },
 ];
 
-export const EmployeeStatus = () => {
-  const { data, isFetching, isLoading, error } = useGetAllEmployeeStatus();
+export const EmployeeType = () => {
+  const { data, isFetching, isLoading, error } = useGetAllEmployeeType();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Employee Status",
+    module: "Employee Type",
   });
 
   const [form, setForm] = useState({
-    url: "/modules",
-    fetchQueryKey: getAllEmployeeStatusKey,
+    url: "/management/employee-type",
+    fetchQueryKey: getAllEmployeeTypeKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
-      addEmployeeStatus(data as IEmployeeStatusInput),
+      addEmployeeType(data as IEmployeeTypeInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateEmployeeStatus(id, data as IEmployeeStatusInput),
-    onDeleteFn: (id: string) => deleteEmployeeStatus(id),
-    onRetrieveFn: (id: string) => retrieveEmployeeStatus(id),
+      updateEmployeeType(id, data as IEmployeeTypeInput),
+    onDeleteFn: (id: string) => deleteEmployeeType(id),
+    onRetrieveFn: (id: string) => retrieveEmployeeType(id),
   });
 
   const [record, setRecord] = useState(data);
 
   useEffect(() => {
-    setRecord((prev) => (error ? [] : prev));
+    setRecord(() => (error ? [] : data));
     // show toast in the future...
-  }, [error]);
+  }, [data, error]);
 
   return (
     <>
@@ -198,8 +198,8 @@ export const EmployeeStatus = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
-              schema={moduleSchema}
-              moduleName="Employee Status"
+              schema={employeeStatusSchema}
+              moduleName="Employee Type"
               data={dialog.data}
             />
           </Dialog>

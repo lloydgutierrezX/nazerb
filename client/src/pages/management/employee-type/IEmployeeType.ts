@@ -1,4 +1,4 @@
-export type IEmployeeStatusResponse = {
+export type IEmployeeTypeResponse = {
   id: string;
   name: string;
   description: string;
@@ -7,7 +7,7 @@ export type IEmployeeStatusResponse = {
   updated_at: string;
 }
 
-export type IEmployeeStatusInput = {
+export type IEmployeeTypeInput = {
   name: string,
   description: string,
   is_active: boolean
