@@ -91,7 +91,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "employee status",
+  module: "employee type",
   serverSide: false,
   permissions: {
     search: {
@@ -100,18 +100,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add Employee Status",
-      popover: "Add new employee status?",
+      placeholder: "Add Employee Type",
+      popover: "Add new employee type?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Employee Status?",
+      popover: "Delete this employee type?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Employee Status?",
+      popover: "Update this employee type?",
     },
   },
 };
@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this Employee Status",
+      placeholder: "Toggle this to turn on/off this employee type",
     },
     error: {
       className: "text-left",
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the employee status name",
+      placeholder: "Input the employee type name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the employee status description",
+      placeholder: "Input the employee type description",
       className: "h-40 w-full",
     },
   },
@@ -166,7 +166,7 @@ export const EmployeeType = () => {
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Employee Status",
+    module: "Employee Type",
   });
 
   const [form, setForm] = useState({
@@ -199,7 +199,7 @@ export const EmployeeType = () => {
             <FormGroup
               formFields={formGroupFields}
               schema={employeeStatusSchema}
-              moduleName="Employee Status"
+              moduleName="Employee Type"
               data={dialog.data}
             />
           </Dialog>
