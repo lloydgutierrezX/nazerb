@@ -91,7 +91,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "employee type",
+  module: "Position",
   serverSide: false,
   permissions: {
     search: {
@@ -100,18 +100,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add Employee Type",
-      popover: "Add new employee type?",
+      placeholder: "Add Position",
+      popover: "Add new Position?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this employee type?",
+      popover: "Delete this Position?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this employee type?",
+      popover: "Update this Position?",
     },
   },
 };
@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this employee type",
+      placeholder: "Toggle this to turn on/off this Position",
     },
     error: {
       className: "text-left",
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the employee type name",
+      placeholder: "Input the Position name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the employee type description",
+      placeholder: "Input the Position description",
       className: "h-40 w-full",
     },
   },
@@ -199,7 +199,7 @@ export const Position = () => {
             <FormGroup
               formFields={formGroupFields}
               schema={employeeStatusSchema}
-              moduleName="Employee Type"
+              moduleName="Position"
               data={dialog.data}
             />
           </Dialog>
