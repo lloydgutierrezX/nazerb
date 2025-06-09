@@ -3,11 +3,11 @@
 ### Task ###
 
 ### Get Task Request
-GET http://localhost:3000/api/management/task
+GET http://13.215.206.103/api/management/task
 Content-Type: application/json
 
 ### Create Task Request
-POST http://localhost:3000/api/management/task
+POST http://13.215.206.103/api/management/task
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Update Task Request
-PUT http://localhost:3000/api/management/task/1
+PUT http://13.215.206.103/api/management/task/1
 Content-Type: application/json
 
 {
@@ -25,5 +25,5 @@ Content-Type: application/json
 }
 
 ### Delete Task Request
-DELETE http://localhost:3000/api/management/task/1
+DELETE http://13.215.206.103/api/management/task/1
 Content-Type: application/json

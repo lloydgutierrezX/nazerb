@@ -5,7 +5,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import { IBaseFormGroupField } from "../IForm";
+import { IBaseFormGroupField, ICheckListField, IFieldType } from "../IForm";
 import { useEffect, useState } from "react";
 
 type IChecklistProps = {
@@ -18,6 +18,8 @@ type IChecklistProps = {
   defaultValues: Record<string, unknown>;
 };
 
+type ICheckField = { [key: string]: number };
+
 export const Checklist: React.FC<IChecklistProps> = ({
   register,
   formField,
@@ -26,24 +28,45 @@ export const Checklist: React.FC<IChecklistProps> = ({
   getValues,
 }) => {
   const { name, label, className, field } = formField;
-  const [checklists, setChecklists] = useState<{ [key: string]: number }[]>([]);
+  const { checklist, parent } = field as ICheckListField;
+  console.log(getValues());
 
-  const data = getValues()[name];
+  // useEffect(() => {
+  //   console.log(checklist);
+  //   setValue(name, checklist.map());
+  //   setCheckFields(
+  //     checklist.map((item) => {
+  //       console.log("Item", item);
+  //       return {
+  //         [parent.key]: parseInt(item.key),
+  //       };
+  //     })
+  //   );
+  // }, [checklist, parent.key]);
 
-  useEffect(() => {
-    if (field.type !== "checklist" || !("key" in field)) return;
-    if (!Array.isArray(data)) return;
+  const handleOnChange = (checked: boolean, value: number) => {
+    // console.log(checked, checkFields);
+    // setCheckFields((prev: ICheckField[]) => {
+    //   const updated = [...prev];
+    //   if (checked) {
+    //     updated.push({ [key]: value });
+    //   } else {
+    //     const index = updated.findIndex((item) => item[key] === value);
+    //     console.log("Index", index);
+    //     if (index !== -1) {
+    //       updated.splice(index, 1);
+    //     }
+    //   }
+    //   return updated;
+    // });
+    setValue(name, { permissionId: checked });
+    console.log(getValues());
+    // console.log("Updated CheckFields:", checkFields);
+    // console.log("Updated Value:", getValues(name));
+  };
 
-    const filtered = data.filter(
-      (d) => !isNaN(parseInt(d[field.key])) && typeof [field.key] === "number"
-    );
-    setChecklists(filtered);
-  }, [data, field, field.type, getValues, name]);
-  const { checklist, key } = field;
-
-  const handleOnClick = (checked: boolean, value: number) => {
-    console.log(checked, value);
-    console.log(checklists);
+  const isChecked = (id: string) => {
+    return parseInt(id);
   };
 
   return (
@@ -57,14 +80,15 @@ export const Checklist: React.FC<IChecklistProps> = ({
             }`}
           >
             <input
-              {...register(`${name}.${idx}.${key}`)}
+              {...register(`${name}.${idx}.${parent.key}`)}
               type="checkbox"
-              onClick={(e) =>
-                handleOnClick(
+              onChange={(e) =>
+                handleOnChange(
                   (e.target as HTMLInputElement).checked,
                   parseInt(checklist.key)
                 )
               }
+              defaultChecked={isChecked(checklist.key)}
             />
             {checklist.value}
           </label>

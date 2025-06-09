@@ -50,7 +50,10 @@ export type IToggleField = {
 export type ICheckListField = {
   type: 'checklist',
   className: string;
-  key: string;
+  parent: {
+    key: string;
+    name: string;
+  },
   checklist: IOptions[];
 }
 

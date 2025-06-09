@@ -181,7 +181,7 @@ const formFieldsDefaultConfig: IBaseFormGroupField[] = [
     excludeDisabledOption: true,
   },
   {
-    name: "rolePermission",
+    name: "permissions",
     className: "",
     label: {
       className: "w-1/2 lowercase items-center",
@@ -191,12 +191,15 @@ const formFieldsDefaultConfig: IBaseFormGroupField[] = [
       type: "checklist",
       className: "input",
       checklist: [],
-      key: "permissionId",
+      parent: {
+        key: "permissionId",
+        name: "rolePermission",
+      },
     },
   },
 ];
 
-const filterPermissionsByModule = (
+const updatePermissionsByModule = (
   permissionsByModule: DynamicObject[],
   moduleId?: string
 ) =>
@@ -209,10 +212,10 @@ const filterPermissionsByModule = (
         : {};
 
     return {
-      key: permission.id,
+      key: String(permission.id),
       value: `${permission.action}:${module.name}`,
-      isHidden:
-        moduleId !== "all" && module && moduleId !== module.id.toString(),
+      isHidden: moduleId !== "all" && module && moduleId !== String(module.id),
+      defaultChecked: false,
     };
   }) ?? [];
 
@@ -261,7 +264,7 @@ export const Role = () => {
               ...p.field,
               options:
                 result[1]?.data?.data?.map((module: DynamicObject) => ({
-                  key: module.id,
+                  key: String(module.id),
                   value: module.name,
                 })) ?? [],
               onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -274,7 +277,7 @@ export const Role = () => {
                       field: {
                         ...p.field,
                         checklist: result[2]?.data?.data
-                          ? filterPermissionsByModule(
+                          ? updatePermissionsByModule(
                               result[2].data.data,
                               e.target.value
                             )
@@ -286,13 +289,13 @@ export const Role = () => {
               },
             },
           };
-        } else if (p.name === "rolePermission") {
+        } else if (p.name === "permissions") {
           return {
             ...p,
             field: {
               ...p.field,
               checklist: result[2]?.data?.data
-                ? filterPermissionsByModule(result[2].data.data, "all")
+                ? updatePermissionsByModule(result[2].data.data, "all")
                 : [],
             },
           };
@@ -305,7 +308,6 @@ export const Role = () => {
   }, [result[1].data, result[2].data]);
 
   const { dialog } = useDialogContext();
-
   const [isFetching, isLoading] = result
     .map((res) => [res.isFetching, res.isLoading])
     .flat();

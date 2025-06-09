@@ -51,7 +51,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     defaultValues,
   });
 
-  console.log(getValues(), errors);
+  console.log(errors);
+  console.log(data, getValues());
 
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve
@@ -130,11 +131,11 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       // if data has value, meaning the form is called for update
       // else, this is for create. we need to implement the default value
       if (data) {
-        console.log(f.name, d[f.name]);
         setValue(f.name, d[f.name]);
         return;
-      } else if (defaultValues?.[f.name]) {
-        console.log(defaultValues, f.name);
+      }
+
+      if (defaultValues?.[f.name]) {
         setValue(f.name, defaultValues?.[f.name]);
         return;
       }
@@ -145,8 +146,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       const isBoolean = f.field.type === "checkbox";
       setValue(f.name, isBoolean ? true : "");
     });
-
-    console.log(getValues());
   }, [dialog.open]);
 
   return (
