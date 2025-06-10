@@ -33,6 +33,7 @@ import {
   HandCoins,
   PhilippinePeso,
   UserCheck,
+  WalletCards,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -189,6 +190,11 @@ export const Icon = memo(function Icon(props: {
             return (
               <UserCheck className={classNames} color={color ?? undefined} />
             );
+          case "wallet-cards":
+            return (
+              <WalletCards className={classNames} color={color ?? undefined} />
+            );
+
           default:
             console.warn(`No icon for ${icon}`);
             return "";
