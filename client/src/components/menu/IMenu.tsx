@@ -9,7 +9,7 @@ export interface IMenu extends IMenuContent {
   children?: IMenu[];
 }
 
-// Sample MEN response from BE
+// Temporary menu while the auth is not ready
 export const jsonMenu = [
   {
     key: "dashboard",
@@ -28,6 +28,12 @@ export const jsonMenu = [
     path: "/timesheets",
     is_active: true,
     icon: "calendar-clock",
+  },
+  {
+    key: "payslips",
+    path: "/payslips",
+    is_active: true,
+    icon: "wallet-cards",
   },
   {
     key: "management",
