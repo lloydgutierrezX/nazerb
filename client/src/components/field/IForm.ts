@@ -29,6 +29,7 @@ export type IOptions = {
   value: string | number;
   className?: string;
   isHidden?: boolean;
+  defaultChecked?: boolean;
 };
 
 interface ISelectField extends React.SelectHTMLAttributes<HTMLSelectElement> {

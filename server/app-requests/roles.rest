@@ -3,15 +3,15 @@
 ### ROLE ###
 
 ### Get All Roles Request
-GET http://localhost:3000/api/roles
+GET http://13.215.206.103:3000/api/roles
 Content-Type: application/json
 
 ### Get Role by ID Request
-GET http://localhost:3000/api/roles/5
+GET http://13.215.206.103:3000/api/roles/5
 Content-Type: application/json
 
 ### Create Role Request
-POST http://localhost:3000/api/roles
+POST http://13.215.206.103:3000/api/roles
 Content-Type: application/json
 
 {
@@ -29,19 +29,53 @@ Content-Type: application/json
 }
 
 ### Update Role Request
-PUT http://localhost:3000/api/roles/1
+PUT http://13.215.206.103:3000/api/roles/1
 Content-Type: application/json
 
 {
   "description": "Admin role",
   "active": true,
-  "permissions": []
+  "permissions": [
+    {
+      "permissionId": 1
+    },
+    {
+      "permissionId": 2
+    },
+    {
+      "permissionId": 3
+    },
+    {
+      "permissionId": 4
+    },
+    {
+      "permissionId": 5
+    },
+    {
+      "permissionId": 6
+    },
+    {
+      "permissionId": 7
+    },
+    {
+      "permissionId": 8
+    },
+    {
+      "permissionId": 9
+    },
+    {
+      "permissionId": 11
+    },
+    {
+      "permissionId": 12
+    }
+  ]
 }
 
 ### Delete Role Request
-DELETE http://localhost:3000/api/roles/1
+DELETE http://13.215.206.103:3000/api/roles/1
 Content-Type: application/json
 
 ### Retrieve Role Request
-PUT http://localhost:3000/api/roles/retrieve/1
+PUT http://13.215.206.103:3000/api/roles/retrieve/1
 Content-Type: application/json

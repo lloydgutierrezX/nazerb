@@ -327,6 +327,22 @@ export const Role = () => {
               data={dialog.data}
               defaultValues={{
                 modules: "all",
+                permissions: (() => {
+                  const permissionsField = formFields.find(
+                    (f) => f.name === "permissions"
+                  )?.field;
+                  if (
+                    permissionsField &&
+                    "checklist" in permissionsField &&
+                    Array.isArray(permissionsField.checklist)
+                  ) {
+                    return permissionsField.checklist.map((c) => ({
+                      permissionId: c.key,
+                      defaultChecked: c.defaultChecked,
+                    }));
+                  }
+                  return [];
+                })(),
               }}
             />
           </Dialog>
