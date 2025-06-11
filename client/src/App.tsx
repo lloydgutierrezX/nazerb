@@ -13,8 +13,7 @@ import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
-import { Position } from "Pages/management/position/Position";
-import { EmployeeBenefit } from "Pages/management/employee-benefit/Benefits";
+import { EmployeeBenefit } from "Pages/management/benefit/Benefits";
 
 // import Login from "./pages/Login";
 

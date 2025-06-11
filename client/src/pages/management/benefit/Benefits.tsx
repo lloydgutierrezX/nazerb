@@ -162,8 +162,20 @@ const formGroupFields: IBaseFormGroupField[] = [
       value: "Type",
     },
     field: {
-      type: "text",
+      type: "select",
       className: "input w-full",
+      options: [
+        {
+          key: 'debit',
+          value: 'Debit',
+          className: ''
+        },
+        {
+          key: 'credit',
+          value: 'Credit',
+          className: ''
+        }
+      ],
       placeholder: "Input the EmployeeBenefit name",
     },
   },
