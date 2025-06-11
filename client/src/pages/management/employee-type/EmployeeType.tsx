@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this module",
+      placeholder: "Toggle this to turn on/off this employee type",
     },
     error: {
       className: "text-left",
