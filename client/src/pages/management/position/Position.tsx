@@ -25,7 +25,11 @@ import {
 } from "./PositionActions";
 import { IPositionInput } from "./IPosition";
 import { Icon } from "Components/icon/Icon";
+<<<<<<< HEAD
 import { PositionSchema } from "./PositionSchema";
+=======
+import { employeeStatusSchema } from "./PositionSchema";
+>>>>>>> fe75a4b711106bcdaeaf02053435b0e87bb7f89b
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -166,7 +170,11 @@ export const Position = () => {
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
+<<<<<<< HEAD
     module: "Position",
+=======
+    module: "Employee Type",
+>>>>>>> fe75a4b711106bcdaeaf02053435b0e87bb7f89b
   });
 
   const [form, setForm] = useState({
@@ -198,7 +206,11 @@ export const Position = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
+<<<<<<< HEAD
               schema={PositionSchema}
+=======
+              schema={employeeStatusSchema}
+>>>>>>> fe75a4b711106bcdaeaf02053435b0e87bb7f89b
               moduleName="Position"
               data={dialog.data}
             />
