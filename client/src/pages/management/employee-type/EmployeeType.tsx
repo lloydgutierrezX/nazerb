@@ -6,7 +6,12 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
+<<<<<<< HEAD
 import moment from "moment";
+=======
+// import moment from "moment";
+import { moduleSchema } from "Pages/security/module/ModuleSchema";
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 import { useEffect, useState } from "react";
 import {
   IConfirmDialogContent,
@@ -22,10 +27,16 @@ import {
   updateEmployeeType,
   deleteEmployeeType,
   retrieveEmployeeType,
+<<<<<<< HEAD
 } from "./EmployeeTypeActions";
 import { IEmployeeTypeInput } from "./IEmployeeType";
 import { Icon } from "Components/icon/Icon";
 import { employeeStatusSchema } from "./EmployeeTypeSchema";
+=======
+} from "./EmployeetypeActions";
+import { IEmployeeTypeInput } from "./IEmployeetype";
+import { Icon } from "Components/icon/Icon";
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -67,6 +78,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     sortDescFirst: false,
     enableGlobalFilter: false,
   },
+<<<<<<< HEAD
   {
     accessorKey: "createdAt",
     header: "Date Created",
@@ -87,11 +99,45 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     sortDescFirst: false,
     enableGlobalFilter: false,
   },
+=======
+   {
+    accessorKey: "description", // key
+    header: "Description", // header name
+    cell: (info: { getValue: () => string }) => info.getValue(),
+    enableSorting: true,
+    sortUndefined: -1,
+    sortDescFirst: false,
+  },
+//   {
+//     accessorKey: "createdAt",
+//     header: "Date Created",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
+//   {
+//     accessorKey: "updatedAt",
+//     header: "Last Update",
+//     cell: (info: { getValue: () => string }) =>
+//       moment(info.getValue()).format("MMM DD, YYYY"),
+//     enableSorting: true,
+//     sortUndefined: -1,
+//     sortDescFirst: false,
+//     enableGlobalFilter: false,
+//   },
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 ];
 
 // Config for the datatable view
 const config: ITableConfig = {
+<<<<<<< HEAD
   module: "employee type",
+=======
+  module: "employee-status",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
   serverSide: false,
   permissions: {
     search: {
@@ -101,17 +147,29 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Employee Type",
+<<<<<<< HEAD
       popover: "Add new employee type?",
+=======
+      popover: "Add new Employee Type",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
+<<<<<<< HEAD
       popover: "Delete this employee type?",
+=======
+      popover: "Delete this Employee Type?",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
+<<<<<<< HEAD
       popover: "Update this employee type?",
+=======
+      popover: "Update this Employee Type?",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
   },
 };
@@ -127,7 +185,11 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
+<<<<<<< HEAD
       placeholder: "Toggle this to turn on/off this employee type",
+=======
+      placeholder: "Toggle this to turn on/off this module",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
     error: {
       className: "text-left",
@@ -143,7 +205,11 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
+<<<<<<< HEAD
       placeholder: "Input the employee type name",
+=======
+      placeholder: "Input the Employee Type name",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
   },
   {
@@ -155,7 +221,11 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
+<<<<<<< HEAD
       placeholder: "Input the employee type description",
+=======
+      placeholder: "Input the Employee Type description",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
       className: "h-40 w-full",
     },
   },
@@ -170,7 +240,11 @@ export const EmployeeType = () => {
   });
 
   const [form, setForm] = useState({
+<<<<<<< HEAD
     url: "/management/employee-type",
+=======
+    url: "/modules",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     fetchQueryKey: getAllEmployeeTypeKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
@@ -184,9 +258,15 @@ export const EmployeeType = () => {
   const [record, setRecord] = useState(data);
 
   useEffect(() => {
+<<<<<<< HEAD
     setRecord(() => (error ? [] : data));
     // show toast in the future...
   }, [data, error]);
+=======
+    setRecord((prev) => (error ? [] : prev));
+    // show toast in the future...
+  }, [error]);
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 
   return (
     <>
@@ -198,7 +278,11 @@ export const EmployeeType = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
+<<<<<<< HEAD
               schema={employeeStatusSchema}
+=======
+              schema={moduleSchema}
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
               moduleName="Employee Type"
               data={dialog.data}
             />

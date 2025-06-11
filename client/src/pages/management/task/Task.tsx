@@ -7,6 +7,10 @@ import { IAction, IBaseFormGroupField } from "Components/field/IForm";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import moment from "moment";
+<<<<<<< HEAD
+=======
+import { moduleSchema } from "Pages/security/module/ModuleSchema";
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 import { useEffect, useState } from "react";
 import {
   IConfirmDialogContent,
@@ -22,10 +26,16 @@ import {
   updateTask,
   deleteTask,
   retrieveTask,
+<<<<<<< HEAD
 } from "./TaskActions";
 import { ITaskInput } from "./ITask";
 import { Icon } from "Components/icon/Icon";
 import { TaskSchema } from "./TaskSchema";
+=======
+} from "./TaskAction";
+import { ITaskInput } from "./ITask";
+import { Icon } from "Components/icon/Icon";
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -67,6 +77,17 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     sortDescFirst: false,
     enableGlobalFilter: false,
   },
+<<<<<<< HEAD
+=======
+  // {
+  //   accessorKey: "description", // key
+  //   header: "Description", // header name
+  //   cell: (info: { getValue: () => string }) => info.getValue(),
+  //   enableSorting: true,
+  //   sortUndefined: -1,
+  //   sortDescFirst: false,
+  // },
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
   {
     accessorKey: "createdAt",
     header: "Date Created",
@@ -91,7 +112,11 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
+<<<<<<< HEAD
   module: "Task",
+=======
+  module: "task",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
   serverSide: false,
   permissions: {
     search: {
@@ -101,7 +126,11 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Task",
+<<<<<<< HEAD
       popover: "Add new Task?",
+=======
+      popover: "Add new Task",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
     delete: {
       isAllowed: true,
@@ -127,7 +156,11 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
+<<<<<<< HEAD
       placeholder: "Toggle this to turn on/off this Task",
+=======
+      placeholder: "Toggle this to turn on/off this module",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     },
     error: {
       className: "text-left",
@@ -170,7 +203,11 @@ export const Task = () => {
   });
 
   const [form, setForm] = useState({
+<<<<<<< HEAD
     url: "/management/employee-type",
+=======
+    url: "/modules",
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
     fetchQueryKey: getAllTaskKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
@@ -185,8 +222,13 @@ export const Task = () => {
 
   useEffect(() => {
     setRecord(() => (error ? [] : data));
+<<<<<<< HEAD
     // show toast in the future...
   }, [data, error]);
+=======
+    //show toast in the future...
+  }, [data,])
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 
   return (
     <>
@@ -198,8 +240,13 @@ export const Task = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
+<<<<<<< HEAD
               schema={TaskSchema}
               moduleName="Task"
+=======
+              schema={moduleSchema}
+              moduleName="Task" 
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
               data={dialog.data}
             />
           </Dialog>

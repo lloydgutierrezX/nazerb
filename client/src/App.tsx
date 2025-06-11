@@ -12,9 +12,15 @@ import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
+<<<<<<< HEAD
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 import { Position } from "Pages/management/position/Position";
 import { Task } from "Pages/management/task/Task";
+=======
+import { EmployeeStatus } from "Pages/management/employee-status/EmployeeStatus";
+import { Task } from "Pages/management/task/Task";
+import { EmployeeType } from "Pages/management/employee-type/Employeetype";
+>>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -68,6 +74,17 @@ function App() {
                   path="management/task"
                   element={<Task />}
                 />
+
+                <Route
+                  path="management/task"
+                  element={<Task />}
+                />
+
+                <Route
+                  path="management/employee-type"
+                  element={<EmployeeType />}
+                />
+                 
 
                 <Route path="/security/modules" element={<Module />} />
                 <Route path="/security/permissions" element={<Permission />} />
