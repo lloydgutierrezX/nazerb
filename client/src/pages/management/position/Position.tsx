@@ -101,17 +101,17 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Position",
-      popover: "Add new position?",
+      popover: "Add new Position?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this position?",
+      popover: "Delete this Position?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this position?",
+      popover: "Update this Position?",
     },
   },
 };
@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this position",
+      placeholder: "Toggle this to turn on/off this Position",
     },
     error: {
       className: "text-left",
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the position name",
+      placeholder: "Input the Position name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the position description",
+      placeholder: "Input the Position description",
       className: "h-40 w-full",
     },
   },
@@ -170,11 +170,10 @@ export const Position = () => {
   });
 
   const [form, setForm] = useState({
-    url: "/management/position",
+    url: "/management/employee-type",
     fetchQueryKey: getAllPositionKey,
     action: "create" as IAction, // defaults to create
-    onAddFn: (data: DynamicObject) =>
-      addPosition(data as IPositionInput),
+    onAddFn: (data: DynamicObject) => addPosition(data as IPositionInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
       updatePosition(id, data as IPositionInput),
     onDeleteFn: (id: string) => deletePosition(id),
