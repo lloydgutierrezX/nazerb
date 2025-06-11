@@ -41,12 +41,6 @@ export const jsonMenu = [
     icon: "settings",
     children: [
       {
-        key: "benefits",
-        path: "management/benefits",
-        is_active: true,
-        icon: "hand-coins",
-      },
-      {
         key: "employee type",
         path: "management/employee-type",
         is_active: true,
@@ -65,14 +59,8 @@ export const jsonMenu = [
         icon: "file-user",
       },
       {
-        key: "task",
-        path: "management/task",
-        is_active: true,
-        icon: "file-user",
-      },
-      {
-        key: "employee-type",
-        path: "management/employee-type",
+        key: "employee-benefit",
+        path: "management/employee-benefit",
         is_active: true,
         icon: "file-user",
       },

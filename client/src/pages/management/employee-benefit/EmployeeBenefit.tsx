@@ -16,16 +16,16 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
-  useGetAllTask,
-  getAllTaskKey,
-  addTask,
-  updateTask,
-  deleteTask,
-  retrieveTask,
-} from "./TaskActions";
-import { ITaskInput } from "./ITask";
+  useGetAllEmployeeBenefit,
+  getAllEmployeeBenefitKey,
+  addEmployeeBenefit,
+  updateEmployeeBenefit,
+  deleteEmployeeBenefit,
+  retrieveEmployeeBenefit,
+} from "./EmployeeBenefitActions";
+import { IEmployeeBenefitInput } from "./IEmployeeBenefit";
 import { Icon } from "Components/icon/Icon";
-import { TaskSchema } from "./TaskSchema";
+import { EmployeeBenefitSchema } from "./EmployeeBenefitSchema";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -68,6 +68,14 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
     enableGlobalFilter: false,
   },
   {
+    accessorKey: "type", // key
+    header: "Type", // header name
+    cell: (info: { getValue: () => string }) => info.getValue(),
+    enableSorting: true,
+    sortUndefined: -1,
+    sortDescFirst: false,
+  },
+  {
     accessorKey: "createdAt",
     header: "Date Created",
     cell: (info: { getValue: () => string }) =>
@@ -91,7 +99,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "Task",
+  module: "EmployeeBenefit",
   serverSide: false,
   permissions: {
     search: {
@@ -100,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add Task",
-      popover: "Add new Task?",
+      placeholder: "Add EmployeeBenefit",
+      popover: "Add new EmployeeBenefit?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Task?",
+      popover: "Delete this EmployeeBenefit?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Task?",
+      popover: "Update this EmployeeBenefit?",
     },
   },
 };
@@ -127,7 +135,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this Task",
+      placeholder: "Toggle this to turn on/off this EmployeeBenefit",
     },
     error: {
       className: "text-left",
@@ -143,7 +151,20 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the Task name",
+      placeholder: "Input the EmployeeBenefit name",
+    },
+  },
+  {
+    name: "type",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Type",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Input the EmployeeBenefit name",
     },
   },
   {
@@ -155,30 +176,30 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the Task description",
+      placeholder: "Input the EmployeeBenefit description",
       className: "h-40 w-full",
     },
   },
 ];
 
-export const Task = () => {
-  const { data, isFetching, isLoading, error } = useGetAllTask();
+export const EmployeeBenefit = () => {
+  const { data, isFetching, isLoading, error } = useGetAllEmployeeBenefit();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "Task",
+    module: "EmployeeBenefit",
   });
 
   const [form, setForm] = useState({
-    url: "/management/employee-type",
-    fetchQueryKey: getAllTaskKey,
+    url: "/management/employee-benefit",
+    fetchQueryKey: getAllEmployeeBenefitKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
-      addTask(data as ITaskInput),
+      addEmployeeBenefit(data as IEmployeeBenefitInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateTask(id, data as ITaskInput),
-    onDeleteFn: (id: string) => deleteTask(id),
-    onRetrieveFn: (id: string) => retrieveTask(id),
+      updateEmployeeBenefit(id, data as IEmployeeBenefitInput),
+    onDeleteFn: (id: string) => deleteEmployeeBenefit(id),
+    onRetrieveFn: (id: string) => retrieveEmployeeBenefit(id),
   });
 
   const [record, setRecord] = useState(data);
@@ -198,8 +219,8 @@ export const Task = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
-              schema={TaskSchema}
-              moduleName="Task"
+              schema={EmployeeBenefitSchema}
+              moduleName="EmployeeBenefit"
               data={dialog.data}
             />
           </Dialog>
