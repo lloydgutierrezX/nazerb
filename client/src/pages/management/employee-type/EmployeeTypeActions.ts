@@ -1,14 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData } from "Services/axios/request";
-<<<<<<< HEAD
 import { IEmployeeTypeInput, IEmployeeTypeResponse } from "./IEmployeeType";
 
 const url = '/management/employee-type';
-=======
-import { IEmployeeTypeInput, IEmployeeTypeResponse } from "./IEmployeetype";
-
-const url = '/management/employee-status';
->>>>>>> 8aec6545caadd374f375925b6a6ab3413277fddb
 export const getAllEmployeeTypeKey = 'get-all-modules';
 // get all modules request
 const getAllEmployeeType =

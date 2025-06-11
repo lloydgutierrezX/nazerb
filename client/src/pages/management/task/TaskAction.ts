@@ -3,7 +3,7 @@ import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData
 import { ITaskInput, ITaskResponse } from "./ITask";
 
 const url = '/management/task';
-export const getAllTaskKey = 'get-all-modules';
+export const getAllTaskKey = 'get-all-task';
 // get all modules request
 const getAllTask =
   async (url: string, config?: IRequestParams) => await fetchAll(url, config);
