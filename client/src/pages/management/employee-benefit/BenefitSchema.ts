@@ -1,6 +1,5 @@
-
 import { z } from "zod";
-export const PositionSchema = z.object({
+export const BenefitSchema = z.object({
   active: z.coerce.boolean(),
   name: z.string().min(4).max(60),
   description: z.string().max(255).nullable(),
@@ -8,4 +7,4 @@ export const PositionSchema = z.object({
   updatedAt: z.date().nullish(),
 });
 
-export type IPosition = z.infer<typeof PositionSchema>;
+export type IBenefit = z.infer<typeof BenefitSchema>;

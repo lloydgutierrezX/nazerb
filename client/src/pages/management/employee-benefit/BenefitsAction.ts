@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData } from "Services/axios/request";
-import { IEmployeeBenefitInput, IEmployeeBenefitResponse } from "./IEmployeeBenefit";
+import { IBenefitInput, IBenefitResponse } from "./IBenefit";
 
 const url = '/management/employee-benefit';
 export const getAllEmployeeBenefitKey = 'get-all-modules';
@@ -10,7 +10,7 @@ const getAllEmployeeBenefit =
 
 // get all modules useQuery implementation
 export const useGetAllEmployeeBenefit = (config?: IRequestParams) => {
-  return useQuery<IEmployeeBenefitResponse[], unknown>({
+  return useQuery<IBenefitResponse[], unknown>({
     queryFn: async () => {
       const response = await getAllEmployeeBenefit(url, config);
       return response?.data ?? [];
@@ -21,10 +21,10 @@ export const useGetAllEmployeeBenefit = (config?: IRequestParams) => {
 
 // add module request
 export const addEmployeeBenefit =
-  async (data: IEmployeeBenefitInput) => await addData({ url, data });
+  async (data: IBenefitInput) => await addData({ url, data });
 
 export const updateEmployeeBenefit =
-  async (id: string, data: IEmployeeBenefitInput) => await updateData({ url: `${url}/${id}`, data });
+  async (id: string, data: IBenefitInput) => await updateData({ url: `${url}/${id}`, data });
 
 export const deleteEmployeeBenefit =
   async (id: string) => await deleteData({ url: `${url}/${id}` });

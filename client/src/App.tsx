@@ -14,8 +14,7 @@ import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 import { Position } from "Pages/management/position/Position";
-import { Task } from "Pages/management/task/Task";
-import { EmployeeBenefit } from "Pages/management/employee-benefit/EmployeeBenefit";
+import { EmployeeBenefit } from "Pages/management/employee-benefit/Benefits";
 
 // import Login from "./pages/Login";
 
@@ -62,19 +61,11 @@ function App() {
                   path="management/employee-type"
                   element={<EmployeeType />}
                 />
-                <Route
-                  path="management/position"
-                  element={<Position />}
-                />
-                <Route
-                  path="management/task"
-                  element={<Task />}
-                />
+
                 <Route
                   path="management/employee-benefit"
                   element={<EmployeeBenefit />}
                 />
-                 
 
                 <Route path="/security/modules" element={<Module />} />
                 <Route path="/security/permissions" element={<Permission />} />

@@ -1,4 +1,4 @@
-export type IPositionResponse = {
+export type IBenefitResponse = {
   id: string;
   name: string;
   description: string;
@@ -7,7 +7,7 @@ export type IPositionResponse = {
   updated_at: string;
 }
 
-export type IPositionInput = {
+export type IBenefitInput = {
   name: string,
   description: string,
   is_active: boolean

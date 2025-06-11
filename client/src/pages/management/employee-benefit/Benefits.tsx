@@ -22,10 +22,10 @@ import {
   updateEmployeeBenefit,
   deleteEmployeeBenefit,
   retrieveEmployeeBenefit,
-} from "./EmployeeBenefitActions";
-import { IEmployeeBenefitInput } from "./IEmployeeBenefit";
+} from "./BenefitsAction";
+import { IBenefitInput } from "./IBenefit";
 import { Icon } from "Components/icon/Icon";
-import { EmployeeBenefitSchema } from "./EmployeeBenefitSchema";
+import { BenefitSchema } from "./BenefitSchema";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -195,9 +195,9 @@ export const EmployeeBenefit = () => {
     fetchQueryKey: getAllEmployeeBenefitKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
-      addEmployeeBenefit(data as IEmployeeBenefitInput),
+      addEmployeeBenefit(data as IBenefitInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateEmployeeBenefit(id, data as IEmployeeBenefitInput),
+      updateEmployeeBenefit(id, data as IBenefitInput),
     onDeleteFn: (id: string) => deleteEmployeeBenefit(id),
     onRetrieveFn: (id: string) => retrieveEmployeeBenefit(id),
   });
@@ -219,7 +219,7 @@ export const EmployeeBenefit = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
-              schema={EmployeeBenefitSchema}
+              schema={BenefitSchema}
               moduleName="EmployeeBenefit"
               data={dialog.data}
             />
