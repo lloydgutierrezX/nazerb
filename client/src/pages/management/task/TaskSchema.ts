@@ -1,6 +1,6 @@
 
 import { z } from "zod";
-export const employeeTypeSchema = z.object({
+export const TaskSchema = z.object({
   active: z.coerce.boolean(),
   name: z.string().min(4).max(60),
   description: z.string().max(255).nullable(),
@@ -8,4 +8,4 @@ export const employeeTypeSchema = z.object({
   updatedAt: z.date().nullish(),
 });
 
-export type IEmployeeType = z.infer<typeof employeeTypeSchema>;
+export type ITask = z.infer<typeof TaskSchema>;
