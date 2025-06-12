@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData } from "Services/axios/request";
 import { IPositionInput, IPositionResponse } from "./IPosition";
 
-const url = '/management/employee-type';
-export const getAllPositionKey = 'get-all-modules';
+const url = '/management/position';
+export const getAllPositionKey = 'get-all-position';
 // get all modules request
 const getAllPosition =
   async (url: string, config?: IRequestParams) => await fetchAll(url, config);
