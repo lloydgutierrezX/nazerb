@@ -101,17 +101,17 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Task",
-      popover: "Add new Task?",
+      popover: "Add new task?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Task?",
+      popover: "Delete this task?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Task?",
+      popover: "Update this task?",
     },
   },
 };
@@ -127,7 +127,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this Task",
+      placeholder: "Toggle this to turn on/off this task",
     },
     error: {
       className: "text-left",
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the Task name",
+      placeholder: "Input the task name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the Task description",
+      placeholder: "Input the task description",
       className: "h-40 w-full",
     },
   },
