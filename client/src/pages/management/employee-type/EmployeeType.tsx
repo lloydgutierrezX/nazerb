@@ -101,17 +101,17 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Employee Type",
-      popover: "Add new Employee Type",
+      popover: "Add new employee type",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Employee Type?",
+      popover: "Delete this employee type?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Employee Type?",
+      popover: "Update this employee type?",
     },
   },
 };
@@ -143,7 +143,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the Employee Type name",
+      placeholder: "Input the employee type name",
     },
   },
   {
@@ -155,7 +155,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the Employee Type description",
+      placeholder: "Input the employee type description",
       className: "h-40 w-full",
     },
   },

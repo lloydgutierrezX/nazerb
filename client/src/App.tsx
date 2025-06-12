@@ -23,7 +23,6 @@ import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 function App() {
   const location = useLocation();
   const [currentModule, setCurrentModule] = useState("");
-
   const [dialog, setDialog] = useState({ open: false });
 
   useEffect(() => {
@@ -55,16 +54,14 @@ function App() {
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/dashboard" element={<Dashboard />} />
 
+                {/* Management */}
                 <Route
                   path="management/employee-type"
                   element={<EmployeeType />}
                 />
+                <Route path="management/task" element={<Task />} />
 
-                <Route
-                  path="management/task"
-                  element={<Task />}
-                />
-
+                {/* Security */}
                 <Route path="/security/modules" element={<Module />} />
                 <Route path="/security/permissions" element={<Permission />} />
                 <Route path="/security/roles" element={<Role />} />
