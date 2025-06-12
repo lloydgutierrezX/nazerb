@@ -16,12 +16,12 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
-  useGetAllEmployeeBenefit,
-  getAllEmployeeBenefitKey,
-  addEmployeeBenefit,
-  updateEmployeeBenefit,
-  deleteEmployeeBenefit,
-  retrieveEmployeeBenefit,
+  useGetAllBenefits,
+  getAllBenefitsKey,
+  addBenefits,
+  updateBenefits,
+  deleteBenefits,
+  retrieveBenefits,
 } from "./BenefitsAction";
 import { IBenefitInput } from "./IBenefit";
 import { Icon } from "Components/icon/Icon";
@@ -99,7 +99,7 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
 
 // Config for the datatable view
 const config: ITableConfig = {
-  module: "EmployeeBenefit",
+  module: "Benefits",
   serverSide: false,
   permissions: {
     search: {
@@ -108,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add EmployeeBenefit",
-      popover: "Add new EmployeeBenefit?",
+      placeholder: "Add Benefits",
+      popover: "Add new Benefits?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this EmployeeBenefit?",
+      popover: "Delete this Benefits?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this EmployeeBenefit?",
+      popover: "Update this Benefits?",
     },
   },
 };
@@ -135,26 +135,13 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this EmployeeBenefit",
+      placeholder: "Toggle this to turn on/off this Benefit",
     },
     error: {
       className: "text-left",
     },
   },
-  {
-    name: "name",
-    className: "my-2",
-    label: {
-      className: "w-full",
-      value: "Name",
-    },
-    field: {
-      type: "text",
-      className: "input w-full",
-      placeholder: "Input the EmployeeBenefit name",
-    },
-  },
-  {
+    {
     name: "type",
     className: "my-2",
     label: {
@@ -176,9 +163,23 @@ const formGroupFields: IBaseFormGroupField[] = [
           className: ''
         }
       ],
-      placeholder: "Input the EmployeeBenefit name",
+      placeholder: "Type of Benefits.",
     },
   },
+  {
+    name: "name",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Name",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Employee name.",
+    },
+  },
+
   {
     name: "description",
     className: "my-2",
@@ -188,30 +189,30 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the EmployeeBenefit description",
+      placeholder: "Benefits description.",
       className: "h-40 w-full",
     },
   },
 ];
 
-export const EmployeeBenefit = () => {
-  const { data, isFetching, isLoading, error } = useGetAllEmployeeBenefit();
+export const Benefits = () => {
+  const { data, isFetching, isLoading, error } = useGetAllBenefits();
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
     open: false,
-    module: "EmployeeBenefit",
+    module: "Benefit",
   });
 
   const [form, setForm] = useState({
-    url: "/management/employee-benefit",
-    fetchQueryKey: getAllEmployeeBenefitKey,
+    url: "/management/benefit",
+    fetchQueryKey: getAllBenefitsKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>
-      addEmployeeBenefit(data as IBenefitInput),
+      addBenefits(data as IBenefitInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
-      updateEmployeeBenefit(id, data as IBenefitInput),
-    onDeleteFn: (id: string) => deleteEmployeeBenefit(id),
-    onRetrieveFn: (id: string) => retrieveEmployeeBenefit(id),
+      updateBenefits(id, data as IBenefitInput),
+    onDeleteFn: (id: string) => deleteBenefits(id),
+    onRetrieveFn: (id: string) => retrieveBenefits(id),
   });
 
   const [record, setRecord] = useState(data);
@@ -232,7 +233,7 @@ export const EmployeeBenefit = () => {
             <FormGroup
               formFields={formGroupFields}
               schema={BenefitSchema}
-              moduleName="EmployeeBenefit"
+              moduleName="Benefit"
               data={dialog.data}
             />
           </Dialog>

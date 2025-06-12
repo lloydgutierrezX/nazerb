@@ -3,31 +3,31 @@ import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData
 import { IBenefitInput, IBenefitResponse } from "./IBenefit";
 
 const url = '/management/benefit';
-export const getAllEmployeeBenefitKey = 'get-all-modules';
+export const getAllBenefitsKey = 'get-all-modules';
 // get all modules request
-const getAllEmployeeBenefit =
+const getAllBenefits =
   async (url: string, config?: IRequestParams) => await fetchAll(url, config);
 
 // get all modules useQuery implementation
-export const useGetAllEmployeeBenefit = (config?: IRequestParams) => {
+export const useGetAllBenefits = (config?: IRequestParams) => {
   return useQuery<IBenefitResponse[], unknown>({
     queryFn: async () => {
-      const response = await getAllEmployeeBenefit(url, config);
+      const response = await getAllBenefits(url, config);
       return response?.data ?? [];
     },
-    queryKey: [getAllEmployeeBenefitKey]
+    queryKey: [getAllBenefitsKey]
   })
 }
 
 // add module request
-export const addEmployeeBenefit =
+export const addBenefits =
   async (data: IBenefitInput) => await addData({ url, data });
 
-export const updateEmployeeBenefit =
+export const updateBenefits =
   async (id: string, data: IBenefitInput) => await updateData({ url: `${url}/${id}`, data });
 
-export const deleteEmployeeBenefit =
+export const deleteBenefits =
   async (id: string) => await deleteData({ url: `${url}/${id}` });
 
-export const retrieveEmployeeBenefit =
+export const retrieveBenefits =
   async (id: string) => await retreiveData({ url: `${url}/${id}` });

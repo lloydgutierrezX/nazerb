@@ -13,7 +13,7 @@ import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
-import { EmployeeBenefit } from "Pages/management/benefit/Benefits";
+import { Benefits } from "Pages/management/benefit/Benefits";
 
 // import Login from "./pages/Login";
 
@@ -60,10 +60,9 @@ function App() {
                   path="management/employee-type"
                   element={<EmployeeType />}
                 />
-
                 <Route
-                  path="management/employee-benefit"
-                  element={<EmployeeBenefit />}
+                  path="management/benefit"
+                  element={<Benefits />}
                 />
 
                 <Route path="/security/modules" element={<Module />} />
