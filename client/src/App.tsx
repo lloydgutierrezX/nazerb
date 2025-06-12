@@ -13,6 +13,8 @@ import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
+import { Benefits } from "Pages/management/benefit/Benefits";
+
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -57,6 +59,10 @@ function App() {
                 <Route
                   path="management/employee-type"
                   element={<EmployeeType />}
+                />
+                <Route
+                  path="management/benefit"
+                  element={<Benefits />}
                 />
 
                 <Route path="/security/modules" element={<Module />} />
