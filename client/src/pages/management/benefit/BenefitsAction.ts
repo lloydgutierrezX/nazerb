@@ -3,7 +3,7 @@ import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData
 import { IBenefitInput, IBenefitResponse } from "./IBenefit";
 
 const url = '/management/benefit';
-export const getAllBenefitsKey = 'get-all-modules';
+export const getAllBenefitsKey = 'get-all-benefits';
 // get all modules request
 const getAllBenefits =
   async (url: string, config?: IRequestParams) => await fetchAll(url, config);

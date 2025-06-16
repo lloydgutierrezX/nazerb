@@ -108,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add Benefits",
-      popover: "Add new Benefits?",
+      placeholder: "Add benefits",
+      popover: "Add new benefits?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this Benefits?",
+      popover: "Delete this benefits?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this Benefits?",
+      popover: "Update this benefits?",
     },
   },
 };
@@ -135,7 +135,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this Benefit",
+      placeholder: "Toggle this to turn on/off this benefit",
     },
     error: {
       className: "text-left",
@@ -163,7 +163,7 @@ const formGroupFields: IBaseFormGroupField[] = [
           className: ''
         }
       ],
-      placeholder: "Type of Benefits.",
+      placeholder: "Type of benefits.",
     },
   },
   {

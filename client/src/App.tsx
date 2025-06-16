@@ -12,9 +12,15 @@ import { Module } from "./pages/security/module/Module";
 import { DialogContext } from "./services/contexts/DialogContext";
 import { Role } from "Pages/security/roles/Role";
 import { Permission } from "Pages/security/permission/Permission";
+<<<<<<< HEAD
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 import { Benefits } from "Pages/management/benefit/Benefits";
 
+=======
+import { Task } from "Pages/management/task/Task";
+import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
+import { Position } from "Pages/management/position/Position";
+>>>>>>> f7c05f04f8ea580dc652079362306eace1081524
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -24,7 +30,6 @@ import { Benefits } from "Pages/management/benefit/Benefits";
 function App() {
   const location = useLocation();
   const [currentModule, setCurrentModule] = useState("");
-
   const [dialog, setDialog] = useState({ open: false });
 
   useEffect(() => {
@@ -56,15 +61,22 @@ function App() {
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/dashboard" element={<Dashboard />} />
 
+                {/* Management */}
                 <Route
                   path="management/employee-type"
                   element={<EmployeeType />}
                 />
+<<<<<<< HEAD
                 <Route
                   path="management/benefit"
                   element={<Benefits />}
                 />
+=======
+                <Route path="management/task" element={<Task />} />
+                <Route path="management/position" element={<Position />} />
+>>>>>>> f7c05f04f8ea580dc652079362306eace1081524
 
+                {/* Security */}
                 <Route path="/security/modules" element={<Module />} />
                 <Route path="/security/permissions" element={<Permission />} />
                 <Route path="/security/roles" element={<Role />} />
