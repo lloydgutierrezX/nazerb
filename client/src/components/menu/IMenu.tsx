@@ -41,12 +41,6 @@ export const jsonMenu = [
     icon: "settings",
     children: [
       {
-        key: "benefits",
-        path: "management/benefits",
-        is_active: true,
-        icon: "hand-coins",
-      },
-      {
         key: "employee type",
         path: "management/employee-type",
         is_active: true,
