@@ -1,4 +1,4 @@
-export type IPositionResponse = {
+export type ITaskResponse = {
   id: string;
   name: string;
   description: string;
@@ -7,7 +7,7 @@ export type IPositionResponse = {
   updated_at: string;
 }
 
-export type IPositionInput = {
+export type ITaskInput = {
   name: string,
   description: string,
   is_active: boolean
