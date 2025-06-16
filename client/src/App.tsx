@@ -61,7 +61,6 @@ function App() {
                   element={<EmployeeType />}
                 />
                 <Route path="management/task" element={<Task />} />
-
                 <Route path="management/position" element={<Position />} />
 
                 {/* Security */}
