@@ -33,6 +33,9 @@ import {
   HandCoins,
   PhilippinePeso,
   WalletCards,
+  FileCog,
+  ChartSpline,
+  Users,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -189,6 +192,19 @@ export const Icon = memo(function Icon(props: {
             return (
               <WalletCards className={classNames} color={color ?? undefined} />
             );
+
+          case "file-cog":
+            return (
+              <FileCog className={classNames} color={color ?? undefined} />
+            );
+
+          case "chart-spline":
+            return (
+              <ChartSpline className={classNames} color={color ?? undefined} />
+            );
+
+          case "users":
+            return <Users className={classNames} color={color ?? undefined} />;
 
           default:
             console.warn(`No icon for ${icon}`);
