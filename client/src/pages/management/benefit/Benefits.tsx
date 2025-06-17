@@ -108,18 +108,18 @@ const config: ITableConfig = {
     },
     add: {
       isAllowed: true,
-      placeholder: "Add benefits",
-      popover: "Add new benefits?",
+      placeholder: "Add benefit",
+      popover: "Add new benefit?",
     },
     delete: {
       isAllowed: true,
       placeholder: "Delete",
-      popover: "Delete this benefits?",
+      popover: "Delete this benefit?",
     },
     update: {
       isAllowed: true,
       placeholder: "Edit",
-      popover: "Update this benefits?",
+      popover: "Update this benefit?",
     },
   },
 };
@@ -141,7 +141,7 @@ const formGroupFields: IBaseFormGroupField[] = [
       className: "text-left",
     },
   },
-    {
+  {
     name: "type",
     className: "my-2",
     label: {
@@ -153,17 +153,17 @@ const formGroupFields: IBaseFormGroupField[] = [
       className: "input w-full",
       options: [
         {
-          key: 'debit',
-          value: 'Debit',
-          className: ''
+          key: "debit",
+          value: "Debit",
+          className: "",
         },
         {
-          key: 'credit',
-          value: 'Credit',
-          className: ''
-        }
+          key: "credit",
+          value: "Credit",
+          className: "",
+        },
       ],
-      placeholder: "Type of benefits.",
+      placeholder: "Type of benefit",
     },
   },
   {
@@ -176,7 +176,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Employee name.",
+      placeholder: "Benefit name",
     },
   },
 
@@ -189,7 +189,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Benefits description.",
+      placeholder: "Benefit's description",
       className: "h-40 w-full",
     },
   },
@@ -207,8 +207,7 @@ export const Benefits = () => {
     url: "/management/benefit",
     fetchQueryKey: getAllBenefitsKey,
     action: "create" as IAction, // defaults to create
-    onAddFn: (data: DynamicObject) =>
-      addBenefits(data as IBenefitInput),
+    onAddFn: (data: DynamicObject) => addBenefits(data as IBenefitInput),
     onUpdateFn: (id: string, data: DynamicObject) =>
       updateBenefits(id, data as IBenefitInput),
     onDeleteFn: (id: string) => deleteBenefits(id),
