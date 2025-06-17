@@ -15,6 +15,7 @@ import { Permission } from "Pages/security/permission/Permission";
 import { Task } from "Pages/management/task/Task";
 import { EmployeeType } from "Pages/management/employee-type/EmployeeType";
 import { Position } from "Pages/management/position/Position";
+import { Benefits } from "Pages/management/benefit/Benefits";
 // import Login from "./pages/Login";
 
 // const AppLayout = (children: any) => {
@@ -62,6 +63,7 @@ function App() {
                 />
                 <Route path="management/task" element={<Task />} />
                 <Route path="management/position" element={<Position />} />
+                <Route path="management/benefit" element={<Benefits />} />
 
                 {/* Security */}
                 <Route path="/security/modules" element={<Module />} />

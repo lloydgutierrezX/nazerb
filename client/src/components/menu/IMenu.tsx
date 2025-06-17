@@ -58,6 +58,12 @@ export const jsonMenu = [
         is_active: true,
         icon: "users",
       },
+      {
+        key: "benefit",
+        path: "management/benefit",
+        is_active: true,
+        icon: "users",
+      },
     ],
   },
   {
