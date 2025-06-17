@@ -25,7 +25,7 @@ import {
 } from "./EmployeeTypeActions";
 import { IEmployeeTypeInput } from "./IEmployeeType";
 import { Icon } from "Components/icon/Icon";
-import { employeeStatusSchema } from "./EmployeeTypeSchema";
+import { employeeTypeSchema } from "./EmployeeTypeSchema";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -101,7 +101,7 @@ const config: ITableConfig = {
     add: {
       isAllowed: true,
       placeholder: "Add Employee Type",
-      popover: "Add new employee type?",
+      popover: "Add new employee type",
     },
     delete: {
       isAllowed: true,
@@ -198,7 +198,7 @@ export const EmployeeType = () => {
           <Dialog>
             <FormGroup
               formFields={formGroupFields}
-              schema={employeeStatusSchema}
+              schema={employeeTypeSchema}
               moduleName="Employee Type"
               data={dialog.data}
             />
