@@ -8,6 +8,12 @@ import { IBaseFormGroupField, ICheckListField, IOptions } from "../IForm";
 import { useEffect, useState } from "react";
 // import { useEffect, useState } from "react";
 
+type IFieldArray = {
+  id: string;
+  value: string | number;
+  isChecked: boolean;
+};
+
 type IChecklistProps = {
   register: UseFormRegister<Record<string, unknown>>;
   formField: IBaseFormGroupField;
@@ -30,54 +36,22 @@ export const Checklist: React.FC<IChecklistProps> = ({
   getValues,
   defaultValues,
 }) => {
-  const fieldArray = useFieldArray({
-    name: formField.name,
-    control,
-  });
-
-  console.log("Field Array:", fieldArray.fields);
-
+  console.log("controls", control);
   const { name, label, className, field } = formField;
   const { checklist, parent } = field as ICheckListField;
 
-  const [checkFields, setCheckFields] = useState<IOptions[]>([]);
+  console.log(name, control.fields);
 
-  useEffect(() => {
-    return setCheckFields(defaultValues || []);
-  }, [defaultValues]);
+  const { fields, append } = useFieldArray({
+    name,
+    control,
+  });
 
-  const handleOnChange = (checked: boolean, value: number) => {
-    console.log(checked, value, getValues());
-    // setCheckFields((prev: ICheckField[]) => {
-    //   const updated = [...prev];
-    //   if (checked) {
-    //     updated.push({ [key]: value });
-    //   } else {
-    //     const index = updated.findIndex((item) => item[key] === value);
-    //     console.log("Index", index);
-    //     if (index !== -1) {
-    //       updated.splice(index, 1);
-    //     }
-    //   }
-    //   return updated;
-    // });
-    // setValue(name, { permissionId: checked });
-    // console.log("Updated CheckFields:", checkFields);
-    // console.log("Updated Value:", getValues(name));
-  };
-
-  const isChecked = (key: string) => {
-    return (
-      checkFields.some((item) => {
-        return item.key === key && item.defaultChecked === true;
-      }) ?? false
-    );
-  };
+  console.log("fields: ", fields);
 
   return (
     <div className={`${className}`}>
-      {checklist.map((cl) => {
-        console.log("Checklist Item:", name, cl);
+      {checklist.map((cl, idx) => {
         return (
           <label
             key={`checklist-${cl.key}`}
@@ -86,15 +60,10 @@ export const Checklist: React.FC<IChecklistProps> = ({
             }`}
           >
             <input
-              {...register(name)}
+              {...register(`${name}.${idx} as const`)}
               type="checkbox"
-              onChange={(e) =>
-                handleOnChange(
-                  (e.target as HTMLInputElement).checked,
-                  parseInt(cl.key)
-                )
-              }
-              defaultChecked={isChecked(cl.key)}
+              checked={cl.defaultChecked}
+              defaultChecked={cl.defaultChecked ?? false}
             />
             {cl.value}
           </label>

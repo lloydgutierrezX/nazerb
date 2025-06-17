@@ -55,8 +55,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     defaultValues,
   });
 
-  // console.log(errors);
-  // console.log(defaultValues, getValues());
+  console.log(errors);
+  console.log(defaultValues, getValues());
 
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve

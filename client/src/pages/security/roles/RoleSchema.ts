@@ -11,6 +11,6 @@ export const roleSchema = z.object({
   })),
   modules: z.string().optional(),
   permissions: z.array(z.object({
-    permissionId: z.boolean()
-  })).optional()
+    permissionId: z.boolean().optional()
+  }))
 });
