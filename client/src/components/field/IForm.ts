@@ -42,7 +42,7 @@ interface ISelectField extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 export type IToggleField = {
-  type: "toggle",
+  type: "toggle";
   className?: string;
   placeholder?: string;
   defaultChecked?: boolean;
