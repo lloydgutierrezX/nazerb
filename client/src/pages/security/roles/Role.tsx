@@ -148,7 +148,7 @@ const formFieldsDefaultConfig: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Permission description.",
+      placeholder: "Role name",
     },
   },
   {
@@ -161,7 +161,7 @@ const formFieldsDefaultConfig: IBaseFormGroupField[] = [
     field: {
       type: "textarea",
       className: "input w-full",
-      placeholder: "Role description.",
+      placeholder: "Role description",
     },
   },
   {
@@ -192,8 +192,8 @@ const formFieldsDefaultConfig: IBaseFormGroupField[] = [
       className: "input",
       checklist: [],
       parent: {
-        key: "permissionId",
         name: "rolePermission",
+        key: "permissionId",
       },
     },
   },

@@ -1,57 +1,69 @@
 import {
-  useFieldArray,
-  UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
+  useWatch,
+  Control,
 } from "react-hook-form";
 import { IBaseFormGroupField, ICheckListField, IOptions } from "../IForm";
-import { useEffect, useState } from "react";
-// import { useEffect, useState } from "react";
-
-type IFieldArray = {
-  id: string;
-  value: string | number;
-  isChecked: boolean;
-};
+import { useEffect } from "react";
 
 type IChecklistProps = {
   register: UseFormRegister<Record<string, unknown>>;
   formField: IBaseFormGroupField;
   error: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<Record<string, unknown>>;
   setValue: UseFormSetValue<Record<string, unknown>>;
-  getValues: UseFormGetValues<Record<string, unknown>>;
-  defaultValues: IOptions[] | [];
-  control: Record<string, unknown>;
 };
-
-type ICheckField = { [key: string]: number };
 
 export const Checklist: React.FC<IChecklistProps> = ({
   register,
   control,
   formField,
-  error,
   setValue,
-  getValues,
-  defaultValues,
+  error,
 }) => {
-  console.log("controls", control);
   const { name, label, className, field } = formField;
-  const { checklist, parent } = field as ICheckListField;
+  const checklists = useWatch({ control, name }) as IOptions[]; // type assertion
+  const parent = (field as ICheckListField).parent;
 
-  console.log(name, control.fields);
+  useEffect(() => {
+    const parentCheckList = checklists
+      .filter((cl) => !!cl.defaultChecked)
+      .map((cl: { key: string }) => ({
+        [parent.key]: parseInt(cl.key),
+      }));
+    setValue(parent.name, parentCheckList);
+  }, [checklists, parent.key, parent.name, setValue]);
 
-  const { fields, append } = useFieldArray({
-    name,
-    control,
-  });
+  const handleOnChange = (key: string, checked: boolean) => {
+    const updated = checklists.map((item) =>
+      item.key === key
+        ? {
+            ...item,
+            defaultChecked: checked,
+          }
+        : item
+    );
 
-  console.log("fields: ", fields);
+    // Update's the checklist
+    setValue(name, updated);
+
+    // Update's the parent/target field.
+    setValue(
+      parent.name,
+      updated.map((item) => {
+        return item.defaultChecked
+          ? {
+              [parent.key]: item.key,
+            }
+          : false;
+      })
+    );
+  };
 
   return (
     <div className={`${className}`}>
-      {checklist.map((cl, idx) => {
+      {checklists.map((cl, idx) => {
         return (
           <label
             key={`checklist-${cl.key}`}
@@ -62,7 +74,7 @@ export const Checklist: React.FC<IChecklistProps> = ({
             <input
               {...register(`${name}.${idx} as const`)}
               type="checkbox"
-              checked={cl.defaultChecked}
+              onChange={(e) => handleOnChange(cl.key, e.target.checked)}
               defaultChecked={cl.defaultChecked ?? false}
             />
             {cl.value}

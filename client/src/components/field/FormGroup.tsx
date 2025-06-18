@@ -3,9 +3,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input/Input";
 import { z, ZodType } from "zod";
-import { IBaseFormGroupField, ICheckListField, IOptions } from "./IForm";
+import { IBaseFormGroupField, ICheckListField } from "./IForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { TextArea } from "./textarea/TextArea";
 import { useFormContext } from "Services/contexts/FormContext";
@@ -34,9 +34,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   const { dialog, setDialog } = useDialogContext();
   const { confirmDialog, setConfirmDialog } = useConfirmDialogContext();
   const { form, setForm } = useFormContext();
-  const [customDefaultValues, setCustomDefaultValues] = useState<
-    Record<string, unknown>
-  >(defaultValues || {});
 
   // useForm init
   const {
@@ -46,7 +43,7 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     control,
     setError,
     setValue,
-    getValues,
+    // getValues,
     reset,
   } = useForm<z.infer<typeof schema> & Record<string, unknown>>({
     mode: "onChange",
@@ -55,8 +52,8 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     defaultValues,
   });
 
-  console.log(errors);
-  console.log(defaultValues, getValues());
+  // console.log(errors);
+  // console.log(getValues());
 
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve
@@ -126,45 +123,34 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   useEffect(() => {
     // if we close the dialog, then we need to reset the fields.
     if (!dialog.open) {
-      setCustomDefaultValues({});
       reset();
       return;
     }
 
     formFields.forEach((f) => {
       const d = data as Record<string, unknown>;
+
       // if data has value, meaning the form is called for update
       // else, this is for create. we need to implement the default value
-      if (data) {
-        if (
-          f.field.type === "checklist" &&
-          (f.field as ICheckListField).parent
-        ) {
-          const { name, key } = (f.field as ICheckListField).parent;
-          const checklists = f.field.checklist.map((cl) => ({
-            ...cl,
-            defaultChecked:
-              Array.isArray(d[name]) &&
+      if (f.field.type === "checklist" && (f.field as ICheckListField).parent) {
+        const { name, key } = (f.field as ICheckListField).parent;
+        const checklists = f.field.checklist.map((cl) => ({
+          ...cl,
+          defaultChecked: d
+            ? Array.isArray(d[name]) &&
               (d[name] as Array<{ [x: string]: number }>).some(
                 (item: { [x: string]: number }) => {
                   return item[key] === parseInt(cl.key);
                 }
-              ),
-          }));
-          setValue(f.name, checklists);
-          console.log(getValues());
-          // setCustomDefaultValues((prev) => ({
-          //   ...prev,
-          //   [f.name]: checklists,
-          // }));
-        } else {
-          setValue(f.name, d[f.name]);
-        }
+              )
+            : false,
+        }));
+        setValue(f.name, checklists);
         return;
       }
 
-      if (customDefaultValues?.[f.name]) {
-        setValue(f.name, customDefaultValues?.[f.name]);
+      if (d) {
+        setValue(f.name, d[f.name]);
         return;
       }
 
@@ -172,7 +158,10 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       // if the current field is a toggle, we need to set it's value to true.
       // empty string or "" if its not a toggle.
       const isBoolean = f.field.type === "checkbox";
-      setValue(f.name, isBoolean ? true : "");
+      if (isBoolean) {
+        setValue(f.name, true);
+        return;
+      }
     });
   }, [dialog.open]);
 
@@ -237,13 +226,7 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
                     register={register}
                     setValue={setValue}
                     formField={fg}
-                    getValues={getValues}
                     control={control}
-                    defaultValues={
-                      Array.isArray(customDefaultValues?.[fg.name])
-                        ? (customDefaultValues![fg.name] as IOptions[])
-                        : []
-                    }
                     error={errors[fg.name]?.message ?? ""}
                   />
                 </div>
