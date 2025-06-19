@@ -3,7 +3,7 @@
 ### ROLE ###
 
 ### Get All Roles Request
-GET http://13.215.206.103:3000/api/roles
+GET http://13.215.206.103/api/roles
 Content-Type: application/json
 
 ### Get Role by ID Request
@@ -29,13 +29,17 @@ Content-Type: application/json
 }
 
 ### Update Role Request
-PUT http://13.215.206.103:3000/api/roles/1
+PUT http://13.215.206.103/api/roles/1
 Content-Type: application/json
 
 {
+  "name": "admin",
   "description": "Admin role",
   "active": true,
   "permissions": [
+    {}, {}, {}, {}, {}, {},{}
+  ],
+  "rolePermission": [
     {
       "permissionId": 1
     },

@@ -1,7 +1,11 @@
+enum BenefitType {
+  credit
+  debit
+}
 model Benefit {
   id Int @id @default(autoincrement()) @map("id")
   name String @db.VarChar(60) @unique
-  type String @db.VarChar(6) // debit | credit
+  type BenefitType
   active Boolean @default(true) @map("is_active")
   description String @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
@@ -20,7 +24,7 @@ model EmployeeType {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user User[]
+  employee Employee[]
 
   @@map("employee_type")
 }
@@ -44,7 +48,7 @@ model Position {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user User[]
+  employee Employee[]
 
   @@map("position")
 }

@@ -17,7 +17,7 @@ model UsersBasicInfo {
   zipCode String @db.VarChar(4) @map("zip_code")
   address String @db.VarChar(120)
 
-  user User @relation(fields: [userId], references: [id])
+  employee Employee @relation(fields: [userId], references: [userId])
 
   @@map("user_basic_info")
 }
@@ -29,7 +29,7 @@ model UserEmploymentBackground {
   dateStart DateTime @map("date_start")
   dateEnd DateTime @map("date_end")
 
-  user User @relation(fields: [userId], references: [id])
+  employee Employee @relation(fields: [userId], references: [userId])
 
   @@map("user_employment_background")
 }
@@ -41,7 +41,7 @@ model UserEducationalBackground {
   dateStart DateTime @map("date_start")
   dateEnd DateTime @map("date_end")
 
-  user User @relation(fields: [userId], references: [id])
+  employee Employee @relation(fields: [userId], references: [userId])
 
   @@map("user_educational_background")
 }
@@ -57,26 +57,36 @@ model UserEmployementInfo {
   @@map("user_employment_info")
 }
 
-model User {
-  id Int @id @default(autoincrement())
+model Employee {
+  userId Int @map("user_id") @unique
   positionId Int @map("position_id")
-  roleId Int @map("role_id")
   employmentTypeId Int @map("employee_type_id")
 
+  position Position @relation(fields: [positionId], references: [id])
+  basicInfo UsersBasicInfo?
+  employmentBackground UserEmploymentBackground[]
+  educationalBackground UserEducationalBackground[]
+  benefit UserBenefit[]
+
+  employmentType EmployeeType @relation(fields: [employmentTypeId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("employee")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  roleId Int @map("role_id")
+
+  email String @unique @db.VarChar(255)
   isActive Boolean @default(true) @map("is_active")
   password String @db.VarChar(60)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  position Position @relation(fields: [positionId], references: [id])
   role Role @relation(fields: [roleId], references: [id])
-  employmentType EmployeeType @relation(fields: [employmentTypeId], references: [id])
-
-  basicInfo UsersBasicInfo?
-  employmentBackground UserEmploymentBackground[]
-  educationalBackground UserEducationalBackground[]
-  benefit UserBenefit[]
+  employee Employee?  
 
   @@map("user")
 }
@@ -86,7 +96,7 @@ model UserBenefit {
   benefitId Int @map("benefit_id")
   amount Decimal
 
-  user User @relation(fields: [userId], references: [id])
+  employee Employee @relation(fields: [userId], references: [userId])
   benefit Benefit @relation(fields: [benefitId], references: [id])
 
   @@id([userId, benefitId])
