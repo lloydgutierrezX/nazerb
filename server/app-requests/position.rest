@@ -3,11 +3,11 @@
 ### ROLE ###
 
 ### Get Position Request
-GET http://localhost:3000/api/management/position
+GET http://13.215.206.103/api/management/position
 Content-Type: application/json
 
 ### Create Position Request
-POST http://localhost:3000/api/management/position
+POST http://13.215.206.103/api/management/position
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Update Position Request
-PUT http://localhost:3000/api/management/position/1
+PUT http://13.215.206.103/api/management/position/1
 Content-Type: application/json
 
 {
@@ -25,5 +25,5 @@ Content-Type: application/json
 }
 
 ### Delete Position Request
-DELETE http://localhost:3000/api/management/position/1
+DELETE http://13.215.206.103/api/management/position/1
 Content-Type: application/json

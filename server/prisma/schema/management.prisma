@@ -22,7 +22,7 @@ model EmployeeType {
 
   user User[]
 
-  @@map("employee_status")
+  @@map("employee_type")
 }
 
 // model ProjectStatus {

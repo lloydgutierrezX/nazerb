@@ -32,6 +32,7 @@ import {
   Link,
   HandCoins,
   PhilippinePeso,
+  UserCheck,
   WalletCards,
   FileCog,
   ChartSpline,
@@ -188,6 +189,10 @@ export const Icon = memo(function Icon(props: {
               />
             );
 
+          case "user-check":
+            return (
+              <UserCheck className={classNames} color={color ?? undefined} />
+            );
           case "wallet-cards":
             return (
               <WalletCards className={classNames} color={color ?? undefined} />

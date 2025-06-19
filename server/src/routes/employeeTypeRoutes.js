@@ -1,26 +1,26 @@
 import express from "express";
 import {
-  getEmployeeTypees,
+  getEmployeeTypes,
   createEmployeeType,
   updateEmployeeType,
   deleteEmployeeType,
 } from "../controllers/employeeTypeController.js";
 
-const moduleRoutes = express.Router();
+const employeeTypeRoutes = express.Router();
 
-// Route to create a new module
-moduleRoutes.post("/", createEmployeeType);
+// Route to create a new EmployeeType
+employeeTypeRoutes.post("/", createEmployeeType);
 
-// Route to get all modules
-moduleRoutes.get("/", getEmployeeTypees);
+// Route to get all EmployeeTypes
+employeeTypeRoutes.get("/", getEmployeeTypes);
 
-// Route to get a module by ID
-// moduleRoutes.get("/:id", getModuleById);
+// Route to get a EmployeeType by ID
+employeeTypeRoutes.get("/:id", updateEmployeeType);
 
-// Route to update a module by ID
-moduleRoutes.put("/:id", updateEmployeeType);
+// Route to update a EmployeeType by ID
+employeeTypeRoutes.put("/:id", updateEmployeeType);
 
-// Route to delete a module by ID
-moduleRoutes.delete("/:id", deleteEmployeeType);
+// Route to delete a EmployeeType by ID
+employeeTypeRoutes.delete("/:id", deleteEmployeeType);
 
-export default moduleRoutes;
+export default employeeTypeRoutes;

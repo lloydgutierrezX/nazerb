@@ -6,7 +6,7 @@ import benefitRoutes from "./benefitRoutes.js";
 import positionRoutes from "./positionRoutes.js";
 
 // management routes
-import employeeStatus from "./employeeTypeRoutes.js";
+import employeeTypeRoutes from "./employeeTypeRoutes.js";
 import taskRoutes from "./taskRoutes.js";
 
 const routes = express.Router();
@@ -15,7 +15,7 @@ routes.use("/modules", moduleRoute);
 routes.use("/roles", roleRoutes);
 routes.use("/permissions", permissionRoutes);
 
-routes.use("/management/employee-type", employeeStatus);
+routes.use("/management/employee-type", employeeTypeRoutes);
 routes.use("/management/task", taskRoutes);
 routes.use("/management/benefit", benefitRoutes);
 routes.use("/management/position", positionRoutes);

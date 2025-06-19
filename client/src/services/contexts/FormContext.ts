@@ -4,7 +4,7 @@ import { useContext } from "react"
 import { createContext } from "react"
 import { DynamicObject } from "Utils/globalInterface";
 
-type IForm = {
+export type IForm = {
   url: string;
   fetchQueryKey: string;
   action: IAction;
@@ -17,6 +17,7 @@ type IForm = {
   ) => Promise<AxiosResponse<unknown, unknown>>;
   onDeleteFn: (id: string) => Promise<AxiosResponse<unknown, unknown>>,
   onRetrieveFn: (id: string) => Promise<AxiosResponse<unknown, unknown>>,
+  defaultValues?: Record<string, unknown>;
 }
 
 type IFormContext = {

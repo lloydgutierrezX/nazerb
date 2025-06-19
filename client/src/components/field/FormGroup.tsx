@@ -3,21 +3,23 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./input/Input";
 import { z, ZodType } from "zod";
-import { IBaseFormGroupField } from "./IForm";
+import { IBaseFormGroupField, ICheckListField } from "./IForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { TextArea } from "./textarea/TextArea";
 import { useFormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext";
 import { Select } from "./select/Select";
+import { Checklist } from "./checklist/Checklist";
 
 type IFormGroupProps = {
   schema: ZodType<Record<string, unknown>>;
   formFields: IBaseFormGroupField[];
   moduleName: string;
   data?: Record<string, unknown>;
+  children?: ReactNode;
   defaultValues?: Record<string, unknown>;
 };
 
@@ -26,6 +28,7 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   formFields,
   moduleName,
   data,
+  children,
   defaultValues,
 }) => {
   const { dialog, setDialog } = useDialogContext();
@@ -37,8 +40,10 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    control,
     setError,
     setValue,
+    // getValues,
     reset,
   } = useForm<z.infer<typeof schema> & Record<string, unknown>>({
     mode: "onChange",
@@ -46,6 +51,9 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     resolver: zodResolver(schema),
     defaultValues,
   });
+
+  // console.log(errors);
+  // console.log(getValues());
 
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve
@@ -123,9 +131,27 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
 
     formFields.forEach((f) => {
       const d = data as Record<string, unknown>;
+
       // if data has value, meaning the form is called for update
-      // then we need to manually set the value to each field.
-      if (data) {
+      // else, this is for create. we need to implement the default value
+      if (f.field.type === "checklist" && (f.field as ICheckListField).parent) {
+        const { name, key } = (f.field as ICheckListField).parent;
+        const checklists = f.field.checklist.map((cl) => ({
+          ...cl,
+          defaultChecked: d
+            ? Array.isArray(d[name]) &&
+              (d[name] as Array<{ [x: string]: number }>).some(
+                (item: { [x: string]: number }) => {
+                  return item[key] === parseInt(cl.key);
+                }
+              )
+            : false,
+        }));
+        setValue(f.name, checklists);
+        return;
+      }
+
+      if (d) {
         setValue(f.name, d[f.name]);
         return;
       }
@@ -134,9 +160,12 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       // if the current field is a toggle, we need to set it's value to true.
       // empty string or "" if its not a toggle.
       const isBoolean = f.field.type === "checkbox";
-      setValue(f.name, isBoolean ? true : "");
+      if (isBoolean) {
+        setValue(f.name, true);
+        return;
+      }
     });
-  }, [dialog.open, data, formFields, setValue]);
+  }, [dialog.open]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -190,11 +219,28 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
                   />
                 </div>
               );
+
+            case "checklist":
+              return (
+                <div key={`${fg.name}-containter`}>
+                  <Checklist
+                    key={fg.name}
+                    register={register}
+                    setValue={setValue}
+                    formField={fg}
+                    control={control}
+                    error={errors[fg.name]?.message ?? ""}
+                  />
+                </div>
+              );
+
             default:
               return null;
           }
         })}
       </fieldset>
+
+      {children}
 
       <div className="flex justify-end">
         <button

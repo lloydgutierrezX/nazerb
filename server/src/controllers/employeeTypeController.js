@@ -35,22 +35,22 @@ export const createEmployeeType = async (req, res) => {
   }
 };
 
-// Function to get all employee type
-export const getEmployeeTypees = async (req, res) => {
-  consoleLog("Fetching all employee type", "title");
+// Function to get all employee types
+export const getEmployeeTypes = async (req, res) => {
+  consoleLog("Fetching all getEmployeeTypes", "title");
 
   try {
-    const employeeType = await findMany(module, {
+    const getEmployeeTypes = await findMany(module, {
       orderBy: { createdAt: "desc" },
     });
-    return res.status(200).json(employeeType);
+    return res.status(200).json(getEmployeeTypes);
   } catch (error) {
     consoleLog(error, "error");
 
     // If the employee type do not exist, return a 404 error
     return res.status(500).json({ message: "Failed to fetch employee type" });
   } finally {
-    console.log("Leaving getEmployeeType fn", "title");
+    console.log("Leaving getEmployeeTypes fn", "title");
   }
 };
 
@@ -61,28 +61,29 @@ export const updateEmployeeType = async (req, res) => {
   // Check if the ID is a valid number
   const { id } = req.params;
   if (isNaN(id)) {
-    consoleLog(`Invalid employee type ID: ${id}`);
+    consoleLog(`Invalid employeeType ID: ${id}`);
     return res.status(400).json({ message: "Invalid employee type ID" });
   }
 
-  const { name, description, active } = req.body;
+  const { name, description, active, link } = req.body;
   const unique = await findUnique(module, { id: parseInt(id) });
 
-  // Check if the employee type exists
+  // Check if the Employee type exists
   if (!unique) {
-    // If the employee type does not exist, return a 404 error
+    // If the Employee type does not exist, return a 404 error
     return res.status(404).json({ message: "Employee type not found" });
   }
 
   try {
-    // Update the employee type
-    consoleLog(`Updating employee type with ID ${id}`);
+    // Update the Employee type
+    consoleLog(`Updating Employee type with ID ${id}`);
 
     // Check if the employee type name already exists
     if (name === unique.name && id != unique.id) {
-      return res
-        .status(409)
-        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
+      return res.status(409).json({
+        message: `Employee type ${name} is already taken`,
+        fields: ["name"],
+      });
     }
 
     // Update the employee type
@@ -105,11 +106,11 @@ export const updateEmployeeType = async (req, res) => {
     // If the employee type does not exist, return a 404 error
     return res.status(500).json({ message: "Failed to update employee type" });
   } finally {
-    consoleLog("Leaving getEmployeeTypees fn", "title");
+    consoleLog("Leaving updateEmployeeType fn", "title");
   }
 };
 
-// Function to SOFT delete an employee type
+// Function to SOFT delete a employee type
 export const deleteEmployeeType = async (req, res) => {
   consoleLog(`Soft deleting employee type with ID: ${req.params.id}`, "title");
 
@@ -127,13 +128,13 @@ export const deleteEmployeeType = async (req, res) => {
 
   try {
     // Soft delete the employee type by updating its active to false
-    const deletedModule = await update(
+    const deletedEmployeeType = await update(
       module,
       { active: false },
       { id: parseInt(id) }
     );
     // Return the deleted employee type
-    return res.status(200).json(deletedModule);
+    return res.status(200).json(deletedEmployeeType);
   } catch (error) {
     console.log(`Soft deleting employee type with ID ${id} failed`, error);
     // If the employee type does not exist, return a 404 error

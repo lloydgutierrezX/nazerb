@@ -8,15 +8,10 @@ interface ISelect extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 export const Select: React.FC<ISelect> = ({ register, formField, error }) => {
-  const { name, field, label, className } = formField;
+  const { name, field, label, className, excludeDisabledOption, includeAll } =
+    formField;
 
   if (field.type !== "select") return null;
-
-  const options = field.options.map((option) => ({
-    ...option,
-    key: option.key.toString(),
-  }));
-
   return (
     <>
       <fieldset className={`fieldset ${className}`}>
@@ -26,12 +21,20 @@ export const Select: React.FC<ISelect> = ({ register, formField, error }) => {
           </legend>
         )}
 
-        <select {...register(name)} {...field}>
-          <option value="" disabled>
-            {field.placeholder ?? "Select an option"}
-          </option>
+        <select
+          {...register(name)}
+          {...field}
+          className={field.className}
+          onChange={field.onChange}
+        >
+          {!excludeDisabledOption && (
+            <option value="-1" disabled>
+              {field.placeholder ?? "Select an option"}
+            </option>
+          )}
+          {includeAll && <option value="all"> All filters </option>}
 
-          {options.map((option, idx) => (
+          {field.options.map((option, idx) => (
             <option key={`${option.key}-${idx}`} value={option.key}>
               {option.value}
             </option>

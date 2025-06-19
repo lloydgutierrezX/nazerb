@@ -1,8 +1,5 @@
-import { PrismaClient } from "#root/generated/prisma/client.js";
 import { consoleLog } from "../utils.js";
 import { create, findMany, findUnique, update } from "./helper.js";
-
-const prisma = new PrismaClient();
 
 const module = "permission";
 
@@ -19,6 +16,14 @@ export const createPermission = async (req, res) => {
       return res.status(409).json({
         error: `Module does not exist`,
         fields: ["moduleId"],
+      });
+    }
+
+    // check if action:module already exist
+    if (!action || !moduleId) {
+      return res.status(400).json({
+        error: "Action and moduleId are required fields",
+        fields: ["action", "moduleId"],
       });
     }
 

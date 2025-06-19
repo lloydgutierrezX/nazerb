@@ -3,26 +3,26 @@
 ### ROLE ###
 
 ### Get Module Request
-GET http://localhost:3000/api/modules
+GET http://13.215.206.103/api/modules
 Content-Type: application/json
 
 ### Create Module Request
-POST http://localhost:3000/api/modules
+POST http://13.215.206.103/api/modules
 Content-Type: application/json
 
 {
-  "name": "Permission",
-  "description": "Permission module",
+  "name": "Employee type",
+  "description": "Employee type module",
   "active": true,
-  "link": "/permissions"
+  "link": "/management/Employee type"
 }
 
 ### Get Module by ID Request
-GET http://localhost:3000/api/modules/16
+GET http://13.215.206.103/api/modules/16
 Content-Type: application/json
 
 ### Update Module Request
-PUT http://localhost:3000/api/modules/1
+PUT http://13.215.206.103/api/modules/1
 Content-Type: application/json
 
 {
@@ -30,5 +30,5 @@ Content-Type: application/json
 }
 
 ### Delete Module Request
-DELETE http://localhost:3000/api/modules/4
+DELETE http://13.215.206.103/api/modules/4
 Content-Type: application/json

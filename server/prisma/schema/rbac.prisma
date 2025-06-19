@@ -10,7 +10,7 @@ model Module {
   // Relations
   permission Permission[]
 
-  @@map("modules")
+  @@map("module")
 }
 
 model Permission {
@@ -26,7 +26,7 @@ model Permission {
   module Module @relation(fields: [moduleId], references: [id])
   rolePermission RolePermission[]
 
-  @@map("permissions")
+  @@map("permission")
 }
 
 model Role {
@@ -41,7 +41,7 @@ model Role {
   user User[]
   rolePermission RolePermission[]
 
-  @@map("roles")
+  @@map("role")
 }
 
 model RolePermission {
@@ -52,5 +52,5 @@ model RolePermission {
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@id([roleId, permissionId])
-  @@map("roles_permissions")
+  @@map("roles_permission")
 }

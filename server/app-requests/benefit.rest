@@ -1,24 +1,24 @@
 # App Requests
 
-### ROLE ###
+### Benefit ###
 
 ### Get Module Request
-GET http://localhost:3000/api/management/benefit
+GET http://13.215.206.103/api/management/benefit
 Content-Type: application/json
 
 ### Create Module Request
-POST http://localhost:3000/api/management/benefit
+POST http://13.215.206.103/api/management/benefit
 Content-Type: application/json
 
 {
-  "name": "Rice allowance",
+  "name": "Transportation allowance",
   "type": "credit",
-  "description": "Rice allowance for employees",
+  "description": "This is a transportation allowance benefit",
   "active": true
 }
 
 ### Update Module Request
-PUT http://localhost:3000/api/management/benefit/1
+PUT http://13.215.206.103/api/management/benefit/1
 Content-Type: application/json
 
 {
@@ -26,5 +26,5 @@ Content-Type: application/json
 }
 
 ### Delete Module Request
-DELETE http://localhost:3000/api/management/benefit/1
+DELETE http://13.215.206.103/api/management/benefit/1
 Content-Type: application/json

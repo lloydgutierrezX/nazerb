@@ -6,11 +6,11 @@ import moment from "moment";
 import {
   addPermission,
   deletePermission,
+  getAllPermissions,
   getAllPermissionsKey,
   retrievePermission,
   updatePermission,
   url,
-  useGetAllPermissions,
 } from "./PermissionActions";
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { useEffect, useState } from "react";
@@ -24,10 +24,11 @@ import { DataTable } from "Components/datatable/Table";
 import { ConfirmDialog } from "Components/modal/confirm/Confirm";
 import { Dialog } from "Components/modal/dialog/Dialog";
 import { FormGroup } from "Components/field/FormGroup";
-import { FormContext } from "Services/contexts/FormContext";
+import { FormContext, IForm } from "Services/contexts/FormContext";
 import { IModuleResponse } from "../module/IModule";
-import { useGetAllModules } from "../module/ModuleActions";
+import { getAllModules, getAllModulesKey } from "../module/ModuleActions";
 import { permissionSchema } from "./PermissionSchema";
+import { useQueries } from "@tanstack/react-query";
 
 // ColumnsDef: for react-table column display
 const columnDef: ColumnDef<DynamicObject, string>[] = [
@@ -138,7 +139,7 @@ const formFields: IBaseFormGroupField[] = [
     field: {
       type: "checkbox",
       className: "flex dirc checkbox",
-      placeholder: "Toggle this to turn on/off this module",
+      placeholder: "Toggle this to turn on/off this permission",
     },
     error: {
       className: "float-right",
@@ -186,13 +187,23 @@ const formFields: IBaseFormGroupField[] = [
   },
 ];
 
-const defaultValues = {
-  active: true,
-};
-
 export const Permission = () => {
-  const { data, isFetching, isLoading } = useGetAllPermissions();
-  const moduleRequest = useGetAllModules();
+  const result = useQueries({
+    queries: [
+      {
+        queryKey: [getAllPermissionsKey],
+        queryFn: () => getAllPermissions(),
+      },
+      {
+        queryKey: [getAllModulesKey],
+        queryFn: () => getAllModules(),
+      },
+    ],
+  });
+
+  const [isFetching, isLoading] = result
+    .map((res) => [res.isFetching, res.isLoading])
+    .flat();
 
   const { dialog } = useDialogContext();
   const [confirmDialog, setConfirmDialog] = useState<IConfirmDialogContent>({
@@ -201,20 +212,20 @@ export const Permission = () => {
   });
 
   useEffect(() => {
-    if (formFields[1].field.type !== "select" || !moduleRequest?.data) {
+    if (formFields[1].field.type !== "select" || !result[1]?.data) {
       return;
     }
 
-    formFields[1].field.options = moduleRequest.data!.map(
+    formFields[1].field.options = result[1].data?.data?.map(
       (mod: IModuleResponse) => ({
         key: mod.id,
         value: mod.name,
         className: "",
       })
     );
-  }, [moduleRequest]);
+  }, [result]);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<IForm>({
     url,
     fetchQueryKey: getAllPermissionsKey,
     action: "create" as IAction, // defaults to create
@@ -223,6 +234,7 @@ export const Permission = () => {
       updatePermission(id, data as IPermissionInput),
     onDeleteFn: (id: string) => deletePermission(id),
     onRetrieveFn: (id: string) => retrievePermission(id),
+    defaultValues: { active: true } as Record<string, unknown>,
   });
 
   return (
@@ -238,16 +250,15 @@ export const Permission = () => {
               schema={permissionSchema}
               moduleName="Permission"
               data={dialog.data}
-              defaultValues={defaultValues}
             />
           </Dialog>
 
           <DataTable
-            data={data ?? []}
+            data={result[0].data?.data ?? []}
             columnDef={columnDef}
             config={config}
             isFetching={isFetching}
-            isLoading={moduleRequest.isLoading || isLoading}
+            isLoading={isLoading}
           />
         </ConfirmDialogContext.Provider>
       </FormContext.Provider>

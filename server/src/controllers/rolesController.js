@@ -1,19 +1,16 @@
-import { PrismaClient } from "#root/generated/prisma/client.js";
 import { consoleLog } from "../utils.js";
 import { create, findMany, findUnique, update } from "./helper.js";
 
 const module = "role";
 
-const prisma = new PrismaClient();
-
 // Function to create a new role
 export const createRole = async (req, res) => {
   consoleLog("Entering createRole fn", "title");
 
-  const { name, description, active, permissions } = req.body;
+  const { name, description, active, rolePermission } = req.body;
 
   try {
-    if (!Array.isArray(permissions)) {
+    if (!Array.isArray(rolePermission)) {
       return res
         .status(409)
         .json({ message: "Permissions must be an array of permission id." });
@@ -31,7 +28,7 @@ export const createRole = async (req, res) => {
       active,
       description,
       rolePermission: {
-        create: permissions,
+        create: rolePermission,
       },
     });
 
@@ -80,7 +77,7 @@ export const updateRole = async (req, res) => {
     return res.status(400).json({ message: "Invalid role ID" });
   }
 
-  const { name, description, active, permissions } = req.body;
+  const { name, description, active, rolePermission } = req.body;
   const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the role exists
@@ -105,20 +102,24 @@ export const updateRole = async (req, res) => {
     const roleData = {
       active,
       description,
+      // include: { roles: true },
       rolePermission: {
         deleteMany: {
           roleId: parseInt(id),
         },
-        createMany: {
-          data: permissions,
-        },
       },
-      // include: { roles: true },
     };
 
     if (name && name !== unique.name) {
       roleData.name = name;
     }
+
+    if (rolePermission) {
+      roleData.rolePermission.createMany = {
+        data: rolePermission,
+      };
+    }
+
     const updatedRole = await update(module, roleData, {
       id: parseInt(id),
     });

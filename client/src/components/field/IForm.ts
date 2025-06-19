@@ -3,7 +3,7 @@ interface IFormGroupLabel extends React.LabelHTMLAttributes<HTMLLabelElement> {
   className: string;
 }
 
-export type IFieldType = IInputField | IToggleField | ITextAreaField | ISelectField;
+export type IFieldType = IInputField | IToggleField | ITextAreaField | ISelectField | ICheckListField;
 
 export interface IBaseFormGroupField {
   name: string;
@@ -11,6 +11,9 @@ export interface IBaseFormGroupField {
   error?: IFormGroupLabel;
   label?: IFormGroupLabel;
   className?: string;
+  // for select fields
+  includeAll?: boolean;
+  excludeDisabledOption?: boolean;
 };
 
 export interface IInputField extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -21,24 +24,38 @@ interface ITextAreaField extends React.TextareaHTMLAttributes<HTMLTextAreaElemen
   type: "textarea";
 }
 
-type IOptions = {
+export type IOptions = {
   key: string;
   value: string | number;
-  className: string;
+  className?: string;
+  isHidden?: boolean;
+  defaultChecked?: boolean;
 };
 
 interface ISelectField extends React.SelectHTMLAttributes<HTMLSelectElement> {
   type: "select";
   options: IOptions[];
   placeholder: string;
+  includeAll?: boolean;
+  excludeDisabledOption?: boolean;
+  defaultValue?: string;
 }
 
-
-export interface IToggleField {
-  type: "toggle"
+export type IToggleField = {
+  type: "toggle";
   className?: string;
   placeholder?: string;
   defaultChecked?: boolean;
+}
+
+export type ICheckListField = {
+  type: 'checklist',
+  className: string;
+  parent: {
+    key: string;
+    name: string;
+  },
+  checklist: IOptions[];
 }
 
 export type IAction = 'create' | 'update' | 'delete' | 'retrieve';
