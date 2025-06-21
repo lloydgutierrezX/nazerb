@@ -15,12 +15,12 @@ import { Select } from "./select/Select";
 import { Checklist } from "./checklist/Checklist";
 
 type IFormGroupProps = {
-  schema: ZodType<Record<string, unknown>>;
+  schema: ZodType<DynamicObject>;
   formFields: IBaseFormGroupField[];
   moduleName: string;
-  data?: Record<string, unknown>;
+  data?: DynamicObject;
   children?: ReactNode;
-  defaultValues?: Record<string, unknown>;
+  defaultValues?: DynamicObject;
 };
 
 export const FormGroup: React.FC<IFormGroupProps> = ({
@@ -58,7 +58,7 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
   const queryClient = useQueryClient();
   // react-query function for Create, Edit, Delete, Retrieve
   const mutation = useMutation({
-    mutationFn: async (formData?: Record<string, unknown> | null) => {
+    mutationFn: async (formData?: DynamicObject | null) => {
       switch (form.action) {
         case "create":
           return form.onAddFn(formData as DynamicObject);
@@ -101,8 +101,6 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     },
   });
 
-
-  
   const onSubmit: SubmitHandler<
     z.infer<typeof schema> & Record<string, unknown>
   > = (formData) => {
@@ -130,7 +128,7 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
     }
 
     formFields.forEach((f) => {
-      const d = data as Record<string, unknown>;
+      const d = data as DynamicObject;
 
       // if data has value, meaning the form is called for update
       // else, this is for create. we need to implement the default value

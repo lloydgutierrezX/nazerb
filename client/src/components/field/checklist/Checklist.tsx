@@ -6,13 +6,14 @@ import {
 } from "react-hook-form";
 import { IBaseFormGroupField, ICheckListField, IOptions } from "../IForm";
 import { useEffect } from "react";
+import { DynamicObject } from "Utils/globalInterface";
 
 type IChecklistProps = {
-  register: UseFormRegister<Record<string, unknown>>;
+  register: UseFormRegister<DynamicObject>;
   formField: IBaseFormGroupField;
   error: string;
-  control: Control<Record<string, unknown>>;
-  setValue: UseFormSetValue<Record<string, unknown>>;
+  control: Control<DynamicObject>;
+  setValue: UseFormSetValue<DynamicObject>;
 };
 
 export const Checklist: React.FC<IChecklistProps> = ({

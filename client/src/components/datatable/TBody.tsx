@@ -5,6 +5,7 @@ import { useConfirmDialogContext } from "Services/contexts/ConfirmDialogContext"
 import { useDialogContext } from "Services/contexts/DialogContext";
 import { useFormContext } from "Services/contexts/FormContext";
 import { IAction } from "Components/field/IForm";
+import { DynamicObject } from "Utils/globalInterface";
 
 type DataTableBodyProps<TData> = {
   rowModel: () => {
@@ -14,9 +15,7 @@ type DataTableBodyProps<TData> = {
   disabled: boolean;
 };
 
-export const DataTableBody = <
-  TData extends Record<string, unknown> | undefined
->({
+export const DataTableBody = <TData extends DynamicObject | undefined>({
   rowModel,
   permissions,
   disabled,
@@ -25,11 +24,7 @@ export const DataTableBody = <
   const { setConfirmDialog } = useConfirmDialogContext();
   const { setForm } = useFormContext();
 
-  const handleAction = (
-    id: string,
-    action: IAction,
-    data?: Record<string, unknown>
-  ) => {
+  const handleAction = (id: string, action: IAction, data?: DynamicObject) => {
     setForm((prev) => ({ ...prev, action }));
     if (action === "update") {
       setDialog((prev) => ({ ...prev, data, open: true }));

@@ -1,8 +1,9 @@
 import { UseFormRegister } from "react-hook-form";
 import { IBaseFormGroupField } from "../IForm";
+import { DynamicObject } from "Utils/globalInterface";
 
 interface ITextAreaProps {
-  register: UseFormRegister<Record<string, unknown>>;
+  register: UseFormRegister<DynamicObject>;
   formField: IBaseFormGroupField;
   error: string;
 }

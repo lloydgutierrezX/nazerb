@@ -1,8 +1,9 @@
 import { UseFormRegister } from "react-hook-form";
 import { IBaseFormGroupField } from "../IForm";
+import { DynamicObject } from "Utils/globalInterface";
 
 interface ISelect extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  register: UseFormRegister<Record<string, unknown>>;
+  register: UseFormRegister<DynamicObject>;
   formField: IBaseFormGroupField;
   error: string;
 }
@@ -34,11 +35,12 @@ export const Select: React.FC<ISelect> = ({ register, formField, error }) => {
           )}
           {includeAll && <option value="all"> All filters </option>}
 
-          {field.options.map((option, idx) => (
-            <option key={`${option.key}-${idx}`} value={option.key}>
-              {option.value}
-            </option>
-          ))}
+          {field.options &&
+            field.options.map((option, idx) => (
+              <option key={`${option.key}-${idx}`} value={option.key}>
+                {option.value}
+              </option>
+            ))}
         </select>
       </fieldset>
 

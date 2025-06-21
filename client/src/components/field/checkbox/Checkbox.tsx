@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { UseFormRegister } from "react-hook-form";
+import { DynamicObject } from "Utils/globalInterface";
 
 export const Checkbox = (props: {
   name: string;
-  register: UseFormRegister<Record<string, unknown>>;
+  register: UseFormRegister<DynamicObject>;
   defaultChecked: boolean;
   label?: string;
   className?: string;

@@ -2,6 +2,7 @@ import { UseFormRegister } from "react-hook-form";
 import React from "react";
 import { IBaseFormGroupField, IInputField } from "../IForm";
 import { Icon } from "Components/icon/Icon";
+import { DynamicObject } from "Utils/globalInterface";
 
 const labelType = (type: string) => {
   switch (type) {
@@ -21,13 +22,13 @@ const labelType = (type: string) => {
 };
 
 const getInput = (
-  register: UseFormRegister<Record<string, unknown>>,
+  register: UseFormRegister<DynamicObject>,
   inputProps: IInputField,
   name: string
 ) => <input {...register(name)} {...inputProps} />;
 
 interface IInputProps {
-  register: UseFormRegister<Record<string, unknown>>;
+  register: UseFormRegister<DynamicObject>;
   formField: IBaseFormGroupField;
   error?: string;
 }

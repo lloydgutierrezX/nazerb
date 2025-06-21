@@ -1,9 +1,10 @@
 import { createContext, useContext } from "react";
+import { DynamicObject } from "Utils/globalInterface";
 
 export type IDialogContent = {
   open: boolean;
   module?: string;
-  data?: Record<string, unknown>;
+  data?: DynamicObject;
 }
 
 export type IDialogContext = {

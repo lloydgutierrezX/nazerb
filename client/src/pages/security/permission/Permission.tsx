@@ -234,7 +234,7 @@ export const Permission = () => {
       updatePermission(id, data as IPermissionInput),
     onDeleteFn: (id: string) => deletePermission(id),
     onRetrieveFn: (id: string) => retrievePermission(id),
-    defaultValues: { active: true } as Record<string, unknown>,
+    defaultValues: { active: true } as DynamicObject,
   });
 
   return (

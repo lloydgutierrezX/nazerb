@@ -17,7 +17,7 @@ export type IForm = {
   ) => Promise<AxiosResponse<unknown, unknown>>;
   onDeleteFn: (id: string) => Promise<AxiosResponse<unknown, unknown>>,
   onRetrieveFn: (id: string) => Promise<AxiosResponse<unknown, unknown>>,
-  defaultValues?: Record<string, unknown>;
+  defaultValues?: DynamicObject;
 }
 
 type IFormContext = {
