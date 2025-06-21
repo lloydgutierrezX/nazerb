@@ -30,11 +30,12 @@ export const findMany = async (module, config) => {
   }
 };
 
-export const create = async (module, data) => {
+export const create = async (module, data, options = null) => {
   consoleLog(`Entering create fn for ${module}`, "title", data);
   try {
     const result = await prisma[module].create({
       data,
+      ...(options || {}),
     });
     consoleLog(`${module} ${data.name} created successfully`, "result", result);
     return result;

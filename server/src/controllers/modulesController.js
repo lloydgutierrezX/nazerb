@@ -1,5 +1,5 @@
 import { consoleLog } from "../utils.js";
-import { create, findMany, findUnique, update } from "./helper.js";
+import { create, findMany, findUnique, update } from "../hepers/index.js";
 
 const module = "module";
 

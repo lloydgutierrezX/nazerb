@@ -1,15 +1,223 @@
-model UsersBasicInfo {
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  WIDOWED
+  DIVORCED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Nationality {
+  AFGHAN
+  ALBANIAN
+  ALGERIAN
+  AMERICAN
+  ANDORRAN
+  ANGOLAN
+  ANTIGUAN
+  ARGENTINE
+  ARMENIAN
+  AUSTRALIAN
+  AUSTRIAN
+  AZERBAIJANI
+  BAHAMIAN
+  BAHRAINI
+  BANGLADESHI
+  BARBADIAN
+  BELARUSIAN
+  BELGIAN
+  BELIZEAN
+  BENINESE
+  BHUTANESE
+  BOLIVIAN
+  BOSNIAN
+  BOTSWANAN
+  BRAZILIAN
+  BRITISH
+  BRUNEIAN
+  BULGARIAN
+  BURKINABE
+  BURMESE
+  BURUNDIAN
+  CAMBODIAN
+  CAMEROONIAN
+  CANADIAN
+  CAPE_VERDEAN
+  CENTRAL_AFRICAN
+  CHADIAN
+  CHILEAN
+  CHINESE
+  COLOMBIAN
+  COMORAN
+  CONGOLESE
+  COSTA_RICAN
+  CROATIAN
+  CUBAN
+  CYPRIOT
+  CZECH
+  DANISH
+  DJIBOUTIAN
+  DOMINICAN
+  DUTCH
+  EAST_TIMORESE
+  ECUADORIAN
+  EGYPTIAN
+  EMIRATI
+  ENGLISH
+  EQUATOGUINEAN
+  ERITREAN
+  ESTONIAN
+  ETHIOPIAN
+  FIJIAN
+  FILIPINO
+  FINNISH
+  FRENCH
+  GABONESE
+  GAMBIAN
+  GEORGIAN
+  GERMAN
+  GHANAIAN
+  GREEK
+  GRENADIAN
+  GUATEMALAN
+  GUINEAN
+  GUINEA_BISSAUAN
+  GUYANESE
+  HAITIAN
+  HERZEGOVINIAN
+  HONDURAN
+  HUNGARIAN
+  ICELANDIC
+  INDIAN
+  INDONESIAN
+  IRANIAN
+  IRAQI
+  IRISH
+  ISRAELI
+  ITALIAN
+  IVORIAN
+  JAMAICAN
+  JAPANESE
+  JORDANIAN
+  KAZAKHSTANI
+  KENYAN
+  KIRIBATI
+  KOREAN
+  KOSOVAR
+  KUWAITI
+  KYRGYZ
+  LAOTIAN
+  LATVIAN
+  LEBANESE
+  LIBERIAN
+  LIBYAN
+  LIECHTENSTEINER
+  LITHUANIAN
+  LUXEMBOURGER
+  MACEDONIAN
+  MALAGASY
+  MALAWIAN
+  MALAYSIAN
+  MALDIVIAN
+  MALIEN
+  MALTESE
+  MARSHALLESE
+  MAURITANIAN
+  MAURITIAN
+  MEXICAN
+  MICRONESIAN
+  MOLDOVAN
+  MONACAN
+  MONGOLIAN
+  MONTENEGRIN
+  MOROCCAN
+  MOSOTHO
+  MOZAMBICAN
+  NAMIBIAN
+  NAURUAN
+  NEPALESE
+  NEW_ZEALANDER
+  NICARAGUAN
+  NIGERIEN
+  NIGERIAN
+  NORWEGIAN
+  OMANI
+  PAKISTANI
+  PALAUAN
+  PALESTINIAN
+  PANAMANIAN
+  PAPUA_NEW_GUINEAN
+  PARAGUAYAN
+  PERUVIAN
+  POLISH
+  PORTUGUESE
+  QATARI
+  ROMANIAN
+  RUSSIAN
+  RWANDAN
+  SAINT_LUCIAN
+  SALVADORAN
+  SAMOAN
+  SAN_MARINESE
+  SAO_TOMEAN
+  SAUDI
+  SCOTTISH
+  SENEGALESE
+  SERBIAN
+  SEYCHELLOIS
+  SIERRA_LEONEAN
+  SINGAPOREAN
+  SLOVAK
+  SLOVENIAN
+  SOLOMON_ISLANDER
+  SOMALI
+  SOUTH_AFRICAN
+  SPANISH
+  SRI_LANKAN
+  SUDANESE
+  SURINAMESE
+  SWAZI
+  SWEDISH
+  SWISS
+  SYRIAN
+  TAIWANESE
+  TAJIK
+  TANZANIAN
+  THAI
+  TOGOLESE
+  TONGAN
+  TRINIDADIAN
+  TUNISIAN
+  TURKISH
+  TURKMEN
+  TUVALUAN
+  UGANDAN
+  UKRAINIAN
+  URUGUAYAN
+  UZBEK
+  VATICAN
+  VENEZUELAN
+  VIETNAMESE
+  WELSH
+  YEMENI
+  ZAMBIAN
+  ZIMBABWEAN
+}
+
+model UserBasicInfo {
   userId Int @unique @map("user_id")
   firstName String @db.VarChar(60) @map("first_name")
   middleName String @db.VarChar(60) @map("middle_name")
   lastName String @db.VarChar(60) @map("last_name")
   birthdate DateTime
-  email String @db.VarChar(60) @unique
   mobileNumber String @db.VarChar(11) @map("mobile_number") @unique
-  maritalStatus String @db.VarChar(10) @map("marital_status")
-  gender String @db.VarChar(6)
+  maritalStatus MaritalStatus @map("marital_status")
+  gender Gender
 
-  nationality String @db.VarChar(60)
+  nationality Nationality
 
   provinceCode String @db.VarChar(5) @map("province_code")
   cityCode String @db.VarChar(7) @map("city_code")
@@ -17,7 +225,7 @@ model UsersBasicInfo {
   zipCode String @db.VarChar(4) @map("zip_code")
   address String @db.VarChar(120)
 
-  employee Employee @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("user_basic_info")
 }
@@ -29,7 +237,7 @@ model UserEmploymentBackground {
   dateStart DateTime @map("date_start")
   dateEnd DateTime @map("date_end")
 
-  employee Employee @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("user_employment_background")
 }
@@ -41,7 +249,7 @@ model UserEducationalBackground {
   dateStart DateTime @map("date_start")
   dateEnd DateTime @map("date_end")
 
-  employee Employee @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("user_educational_background")
 }
@@ -57,36 +265,28 @@ model UserEmployementInfo {
   @@map("user_employment_info")
 }
 
-model Employee {
-  userId Int @map("user_id") @unique
-  positionId Int @map("position_id")
-  employmentTypeId Int @map("employee_type_id")
-
-  position Position @relation(fields: [positionId], references: [id])
-  basicInfo UsersBasicInfo?
-  employmentBackground UserEmploymentBackground[]
-  educationalBackground UserEducationalBackground[]
-  benefit UserBenefit[]
-
-  employmentType EmployeeType @relation(fields: [employmentTypeId], references: [id])
-  user User @relation(fields: [userId], references: [id])
-
-  @@map("employee")
-}
-
 model User {
   id Int @id @default(autoincrement())
   roleId Int @map("role_id")
+  positionId Int @map("position_id")
+  employmentTypeId Int @map("employee_type_id")
 
   email String @unique @db.VarChar(255)
-  isActive Boolean @default(true) @map("is_active")
-  password String @db.VarChar(60)
+  active Boolean @default(true) @map("is_active")
+  password String @db.VarChar(100)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
   role Role @relation(fields: [roleId], references: [id])
-  employee Employee?  
+
+  basicInfo UserBasicInfo?
+  employmentBackground UserEmploymentBackground[]
+  educationalBackground UserEducationalBackground[]
+  benefit UserBenefit[]
+
+  position Position? @relation(fields: [positionId], references: [id])
+  employmentType EmployeeType? @relation(fields: [employmentTypeId], references: [id])
 
   @@map("user")
 }
@@ -96,7 +296,7 @@ model UserBenefit {
   benefitId Int @map("benefit_id")
   amount Decimal
 
-  employee Employee @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [id])
   benefit Benefit @relation(fields: [benefitId], references: [id])
 
   @@id([userId, benefitId])

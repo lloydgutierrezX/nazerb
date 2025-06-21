@@ -1,19 +1,23 @@
 import express from "express";
+
+// user security routes
 import moduleRoute from "./moduleRoutes.js";
 import roleRoutes from "./roleRoutes.js";
 import permissionRoutes from "./permissionRoutes.js";
-import benefitRoutes from "./benefitRoutes.js";
-import positionRoutes from "./positionRoutes.js";
+import userRoutes from "./userRoutes.js";
 
 // management routes
+import benefitRoutes from "./benefitRoutes.js";
+import positionRoutes from "./positionRoutes.js";
 import employeeTypeRoutes from "./employeeTypeRoutes.js";
 import taskRoutes from "./taskRoutes.js";
 
 const routes = express.Router();
 // Define the routes for the application
-routes.use("/modules", moduleRoute);
-routes.use("/roles", roleRoutes);
-routes.use("/permissions", permissionRoutes);
+routes.use("/security/modules", moduleRoute);
+routes.use("/security/roles", roleRoutes);
+routes.use("/security/permissions", permissionRoutes);
+routes.use("/security/user", userRoutes);
 
 routes.use("/management/employee-type", employeeTypeRoutes);
 routes.use("/management/task", taskRoutes);
