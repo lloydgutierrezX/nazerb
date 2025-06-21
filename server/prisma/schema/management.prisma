@@ -1,31 +1,43 @@
+/// `DEBIT` — System will deduct from balance
+/// `CREDIT` — System will add to balance
 enum BenefitType {
-  debit
-  credit
+  DEBIT
+  CREDIT
 }
 
 model Benefit {
   id Int @id @default(autoincrement()) @map("id")
+  code String @db.VarChar(30) @unique
   name String @db.VarChar(60) @unique
   type BenefitType
   active Boolean @default(true) @map("is_active")
-  description String @db.VarChar(255)
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   userAllowance UserBenefit[]
+
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 
   @@map("benefit")
 }
 
 model EmployeeType {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(15) @unique
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")
-  description String @db.VarChar(255)
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   user User[]
+
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 
   @@map("employee_type")
 }
@@ -43,24 +55,34 @@ model EmployeeType {
 
 model Position {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(20) @unique
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")
-  description String @db.VarChar(255)
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   user User[]
+
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 
   @@map("position")
 }
 
 model Task {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(30) @unique
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")
-  description String @db.VarChar(255)
+  description String? @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 
   @@map("task")
 }

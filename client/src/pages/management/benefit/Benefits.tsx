@@ -16,6 +16,7 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
+  url,
   useGetAllBenefits,
   getAllBenefitsKey,
   addBenefits,
@@ -204,7 +205,7 @@ export const Benefits = () => {
   });
 
   const [form, setForm] = useState({
-    url: "/management/benefit",
+    url,
     fetchQueryKey: getAllBenefitsKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) => addBenefits(data as IBenefitInput),

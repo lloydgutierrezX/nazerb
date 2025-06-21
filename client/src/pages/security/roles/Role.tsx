@@ -225,7 +225,7 @@ export const Role = () => {
     module: "Roles",
   });
   const [form, setForm] = useState<IForm>({
-    url: url,
+    url,
     fetchQueryKey: getAllRolesKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) => addRole(data as IRoleInput),

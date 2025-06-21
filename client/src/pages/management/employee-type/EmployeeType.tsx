@@ -16,6 +16,7 @@ import { useDialogContext } from "Services/contexts/DialogContext";
 import { FormContext } from "Services/contexts/FormContext";
 import { DynamicObject } from "Utils/globalInterface";
 import {
+  url,
   useGetAllEmployeeType,
   getAllEmployeeTypeKey,
   addEmployeeType,
@@ -170,7 +171,7 @@ export const EmployeeType = () => {
   });
 
   const [form, setForm] = useState({
-    url: "/management/employee-type",
+    url,
     fetchQueryKey: getAllEmployeeTypeKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) =>

@@ -5,12 +5,7 @@ const MARITAL_STATUS = {
   divorced: "DIVORCED",
 };
 
-object.freeze(MARITAL_STATUS);
+Object.freeze(MARITAL_STATUS);
 
-const isMaritalStatusValid = (value) =>
+export const isMaritalStatusValid = (value) =>
   Object.keys(MARITAL_STATUS).includes(value.lowerCase());
-
-module.exports = {
-  MARITAL_STATUS,
-  isMaritalStatusValid,
-};

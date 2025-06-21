@@ -1,5 +1,6 @@
 model Module {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(30) @unique
   name String @db.VarChar(60) @unique
   link String @db.VarChar(120) @unique
   active Boolean @default(true) @map("is_active")
@@ -11,10 +12,14 @@ model Module {
   permission Permission[]
 
   @@map("module")
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 }
 
 model Permission {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(40) @unique
   moduleId Int @map("module_id")
   action String @db.VarChar(60)
   description String? @db.VarChar(255)
@@ -27,10 +32,14 @@ model Permission {
   rolePermission RolePermission[]
 
   @@map("permission")
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 }
 
 model Role {
   id Int @id @default(autoincrement())
+  code String @db.VarChar(30) @unique
   name String @db.VarChar(60) @unique
   active Boolean @default(true) @map("is_active")
   description String? @db.VarChar(255)
@@ -42,6 +51,9 @@ model Role {
   rolePermission RolePermission[]
 
   @@map("role")
+  @@index([code])
+  @@index([active])
+  @@index([code, active])
 }
 
 model RolePermission {

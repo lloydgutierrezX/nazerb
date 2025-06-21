@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { IRequestParams, fetchAll, addData, updateData, deleteData, retreiveData } from "Services/axios/request";
 import { IBenefitInput, IBenefitResponse } from "./IBenefits";
 
-const url = '/management/benefit';
+export const url = '/management/benefit';
 export const getAllBenefitsKey = 'get-all-benefits';
 // get all modules request
 const getAllBenefits =

@@ -14,9 +14,9 @@ import taskRoutes from "./taskRoutes.js";
 
 const routes = express.Router();
 // Define the routes for the application
-routes.use("/security/modules", moduleRoute);
-routes.use("/security/roles", roleRoutes);
-routes.use("/security/permissions", permissionRoutes);
+routes.use("/security/module", moduleRoute);
+routes.use("/security/role", roleRoutes);
+routes.use("/security/permission", permissionRoutes);
 routes.use("/security/user", userRoutes);
 
 routes.use("/management/employee-type", employeeTypeRoutes);

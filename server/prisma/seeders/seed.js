@@ -1,9 +1,11 @@
 import { PrismaClient } from "#root/generated/prisma/client.js";
 import { modulePermissionRoleSeeder } from "./rbac.js";
+import { managementSeeder } from "./management.js";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await managementSeeder();
   await modulePermissionRoleSeeder([
     {
       moduleName: "module",

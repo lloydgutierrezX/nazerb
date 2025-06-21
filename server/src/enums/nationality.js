@@ -197,10 +197,5 @@ const NATIONALITY = {
 
 Object.freeze(NATIONALITY);
 
-const isNationalityValid = (value) =>
+export const isNationalityValid = (value) =>
   Object.keys(NATIONALITY).includes(value.toLowerCase());
-
-module.exports = {
-  NATIONALITY,
-  isNationalityValid,
-};

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
 import { IRoleResponse, IRoleInput } from "./IRole";
 
-export const url = '/roles';
+export const url = 'security/role';
 export const getAllRolesKey = 'get-all-roles';
 
 export const getAllRoles = async (passedUrl?: string) => await fetchAll(passedUrl ?? url);

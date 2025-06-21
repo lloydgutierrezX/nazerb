@@ -8,6 +8,7 @@ import { moduleSchema } from "./ModuleSchema";
 
 import moment from "moment";
 import {
+  url,
   useGetAllModules,
   addModule,
   deleteModule,
@@ -183,7 +184,7 @@ export const Module = () => {
     module: "Modules",
   });
   const [form, setForm] = useState({
-    url: "/modules",
+    url,
     fetchQueryKey: getAllModulesKey,
     action: "create" as IAction, // defaults to create
     onAddFn: (data: DynamicObject) => addModule(data as IModuleInput),

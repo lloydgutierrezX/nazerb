@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { addData, deleteData, fetchAll, IRequestParams, retreiveData, updateData } from "Services/axios/request";
 import { IModuleInput, IModuleResponse } from "./IModule";
 
-const url = '/modules';
+export const url = '/security/module';
 export const getAllModulesKey = 'get-all-modules';
 // get all modules request
 export const getAllModules =

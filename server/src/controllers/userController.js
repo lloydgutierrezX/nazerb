@@ -1,7 +1,43 @@
 import { consoleLog } from "../utils.js";
 import { create, findMany, findUnique, update } from "../hepers/index.js";
+import { isNationalityValid } from "../enums/nationality.js";
+import { isGenderValid } from "../enums/gender.js";
+import { isMaritalStatusValid } from "../enums/maritalStatus.js";
 
 const module = "user";
+
+// Utility function to validate basic user info fields.
+// Returns an error object if invalid, otherwise returns undefined.
+const isUserBasicInfoValid = (gender, maritalStatus, nationality) => {
+  if (!isNationalityValid(nationality)) {
+    return {
+      error: {
+        message: `Nationality is not in the list`,
+        fields: ["nationality"],
+      },
+    };
+  }
+
+  if (!isGenderValid(gender)) {
+    return {
+      error: {
+        message: `Gender is not in the list`,
+        fields: ["gender"],
+      },
+    };
+  }
+
+  if (!isMaritalStatusValid(maritalStatus)) {
+    return {
+      error: {
+        message: `Marital status is not in the list`,
+        fields: ["maritalStatus"],
+      },
+    };
+  }
+
+  return undefined;
+};
 
 // Function to create a new user
 export const createUser = async (req, res) => {
@@ -47,6 +83,20 @@ export const createUser = async (req, res) => {
         fields: ["role"],
       });
     }
+
+    // userBasicInfoError validation
+    const userBasicInfoError = isUserBasicInfoValid(
+      gender,
+      maritalStatus,
+      nationality
+    );
+    if (userBasicInfoError) {
+      return res.status(400).json(userBasicInfoError);
+    }
+
+    consoleLog(
+      "All validation has passed. Will no proceed on adding the values."
+    );
 
     // Create the new user
     const newUser = await create(

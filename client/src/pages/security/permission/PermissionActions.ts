@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { addData, deleteData, fetchAll, retreiveData, updateData } from "Services/axios/request";
 import { IPermissionInput, IPermissionResponse } from "./IPermission";
 
-export const url = '/permissions';
+export const url = 'security/permission';
 export const getAllPermissionsKey = 'get-all-permissions';
 
 export const getAllPermissions =

@@ -1,0 +1,45 @@
+# App Requests
+
+### User ###
+
+@baseUrl = http://localhost:3001/api/
+# @baseUrl = http://13.215.206.103/api/
+
+
+# @module = management/benefit
+# @module = management/employee-type
+# @module = management/task
+# @module = management/position
+
+@module = security/modules
+# @module = security/permissions
+# @module = security/roles
+# @module = security/user
+
+
+### Get User Request
+GET {{baseUrl}}{{module}}
+Content-Type: application/json
+
+### Create User Request
+POST {{baseUrl}}{{module}}
+Content-Type: application/json
+
+{
+  "name": "Transportation allowance",
+  "type": "credit",
+  "description": "This is a transportation allowance user",
+  "active": true
+}
+
+### Update User Request
+PUT {{baseUrl}}/api/{{module}}/1
+Content-Type: application/json
+
+{
+  "active": true
+}
+
+### Delete User Request
+DELETE {{baseUrl}}/api/{{module}}/1
+Content-Type: application/json
