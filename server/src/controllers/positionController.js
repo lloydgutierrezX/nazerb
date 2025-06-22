@@ -1,18 +1,37 @@
 import { consoleLog } from "../utils.js";
-import { create, findMany, findUnique, update } from "../hepers/index.js";
+import {
+  create,
+  findMany,
+  findUnique,
+  update,
+  validateDuplicate,
+} from "../hepers/index.js";
 
 const module = "position";
 
 // Function to create a new position
 export const createPosition = async (req, res) => {
   consoleLog("Entering createPosition fn", "title");
-  const { name, description, active } = req.body;
+  const { name, description, active, code } = req.body;
 
   try {
-    if (await findUnique(module, { name: name })) {
+    // validate name
+    if (
+      await validateDuplicate(module, {
+        name: { equals: name, mode: "insensitive" },
+      })
+    ) {
       return res.status(409).json({
         message: `Position ${name} is already taken`,
         fields: ["name"],
+      });
+    }
+
+    // validate code
+    if (await validateDuplicate(module, { code })) {
+      return res.status(409).json({
+        message: `Position ${code} is already taken`,
+        fields: ["code"],
       });
     }
 
@@ -21,6 +40,7 @@ export const createPosition = async (req, res) => {
       name,
       active,
       description,
+      code,
     });
 
     // Return the created position
@@ -65,7 +85,7 @@ export const updatePosition = async (req, res) => {
     return res.status(400).json({ message: "Invalid position ID" });
   }
 
-  const { name, description, active } = req.body;
+  const { name, description, active, code } = req.body;
   const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the position exists
@@ -74,26 +94,44 @@ export const updatePosition = async (req, res) => {
     return res.status(404).json({ message: "Position not found" });
   }
 
+  if (
+    name !== unique.name &&
+    (await validateDuplicate(module, {
+      AND: [
+        { name: { equals: name, mode: "insensitive" } },
+        { id: { not: parseInt(unique.id) } },
+      ],
+    }))
+  ) {
+    return res.status(409).json({
+      message: `Position ${name} is taken already.`,
+      fields: ["name"],
+    });
+  }
+
+  if (
+    code !== unique.code &&
+    (await validateDuplicate(module, {
+      AND: [{ code }, { id: { not: parseInt(unique.id) } }],
+    }))
+  ) {
+    return res.status(409).json({
+      message: `Position ${code} is taken already.`,
+      fields: ["code"],
+    });
+  }
+
   try {
     // Update the position
     consoleLog(`Updating position with ID ${id}`);
 
-    // Check if the position name already exists
-    if (name === unique.name && id != unique.id) {
-      return res
-        .status(409)
-        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
-    }
-
-    // Update the position
     const positionData = {
+      code,
+      name,
       active,
       description,
     };
 
-    if (name !== unique.name) {
-      positionData.name = name;
-    }
     const updatedPosition = await update(module, positionData, {
       id: parseInt(id),
     });
