@@ -89,14 +89,14 @@ export const FormGroup: React.FC<IFormGroupProps> = ({
       }));
       setForm((prev) => ({ ...prev, action: "create" }));
     },
-    onError: (error: { fields?: string[]; error?: string }) => {
-      if (!error.fields || !error.error) {
+    onError: (error: { fields?: string[]; message?: string }) => {
+      if (!error.fields || !error.message) {
         return;
       }
 
       // setting manual error per field
       error.fields.map((fieldName) =>
-        setError(fieldName, { type: "manual", message: error.error })
+        setError(fieldName, { type: "manual", message: error.message })
       );
     },
   });

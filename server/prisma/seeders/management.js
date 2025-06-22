@@ -6,28 +6,28 @@ export async function managementSeeder() {
     // Seed Employee Types
     await prisma.employeeType.createMany({
       data: [
-        { code: "regular", name: "Regular", description: "Full-time employee" },
+        { code: "REGULAR", name: "Regular", description: "Full-time employee" },
         {
-          code: "probationary",
+          code: "PROBATIONARY",
           name: "Probationary",
           description: "On evaluation period",
         },
         {
-          code: "contractual",
+          code: "CONTRACTUAL",
           name: "Contractual",
           description: "Fixed-term contract",
         },
         {
-          code: "project_based",
+          code: "PROJECT_BASED",
           name: "Project-Based",
           description: "Project duration only",
         },
         {
-          code: "part_time",
+          code: "PART_TIME",
           name: "Part-Time",
           description: "Limited hours schedule",
         },
-        { code: "intern", name: "Intern", description: "Student or trainee" },
+        { code: "INTERN", name: "Intern", description: "Student or trainee" },
       ],
       skipDuplicates: true,
     });
@@ -36,27 +36,27 @@ export async function managementSeeder() {
     await prisma.position.createMany({
       data: [
         {
-          code: "tower_engineer",
+          code: "TOWER_ENGINEER",
           name: "Tower Engineer",
           description: "Oversees tower structure and design",
         },
         {
-          code: "rigger",
+          code: "RIGGER",
           name: "Rigger",
           description: "Climbs and assembles tower parts",
         },
         {
-          code: "foreman",
+          code: "FOREMAN",
           name: "Foreman",
           description: "Supervises the construction crew",
         },
         {
-          code: "site_supervisor",
+          code: "SITE_SUPERVISOR",
           name: "Site Supervisor",
           description: "Manages the construction site",
         },
         {
-          code: "qa_inspector",
+          code: "QA_INSPECTOR",
           name: "QA Inspector",
           description: "Ensures quality and compliance",
         },
@@ -68,27 +68,27 @@ export async function managementSeeder() {
     await prisma.task.createMany({
       data: [
         {
-          code: "site_clearance",
+          code: "SITE_CLEARANCE",
           name: "Site Clearance",
           description: "Remove vegetation and debris from site",
         },
         {
-          code: "foundation_work",
+          code: "FOUNDATION_WORK",
           name: "Foundation Work",
           description: "Prepare and pour foundation",
         },
         {
-          code: "tower_assembly",
+          code: "TOWER_ASSEMBLY",
           name: "Tower Assembly",
           description: "Assemble tower sections on the ground",
         },
         {
-          code: "tower_erection",
+          code: "TOWER_ERECTION",
           name: "Tower Erection",
           description: "Raise and secure tower in place",
         },
         {
-          code: "antenna_install",
+          code: "ANTENNA_INSTALL",
           name: "Antenna Installation",
           description: "Mount antennas and related hardware",
         },
@@ -100,31 +100,31 @@ export async function managementSeeder() {
     await prisma.benefit.createMany({
       data: [
         {
-          code: "sss",
+          code: "SSS",
           name: "Social Security System",
           type: "DEBIT",
           description: "Monthly SSS deduction",
         },
         {
-          code: "philhealth",
+          code: "PHILHEALTH",
           name: "PhilHealth",
           type: "DEBIT",
           description: "PhilHealth contribution",
         },
         {
-          code: "pagibig",
+          code: "PAGIBIG",
           name: "PAG-IBIG Fund",
           type: "DEBIT",
           description: "PAG-IBIG monthly deduction",
         },
         {
-          code: "rice_allowance",
+          code: "RICE_ALLOWANCE",
           name: "Rice Allowance",
           type: "CREDIT",
           description: "Monthly rice support",
         },
         {
-          code: "transport_subsidy",
+          code: "TRANSPORT_SUBSIDY",
           name: "Transport Subsidy",
           type: "CREDIT",
           description: "Monthly transport help",

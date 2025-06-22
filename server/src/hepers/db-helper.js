@@ -3,6 +3,20 @@ import { consoleLog } from "../utils.js";
 
 const prisma = new PrismaClient();
 
+export const findFirst = async (module, whereClause) => {
+  consoleLog(`Entering findFirst fn for ${module}`, "title", whereClause);
+
+  try {
+    const unique = await prisma[module].findFirst({ where: whereClause });
+    consoleLog(`findFirst result`, "content", unique);
+    return unique;
+  } catch (error) {
+    consoleLog("findFirst fn error", "error", error?.message ?? error);
+  } finally {
+    consoleLog("Leaving findFirst fn", "Title");
+  }
+};
+
 export const findUnique = async (module, whereClause) => {
   consoleLog(`Entering findUnique fn for ${module}`, "title", whereClause);
 

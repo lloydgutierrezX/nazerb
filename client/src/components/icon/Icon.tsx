@@ -37,6 +37,7 @@ import {
   FileCog,
   ChartSpline,
   Users,
+  Minus,
 } from "lucide-react";
 import { memo } from "react";
 
@@ -210,6 +211,9 @@ export const Icon = memo(function Icon(props: {
 
           case "users":
             return <Users className={classNames} color={color ?? undefined} />;
+
+          case "minus":
+            return <Minus className={classNames} color={color ?? undefined} />;
 
           default:
             console.warn(`No icon for ${icon}`);
