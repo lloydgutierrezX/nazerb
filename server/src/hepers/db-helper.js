@@ -3,6 +3,13 @@ import { consoleLog } from "../utils.js";
 
 const prisma = new PrismaClient();
 
+export const validateDuplicate = async (module, compareColumn) => {
+  // We check if passed name is taken by other reocrd already.
+  const duplicateByName = await findFirst(module, compareColumn);
+  // if duplicateByName has record, meaning the requested name to change is already taken. We return an error.
+  return duplicateByName;
+};
+
 export const findFirst = async (module, whereClause) => {
   consoleLog(`Entering findFirst fn for ${module}`, "title", whereClause);
 

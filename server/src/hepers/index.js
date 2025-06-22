@@ -1,6 +1,7 @@
 export {
   findUnique,
   findFirst,
+  validateDuplicate,
   findMany,
   create,
   update,
