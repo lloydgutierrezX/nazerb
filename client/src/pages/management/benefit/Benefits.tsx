@@ -188,7 +188,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Benefit code name",
+      placeholder: "Benefit's code",
     },
   },
   {
@@ -201,7 +201,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Benefit name",
+      placeholder: "Benefit's name",
     },
   },
   {

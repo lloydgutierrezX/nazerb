@@ -9,7 +9,7 @@ export const BenefitSchema = z.object({
       message: "Code must be uppercase letters, underscores (_), hyphens (-) numbers only, with no spaces",
     }),
   type: z.enum(["DEBIT", "CREDIT"], { message: "This field is required." }),
-  description: z.string().max(255).nullable().optional(),
+  description: z.string().max(255).optional(),
   createdAt: z.date().nullish(),
   updatedAt: z.date().nullish(),
 });
