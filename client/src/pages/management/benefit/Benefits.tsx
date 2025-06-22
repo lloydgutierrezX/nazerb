@@ -71,7 +71,18 @@ const columnDef: ColumnDef<DynamicObject, string>[] = [
   {
     accessorKey: "type", // key
     header: "Type", // header name
-    cell: (info: { getValue: () => string }) => info.getValue(),
+    cell: (info: { getValue: () => string }) => {
+      const type = info.getValue();
+      return (
+        <div
+          className={`${
+            type === "DEBIT" ? "text-red-500" : "text-green-500"
+          } flex`}
+        >
+          {type}
+        </div>
+      );
+    },
     enableSorting: true,
     sortUndefined: -1,
     sortDescFirst: false,
@@ -154,17 +165,30 @@ const formGroupFields: IBaseFormGroupField[] = [
       className: "input w-full",
       options: [
         {
-          key: "debit",
+          key: "DEBIT",
           value: "Debit",
           className: "",
         },
         {
-          key: "credit",
+          key: "CREDIT",
           value: "Credit",
           className: "",
         },
       ],
       placeholder: "Type of benefit",
+    },
+  },
+  {
+    name: "code",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Code",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Benefit code name",
     },
   },
   {
@@ -180,7 +204,6 @@ const formGroupFields: IBaseFormGroupField[] = [
       placeholder: "Benefit name",
     },
   },
-
   {
     name: "description",
     className: "my-2",

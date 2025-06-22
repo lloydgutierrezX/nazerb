@@ -1,26 +1,56 @@
 import { consoleLog, isExist } from "../utils.js";
-import { create, findMany, findUnique, update } from "../hepers/index.js";
+import {
+  create,
+  findMany,
+  findUnique,
+  findFirst,
+  update,
+} from "../hepers/index.js";
 
 const module = "benefit";
+
+const validateBenefitType = (type) => {
+  if (type && !isExist(["DEBIT", "CREDIT"], type)) {
+    return {
+      message: `Benefit type must be either 'debit' or 'credit'`,
+      fields: ["type"],
+    };
+  }
+
+  return undefined;
+};
+
+const validateDuplicate = async (compareColumn) => {
+  // We check if passed name is taken by other reocrd already.
+  const duplicateByName = await findFirst(module, compareColumn);
+  // if duplicateByName has record, meaning the requested name to change is already taken. We return an error.
+  return duplicateByName;
+};
 
 // Function to create a new benefit
 export const createBenefit = async (req, res) => {
   consoleLog("Entering createBenefit fn", "title");
-  const { name, description, active, type } = req.body;
+  const { name, description, code, active, type } = req.body;
 
   try {
-    if (await findUnique(module, { name: name })) {
-      return res.status(409).json({
-        message: `Benefit ${name} is already taken`,
-        fields: ["name"],
-      });
+    if (await validateDuplicate({ name })) {
+      return res
+        .status(409)
+        .json({ message: `Name ${name} is taken already.`, fields: ["name"] });
+    }
+
+    if (await validateDuplicate({ code })) {
+      return res
+        .status(409)
+        .json({ message: `Code ${code} is taken already.`, fields: ["code"] });
     }
 
     // Validate the benefit type
-    if (!isExist(["debit", "credit"], type)) {
+    const validatedBenefitType = validateBenefitType(type);
+    if (validatedBenefitType) {
       return res.status(400).json({
-        message: `Benefit type must be either 'debit' or 'credit'`,
-        fields: ["type"],
+        message: validateBenefitType.message,
+        fields: [...validateBenefitType.fields],
       });
     }
 
@@ -28,6 +58,7 @@ export const createBenefit = async (req, res) => {
     const newBenefit = await create(module, {
       name,
       type,
+      code,
       active,
       description,
     });
@@ -74,43 +105,62 @@ export const updateBenefit = async (req, res) => {
     return res.status(400).json({ message: "Invalid benefit ID" });
   }
 
-  const { name, description, active, type } = req.body;
-  const unique = await findUnique(module, { id: parseInt(id) });
+  const { name, description, active, type, code } = req.body;
 
-  // Check if the benefit exists
-  if (!unique) {
-    // If the benefit does not exist, return a 404 error
-    return res.status(404).json({ message: "Benefit not found" });
+  // checking enum benefits if the passed value is correct.
+  const validatedBenefitType = validateBenefitType(type);
+  if (validatedBenefitType) {
+    return res.status(validateBenefitType.errorCode).json({
+      message: validateBenefitType.message,
+      fields: [...validateBenefitType.fields],
+    });
   }
 
-  if (type && !isExist(["debit", "credit"], type)) {
-    return res.status(400).json({
-      message: `Benefit type must be either 'debit' or 'credit'`,
-      fields: ["type"],
-    });
+  const record = await findUnique(module, { id: parseInt(id) });
+  // Checking benefit if id exists in current records
+  if (!record) {
+    // If the benefit does not exist, return a 404 error
+    return res
+      .status(404)
+      .json({ message: "Benefit not found", fields: ["type"] });
+  }
+
+  if (
+    name !== record.name &&
+    (await validateDuplicate({ name }, { id: { not: parseInt(record.id) } }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Name ${name} is taken already.`, fields: ["name"] });
+  }
+
+  if (
+    code !== record.code &&
+    (await validateDuplicate({ code }, { id: { not: parseInt(record.id) } }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Code ${code} is taken already.`, fields: ["code"] });
   }
 
   try {
     // Update the benefit
     consoleLog(`Updating benefit with ID ${id}`);
 
-    // Check if the benefit name already exists
-    if (name === unique.name && id != unique.id) {
-      return res
-        .status(409)
-        .json({ message: `Module ${name} is already taken`, fields: ["name"] });
-    }
-
-    // Update the benefit
     const benefitData = {
       active,
       description,
       type,
     };
 
-    if (name !== unique.name) {
+    if (name !== record.name) {
       benefitData.name = name;
     }
+
+    if (code !== record.code) {
+      benefitData.code = code;
+    }
+
     const updatedBenefit = await update(module, benefitData, {
       id: parseInt(id),
     });
