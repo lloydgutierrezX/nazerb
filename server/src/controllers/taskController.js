@@ -1,24 +1,41 @@
 import { consoleLog } from "../utils.js";
-import { create, findMany, findUnique, update } from "../hepers/index.js";
+import {
+  create,
+  findMany,
+  findUnique,
+  update,
+  validateDuplicate,
+} from "../hepers/index.js";
 
 const module = "task";
 
 // Function to create a new task
 export const createTask = async (req, res) => {
   consoleLog("Entering createTask fn", "title");
-  const { name, description, active } = req.body;
+  const { name, description, active, code } = req.body;
 
   try {
-    if (await findUnique(module, { name: name })) {
+    if (
+      await validateDuplicate(module, {
+        name: { equals: name, mode: "insensitive" },
+      })
+    ) {
       return res
         .status(409)
         .json({ message: `Task ${name} is already taken`, fields: ["name"] });
+    }
+
+    if (await validateDuplicate(module, { code })) {
+      return res
+        .status(409)
+        .json({ message: `Task ${code} is already taken`, fields: ["code"] });
     }
 
     // Create the new module
     const newTask = await create(module, {
       name,
       active,
+      code,
       description,
     });
 
@@ -64,13 +81,38 @@ export const updateTask = async (req, res) => {
     return res.status(400).json({ message: "Invalid task ID" });
   }
 
-  const { name, description, active } = req.body;
+  const { name, description, active, code } = req.body;
   const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the task exists
   if (!unique) {
     // If the task does not exist, return a 404 error
     return res.status(404).json({ message: "Task not found" });
+  }
+
+  if (
+    name !== unique.name &&
+    (await validateDuplicate(module, {
+      AND: [
+        { name: { equals: name, mode: "insensitive" } },
+        { id: { not: parseInt(unique.id) } },
+      ],
+    }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Task ${name} is taken already.`, fields: ["name"] });
+  }
+
+  if (
+    code !== unique.code &&
+    (await validateDuplicate(module, {
+      AND: [{ code }, { id: { not: parseInt(unique.id) } }],
+    }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Task ${code} is taken already.`, fields: ["code"] });
   }
 
   try {
@@ -88,6 +130,8 @@ export const updateTask = async (req, res) => {
     const taskData = {
       active,
       description,
+      name,
+      code,
     };
 
     if (name !== unique.name) {
