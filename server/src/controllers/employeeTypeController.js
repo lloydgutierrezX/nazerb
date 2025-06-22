@@ -1,15 +1,31 @@
 import { consoleLog } from "../utils.js";
-import { create, findMany, findUnique, update } from "../hepers/index.js";
+import {
+  create,
+  findMany,
+  findUnique,
+  update,
+  validateDuplicate,
+} from "../hepers/index.js";
 
 const module = "employeeType";
 
 // Function to create a new employee type
 export const createEmployeeType = async (req, res) => {
   consoleLog("Entering createEmployeeType fn", "title");
-  const { name, description, active } = req.body;
+  const { name, description, code, active } = req.body;
 
   try {
-    if (await findUnique(module, { name: name })) {
+    if (await validateDuplicate(module, { code })) {
+      return res.status(409).json({
+        message: `Employee type ${code} is already taken`,
+        fields: ["code"],
+      });
+    }
+    if (
+      await validateDuplicate(module, {
+        name: { equals: name, mode: "insensitive" },
+      })
+    ) {
       return res.status(409).json({
         message: `Employee type ${name} is already taken`,
         fields: ["name"],
@@ -19,6 +35,7 @@ export const createEmployeeType = async (req, res) => {
     // Create the new employee type
     const newEmployeeType = await create(module, {
       name,
+      code,
       active,
       description,
     });
@@ -65,7 +82,7 @@ export const updateEmployeeType = async (req, res) => {
     return res.status(400).json({ message: "Invalid employee type ID" });
   }
 
-  const { name, description, active, link } = req.body;
+  const { name, description, active, code } = req.body;
   const unique = await findUnique(module, { id: parseInt(id) });
 
   // Check if the Employee type exists
@@ -74,17 +91,34 @@ export const updateEmployeeType = async (req, res) => {
     return res.status(404).json({ message: "Employee type not found" });
   }
 
+  if (
+    name !== unique.name &&
+    (await validateDuplicate(module, {
+      AND: [
+        { name: { equals: name, mode: "insensitive" } },
+        { id: { not: parseInt(unique.id) } },
+      ],
+    }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Name ${name} is taken already.`, fields: ["name"] });
+  }
+
+  if (
+    code !== unique.code &&
+    (await validateDuplicate(module, {
+      AND: [{ code }, { id: { not: parseInt(unique.id) } }],
+    }))
+  ) {
+    return res
+      .status(409)
+      .json({ message: `Code ${code} is taken already.`, fields: ["code"] });
+  }
+
   try {
     // Update the Employee type
     consoleLog(`Updating Employee type with ID ${id}`);
-
-    // Check if the employee type name already exists
-    if (name === unique.name && id != unique.id) {
-      return res.status(409).json({
-        message: `Employee type ${name} is already taken`,
-        fields: ["name"],
-      });
-    }
 
     // Update the employee type
     const employeeTypeData = {
@@ -95,6 +129,11 @@ export const updateEmployeeType = async (req, res) => {
     if (name !== unique.name) {
       employeeTypeData.name = name;
     }
+
+    if (name !== unique.name) {
+      employeeTypeData.code = code;
+    }
+
     const updatedEmployeeType = await update(module, employeeTypeData, {
       id: parseInt(id),
     });
@@ -140,14 +179,4 @@ export const deleteEmployeeType = async (req, res) => {
     // If the employee type does not exist, return a 404 error
     return res.status(500).json({ message: "Failed to delete employee type" });
   }
-
-  // We do not hard delete data.
-  // try {
-  //   await prisma.module.delete({
-  //     where: { id: parseInt(id) },
-  //   });
-  //   res.status(204).send();
-  // } catch (error) {
-  //   res.status(500).json({ message: "Failed to delete module" });
-  // }
 };

@@ -135,6 +135,19 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
   },
   {
+    name: "code",
+    className: "my-2",
+    label: {
+      className: "w-full",
+      value: "Code",
+    },
+    field: {
+      type: "text",
+      className: "input w-full",
+      placeholder: "Employee type's code",
+    },
+  },
+  {
     name: "name",
     className: "my-2",
     label: {
@@ -144,7 +157,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     field: {
       type: "text",
       className: "input w-full",
-      placeholder: "Input the employee type name",
+      placeholder: "Employee type's name",
     },
   },
   {
@@ -156,7 +169,7 @@ const formGroupFields: IBaseFormGroupField[] = [
     },
     field: {
       type: "textarea",
-      placeholder: "Input the employee type description",
+      placeholder: "Employee type's description",
       className: "h-40 w-full",
     },
   },
