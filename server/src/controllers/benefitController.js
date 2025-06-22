@@ -3,7 +3,7 @@ import {
   create,
   findMany,
   findUnique,
-  findFirst,
+  validateDuplicate,
   update,
 } from "../hepers/index.js";
 
@@ -20,26 +20,23 @@ const validateBenefitType = (type) => {
   return undefined;
 };
 
-const validateDuplicate = async (compareColumn) => {
-  // We check if passed name is taken by other reocrd already.
-  const duplicateByName = await findFirst(module, compareColumn);
-  // if duplicateByName has record, meaning the requested name to change is already taken. We return an error.
-  return duplicateByName;
-};
-
 // Function to create a new benefit
 export const createBenefit = async (req, res) => {
   consoleLog("Entering createBenefit fn", "title");
   const { name, description, code, active, type } = req.body;
 
   try {
-    if (await validateDuplicate({ name })) {
+    if (
+      await validateDuplicate(module, {
+        name: { equals: name, mode: "insensitive" },
+      })
+    ) {
       return res
         .status(409)
         .json({ message: `Name ${name} is taken already.`, fields: ["name"] });
     }
 
-    if (await validateDuplicate({ code })) {
+    if (await validateDuplicate(module, { code })) {
       return res
         .status(409)
         .json({ message: `Code ${code} is taken already.`, fields: ["code"] });
@@ -127,7 +124,12 @@ export const updateBenefit = async (req, res) => {
 
   if (
     name !== record.name &&
-    (await validateDuplicate({ name }, { id: { not: parseInt(record.id) } }))
+    (await validateDuplicate(module, {
+      AND: [
+        { name: { equals: name, mode: "insensitive" } },
+        { id: { not: parseInt(record.id) } },
+      ],
+    }))
   ) {
     return res
       .status(409)
@@ -136,7 +138,9 @@ export const updateBenefit = async (req, res) => {
 
   if (
     code !== record.code &&
-    (await validateDuplicate({ code }, { id: { not: parseInt(record.id) } }))
+    (await validateDuplicate(module, {
+      AND: [{ code }, { id: { not: parseInt(record.id) } }],
+    }))
   ) {
     return res
       .status(409)
